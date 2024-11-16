@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SpotifyLogin } from "@/components/SpotifyLogin";
 import { LocationPicker } from "@/components/LocationPicker";
 import { ConcertCard } from "@/components/ConcertCard";
@@ -16,10 +16,50 @@ const Index = () => {
     });
   };
 
+  useEffect(() => {
+    // Array of concert video IDs
+    const videoIds = [
+      'JGwWNGJdvx8', // Shape of You - Ed Sheeran Live
+      'fJ9rUzIMcZQ', // Bohemian Rhapsody - Queen Live
+      'L0MK7qz13bU', // Let It Go - Frozen Live
+      '1k8craCGpgs', // Viva La Vida - Coldplay Live
+    ];
+    
+    // Randomly select a video ID
+    const randomVideoId = videoIds[Math.floor(Math.random() * videoIds.length)];
+    
+    // Create and append the YouTube iframe
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+    // @ts-ignore
+    window.onYouTubeIframeAPIReady = () => {
+      // @ts-ignore
+      new YT.Player('video-background', {
+        videoId: randomVideoId,
+        playerVars: {
+          autoplay: 1,
+          controls: 0,
+          loop: 1,
+          mute: 1,
+          playlist: randomVideoId,
+        },
+        events: {
+          onReady: (event: any) => {
+            event.target.playVideo();
+          }
+        }
+      });
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-accent/5">
-      <div className="container py-8">
-        <h1 className="text-4xl font-bold text-center mb-8 animate-fade-in">
+    <div className="relative min-h-screen">
+      <div className="absolute inset-0 bg-black/50 z-10" /> {/* Overlay */}
+      <div className="container relative z-20 py-8 mx-auto text-center">
+        <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in">
           Discover Your Next Concert
         </h1>
         
