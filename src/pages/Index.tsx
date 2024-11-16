@@ -6,7 +6,7 @@ import { SurpriseButton } from "@/components/SurpriseButton";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 
-// Sample concert data with minutes listened
+// Sample concert data with minutes listened and similar artists
 const SAMPLE_CONCERTS = [
   {
     artist: "Taylor Swift",
@@ -15,7 +15,8 @@ const SAMPLE_CONCERTS = [
     location: "New York, NY",
     imageUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3",
     ticketUrl: "#",
-    minutesListened: 12000
+    minutesListened: 12000,
+    similarTo: "Selena Gomez"
   },
   {
     artist: "Ed Sheeran",
@@ -24,9 +25,9 @@ const SAMPLE_CONCERTS = [
     location: "Los Angeles, CA",
     imageUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3",
     ticketUrl: "#",
-    minutesListened: 8000
+    minutesListened: 8000,
+    similarTo: "John Mayer"
   },
-  // Add more sample concerts as needed
 ];
 
 const Index = () => {

@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock } from "lucide-react";
+import { Calendar, MapPin, Clock, Music } from "lucide-react";
 
 interface ConcertCardProps {
   artist: string;
@@ -10,6 +10,7 @@ interface ConcertCardProps {
   imageUrl: string;
   ticketUrl: string;
   minutesListened: number;
+  similarTo?: string; // New prop for similar artist
 }
 
 export const ConcertCard = ({
@@ -19,7 +20,8 @@ export const ConcertCard = ({
   location,
   imageUrl,
   ticketUrl,
-  minutesListened
+  minutesListened,
+  similarTo
 }: ConcertCardProps) => {
   return (
     <Card className="overflow-hidden w-full max-w-[350px] transition-transform hover:scale-105 animate-fade-in">
@@ -37,10 +39,16 @@ export const ConcertCard = ({
           <MapPin className="w-4 h-4" />
           <span>{venue}, {location}</span>
         </div>
-        <div className="flex items-center gap-2 text-gray-600 mb-4">
+        <div className="flex items-center gap-2 text-gray-600 mb-2">
           <Clock className="w-4 h-4" />
           <span>{minutesListened.toLocaleString()} minutes listened</span>
         </div>
+        {similarTo && (
+          <div className="flex items-center gap-2 text-gray-600 mb-4">
+            <Music className="w-4 h-4" />
+            <span>Similar to {similarTo}</span>
+          </div>
+        )}
         <Button className="w-full" onClick={() => window.open(ticketUrl, '_blank')}>
           Get Tickets
         </Button>
