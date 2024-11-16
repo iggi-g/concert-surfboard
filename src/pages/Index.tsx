@@ -4,6 +4,7 @@ import { LocationPicker } from "@/components/LocationPicker";
 import { ConcertCard } from "@/components/ConcertCard";
 import { SurpriseButton } from "@/components/SurpriseButton";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,6 +14,15 @@ const Index = () => {
     toast({
       title: "Finding a surprise concert...",
       description: "We're looking for something special just for you!",
+    });
+  };
+
+  // Temporary function to bypass Spotify auth for testing
+  const handleTestLogin = () => {
+    setIsAuthenticated(true);
+    toast({
+      title: "Test Mode Activated",
+      description: "You're now viewing the interface as a logged-in user",
     });
   };
 
@@ -57,15 +67,26 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen">
-      <div className="absolute inset-0 bg-black/50 z-10" /> {/* Overlay */}
-      <div className="container relative z-20 py-8 mx-auto text-center">
+      <div className="absolute inset-0 bg-black/50 z-10" />
+      <div className="container relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen">
         <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in">
           Discover Your Next Concert
         </h1>
         
-        <div className="flex flex-col items-center gap-8">
+        <div className="flex-1 flex flex-col items-center justify-center gap-8">
           {!isAuthenticated ? (
-            <SpotifyLogin />
+            <div className="space-y-4">
+              <SpotifyLogin />
+              <div className="mt-4">
+                <Button 
+                  variant="secondary"
+                  onClick={handleTestLogin}
+                  className="text-sm"
+                >
+                  View Demo Interface
+                </Button>
+              </div>
+            </div>
           ) : (
             <>
               <LocationPicker />
