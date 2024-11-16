@@ -1,7 +1,26 @@
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const CITIES = [
+  "New York, NY",
+  "Los Angeles, CA",
+  "Chicago, IL",
+  "Houston, TX",
+  "Phoenix, AZ",
+  "Philadelphia, PA",
+  "San Antonio, TX",
+  "San Diego, CA",
+  "Dallas, TX",
+  "San Jose, CA",
+];
 
 export const LocationPicker = () => {
   const [location, setLocation] = useState("");
@@ -12,16 +31,21 @@ export const LocationPicker = () => {
   };
 
   return (
-    <form onSubmit={handleLocationSubmit} className="flex gap-2 animate-fade-in">
-      <div className="relative">
-        <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-        <Input
-          type="text"
-          placeholder="Enter your location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="pl-10 w-[300px]"
-        />
+    <form onSubmit={handleLocationSubmit} className="flex flex-col sm:flex-row gap-2 animate-fade-in w-full max-w-md mx-auto">
+      <div className="relative flex-1">
+        <Select onValueChange={setLocation} value={location}>
+          <SelectTrigger className="w-full">
+            <MapPin className="w-4 h-4 mr-2" />
+            <SelectValue placeholder="Select your city" />
+          </SelectTrigger>
+          <SelectContent>
+            {CITIES.map((city) => (
+              <SelectItem key={city} value={city}>
+                {city}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <Button type="submit">Set Location</Button>
     </form>

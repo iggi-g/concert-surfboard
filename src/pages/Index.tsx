@@ -6,6 +6,29 @@ import { SurpriseButton } from "@/components/SurpriseButton";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 
+// Sample concert data with minutes listened
+const SAMPLE_CONCERTS = [
+  {
+    artist: "Taylor Swift",
+    date: "March 15, 2024",
+    venue: "Madison Square Garden",
+    location: "New York, NY",
+    imageUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3",
+    ticketUrl: "#",
+    minutesListened: 12000
+  },
+  {
+    artist: "Ed Sheeran",
+    date: "April 20, 2024",
+    venue: "Staples Center",
+    location: "Los Angeles, CA",
+    imageUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3",
+    ticketUrl: "#",
+    minutesListened: 8000
+  },
+  // Add more sample concerts as needed
+];
+
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { toast } = useToast();
@@ -17,7 +40,6 @@ const Index = () => {
     });
   };
 
-  // Temporary function to bypass Spotify auth for testing
   const handleTestLogin = () => {
     setIsAuthenticated(true);
     toast({
@@ -65,15 +87,18 @@ const Index = () => {
     };
   }, []);
 
+  // Sort concerts by minutes listened
+  const sortedConcerts = [...SAMPLE_CONCERTS].sort((a, b) => b.minutesListened - a.minutesListened);
+
   return (
     <div className="relative min-h-screen">
       <div className="absolute inset-0 bg-black/50 z-10" />
       <div className="container relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen">
-        <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in">
+        <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
           Discover Your Next Concert
         </h1>
         
-        <div className="flex-1 flex flex-col items-center justify-center gap-8">
+        <div className="flex-1 flex flex-col items-center justify-center gap-8 px-4">
           {!isAuthenticated ? (
             <div className="space-y-4">
               <SpotifyLogin />
@@ -90,19 +115,15 @@ const Index = () => {
           ) : (
             <>
               <LocationPicker />
-              <div className="flex justify-center mb-8">
+              <div className="flex justify-center mb-8 w-full">
                 <SurpriseButton onClick={handleSurprise} />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <ConcertCard
-                  artist="Sample Artist"
-                  date="March 15, 2024"
-                  venue="Amazing Venue"
-                  location="New York, NY"
-                  imageUrl="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3"
-                  ticketUrl="#"
-                />
-                {/* More concert cards will be added dynamically */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+                {sortedConcerts.map((concert, index) => (
+                  <div key={index} className="flex justify-center">
+                    <ConcertCard {...concert} />
+                  </div>
+                ))}
               </div>
             </>
           )}
