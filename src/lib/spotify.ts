@@ -16,7 +16,6 @@ export const getTopArtists = async (token: string) => {
 
 // Function to handle concert scraping
 export const findConcerts = async (location: string, artists: string[]) => {
-  // This would be your AI-powered scraping endpoint
   const response = await fetch(`${import.meta.env.VITE_API_URL}/concerts`, {
     method: 'POST',
     headers: {
