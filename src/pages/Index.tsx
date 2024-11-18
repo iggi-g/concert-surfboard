@@ -5,34 +5,17 @@ import { ConcertCard } from "@/components/ConcertCard";
 import { SurpriseButton } from "@/components/SurpriseButton";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-
-// Sample concert data with minutes listened and similar artists
-const SAMPLE_CONCERTS = [
-  {
-    artist: "Taylor Swift",
-    date: "March 15, 2024",
-    venue: "Madison Square Garden",
-    location: "New York, NY",
-    imageUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3",
-    ticketUrl: "#",
-    minutesListened: 12000,
-    similarTo: "Selena Gomez"
-  },
-  {
-    artist: "Ed Sheeran",
-    date: "April 20, 2024",
-    venue: "Staples Center",
-    location: "Los Angeles, CA",
-    imageUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3",
-    ticketUrl: "#",
-    minutesListened: 8000,
-    similarTo: "John Mayer"
-  },
-];
+import { fetchEvents, Event } from "@/lib/supabase-client";
+import { useQuery } from "@tanstack/react-query";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { toast } = useToast();
+
+  const { data: events = [], isLoading, error } = useQuery({
+    queryKey: ['events'],
+    queryFn: fetchEvents
+  });
 
   const handleSurprise = () => {
     toast({
@@ -88,8 +71,13 @@ const Index = () => {
     };
   }, []);
 
-  // Sort concerts by minutes listened
-  const sortedConcerts = [...SAMPLE_CONCERTS].sort((a, b) => b.minutesListened - a.minutesListened);
+  if (error) {
+    toast({
+      title: "Error loading events",
+      description: "Could not load events from the database",
+      variant: "destructive",
+    });
+  }
 
   return (
     <div className="relative min-h-screen">
@@ -120,11 +108,23 @@ const Index = () => {
                 <SurpriseButton onClick={handleSurprise} />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-                {sortedConcerts.map((concert, index) => (
-                  <div key={index} className="flex justify-center">
-                    <ConcertCard {...concert} />
-                  </div>
-                ))}
+                {isLoading ? (
+                  <p className="text-white">Loading events...</p>
+                ) : (
+                  events.map((event: Event, index: number) => (
+                    <div key={index} className="flex justify-center">
+                      <ConcertCard
+                        artist={event.title}
+                        date={event.date}
+                        venue="Venue TBD"
+                        location="Copenhagen"
+                        imageUrl="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3"
+                        ticketUrl={event.link}
+                        minutesListened={0}
+                      />
+                    </div>
+                  ))
+                )}
               </div>
             </>
           )}

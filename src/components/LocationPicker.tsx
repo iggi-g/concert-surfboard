@@ -9,18 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const CITIES = [
-  "New York, NY",
-  "Los Angeles, CA",
-  "Chicago, IL",
-  "Houston, TX",
-  "Phoenix, AZ",
-  "Philadelphia, PA",
-  "San Antonio, TX",
-  "San Diego, CA",
-  "Dallas, TX",
-  "San Jose, CA",
-];
+const CITIES = ["Copenhagen"];
 
 export const LocationPicker = () => {
   const [location, setLocation] = useState("");
