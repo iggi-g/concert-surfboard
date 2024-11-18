@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SpotifyLogin } from "@/components/SpotifyLogin";
 import { LocationPicker } from "@/components/LocationPicker";
 import { ConcertCard } from "@/components/ConcertCard";
@@ -16,13 +16,6 @@ const Index = () => {
     queryKey: ['events'],
     queryFn: fetchEvents
   });
-
-  const handleSurprise = () => {
-    toast({
-      title: "Finding a surprise concert...",
-      description: "We're looking for something special just for you!",
-    });
-  };
 
   const handleTestLogin = () => {
     setIsAuthenticated(true);
@@ -105,7 +98,7 @@ const Index = () => {
             <>
               <LocationPicker />
               <div className="flex justify-center mb-8 w-full">
-                <SurpriseButton onClick={handleSurprise} />
+                <SurpriseButton />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                 {isLoading ? (
