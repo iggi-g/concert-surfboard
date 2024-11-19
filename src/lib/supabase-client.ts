@@ -13,6 +13,7 @@ export interface Event {
   title: string;
   date: string;
   link: string;
+  images: string;
 }
 
 export const fetchEvents = async () => {

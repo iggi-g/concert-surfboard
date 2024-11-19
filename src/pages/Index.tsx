@@ -111,7 +111,7 @@ const Index = () => {
                         date={event.date}
                         venue="Venue TBD"
                         location="Copenhagen"
-                        imageUrl="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3"
+                        imageUrl={event.images || "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3"}
                         ticketUrl={event.link}
                         minutesListened={0}
                       />
