@@ -109,9 +109,10 @@ const Index = () => {
                       <ConcertCard
                         artist={event.title}
                         date={event.date}
-                        venue="Venue TBD"
+                        venue={event.venue}
+                        venueLink={event.venue_link}
                         location="Copenhagen"
-                        imageUrl={event.images || "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3"}
+                        imageUrl={event.images}
                         ticketUrl={event.link}
                         minutesListened={0}
                       />
