@@ -14,6 +14,8 @@ export interface Event {
   date: string;
   link: string;
   images: string;
+  venue: string;
+  venue_link: string;
 }
 
 export const fetchEvents = async () => {
