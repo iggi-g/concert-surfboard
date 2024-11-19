@@ -13,7 +13,7 @@ export interface Event {
   title: string;
   date: string;
   link: string;
-  images: string;  // This is the URL string from Supabase
+  image: string;  // Changed from 'images' to 'image' to match the database column
   venue: string;
   venue_link: string;
   location?: string;
