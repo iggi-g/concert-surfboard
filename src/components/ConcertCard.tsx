@@ -33,14 +33,15 @@ export const ConcertCard = ({
 
   return (
     <Card className="overflow-hidden w-full max-w-[350px] transition-transform hover:scale-105 animate-fade-in">
-      <div className="relative h-[200px]">
+      <div className="relative h-[200px] w-full">
         <img 
-          src={imageUrl || "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3"} 
+          src={imageUrl} 
           alt={artist} 
           className="w-full h-full object-cover"
           onError={(e) => {
             e.currentTarget.src = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3";
           }}
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
