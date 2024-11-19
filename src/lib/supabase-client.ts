@@ -13,9 +13,10 @@ export interface Event {
   title: string;
   date: string;
   link: string;
-  images: string;
+  images: string;  // This is the URL string from Supabase
   venue: string;
   venue_link: string;
+  location?: string;
 }
 
 export const fetchEvents = async () => {
