@@ -112,7 +112,7 @@ const Index = () => {
                         venue={event.venue}
                         venueLink={event.venue_link}
                         location="Copenhagen"
-                        imageUrl={event.images}
+                        imageUrl={event.image}
                         ticketUrl={event.link}
                         minutesListened={0}
                       />
