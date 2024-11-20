@@ -35,13 +35,14 @@ const Index = () => {
     window.onYouTubeIframeAPIReady = () => {
       // @ts-ignore
       new YT.Player('video-background', {
-        videoId: 'ZFcnq6tFYgM', // Portishead - Live at Roseland NYC
+        videoId: 'q4xKvHANqjk',
         playerVars: {
           autoplay: 1,
           controls: 0,
           loop: 1,
           mute: 1,
-          playlist: 'ZFcnq6tFYgM',
+          playlist: 'q4xKvHANqjk',
+          start: 40
         },
         events: {
           onReady: (event: any) => {
