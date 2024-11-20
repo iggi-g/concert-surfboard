@@ -3,9 +3,12 @@ import { Sparkles } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEvents } from "@/lib/supabase-client";
 import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { SurpriseAnimation } from "./SurpriseAnimation";
 
 export const SurpriseButton = () => {
   const { toast } = useToast();
+  const [showAnimation, setShowAnimation] = useState(false);
   const { data: events = [] } = useQuery({
     queryKey: ['events'],
     queryFn: fetchEvents
@@ -21,6 +24,11 @@ export const SurpriseButton = () => {
       return;
     }
 
+    setShowAnimation(true);
+  };
+
+  const handleAnimationComplete = () => {
+    setShowAnimation(false);
     const randomEvent = events[Math.floor(Math.random() * events.length)];
     window.open(randomEvent.link, '_blank');
     
@@ -31,16 +39,22 @@ export const SurpriseButton = () => {
   };
 
   return (
-    <Button
-      onClick={handleSurprise}
-      variant="outline"
-      className="group relative overflow-hidden border-accent hover:border-accent/80"
-    >
-      <span className="relative z-10 flex items-center gap-2">
-        <Sparkles className="w-4 h-4" />
-        Surprise Me
-      </span>
-      <div className="absolute inset-0 bg-accent/10 transform translate-y-full transition-transform group-hover:translate-y-0" />
-    </Button>
+    <>
+      <Button
+        onClick={handleSurprise}
+        variant="outline"
+        className="group relative overflow-hidden border-accent hover:border-accent/80"
+      >
+        <span className="relative z-10 flex items-center gap-2">
+          <Sparkles className="w-4 h-4" />
+          Surprise Me
+        </span>
+        <div className="absolute inset-0 bg-accent/10 transform translate-y-full transition-transform group-hover:translate-y-0" />
+      </Button>
+      <SurpriseAnimation 
+        isOpen={showAnimation}
+        onAnimationComplete={handleAnimationComplete}
+      />
+    </>
   );
 };
