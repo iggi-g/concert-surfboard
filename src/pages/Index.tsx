@@ -26,12 +26,12 @@ const Index = () => {
   };
 
   useEffect(() => {
-    // Array of concert video IDs
+    // Array of KEXP live performance video IDs
     const videoIds = [
-      'JGwWNGJdvx8', // Shape of You - Ed Sheeran Live
-      'fJ9rUzIMcZQ', // Bohemian Rhapsody - Queen Live
-      'L0MK7qz13bU', // Let It Go - Frozen Live
-      '1k8craCGpgs', // Viva La Vida - Coldplay Live
+      'ferZnZ0_rSM', // IDLES - Full Performance (Live on KEXP)
+      'seYb9KqmT9M', // Fontaines D.C. - Full Performance (Live on KEXP)
+      'FjjDmX9Tkss', // Khruangbin - Full Performance (Live on KEXP)
+      'vWLJeqLPfSU', // King Gizzard & The Lizard Wizard - Full Performance (Live on KEXP)
     ];
     
     // Randomly select a video ID
