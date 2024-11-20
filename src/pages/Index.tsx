@@ -26,18 +26,6 @@ const Index = () => {
   };
 
   useEffect(() => {
-    // Array of KEXP live performance video IDs
-    const videoIds = [
-      'ferZnZ0_rSM', // IDLES - Full Performance (Live on KEXP)
-      'seYb9KqmT9M', // Fontaines D.C. - Full Performance (Live on KEXP)
-      'FjjDmX9Tkss', // Khruangbin - Full Performance (Live on KEXP)
-      'vWLJeqLPfSU', // King Gizzard & The Lizard Wizard - Full Performance (Live on KEXP)
-    ];
-    
-    // Randomly select a video ID
-    const randomVideoId = videoIds[Math.floor(Math.random() * videoIds.length)];
-    
-    // Create and append the YouTube iframe
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -47,13 +35,13 @@ const Index = () => {
     window.onYouTubeIframeAPIReady = () => {
       // @ts-ignore
       new YT.Player('video-background', {
-        videoId: randomVideoId,
+        videoId: 'ZFcnq6tFYgM', // Portishead - Live at Roseland NYC
         playerVars: {
           autoplay: 1,
           controls: 0,
           loop: 1,
           mute: 1,
-          playlist: randomVideoId,
+          playlist: 'ZFcnq6tFYgM',
         },
         events: {
           onReady: (event: any) => {
@@ -74,7 +62,6 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen">
-      <div className="absolute inset-0 bg-black/50 z-10" />
       <div className="container relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen">
         <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
           Discover Your Next Concert
