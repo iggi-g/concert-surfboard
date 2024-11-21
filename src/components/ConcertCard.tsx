@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock, Music, X } from "lucide-react";
+import { Calendar, MapPin, Clock, Music, X, Ticket, Link as LinkIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -34,15 +34,24 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleVenueClick = () => {
+  const handleVenueClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (venueLink) {
       window.open(venueLink, '_blank');
     }
   };
 
+  const handleTicketClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open(ticketUrl, '_blank');
+  };
+
   return (
     <>
-      <Card className="overflow-hidden w-full max-w-[350px] transition-transform hover:scale-105 animate-fade-in">
+      <Card 
+        className="overflow-hidden w-full max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer"
+        onClick={() => setIsDialogOpen(true)}
+      >
         <div className="relative aspect-[16/9] w-full">
           <img 
             src={imageUrl} 
@@ -70,29 +79,13 @@ export const ConcertCard = ({
               {venue}, {location}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600 mb-2">
-            <Clock className="w-4 h-4" />
-            <span>{minutesListened.toLocaleString()} minutes listened</span>
-          </div>
-          {similarTo && (
-            <div className="flex items-center gap-2 text-gray-600 mb-4">
-              <Music className="w-4 h-4" />
-              <span>Similar to {similarTo}</span>
-            </div>
-          )}
-          <Button 
-            className="w-full" 
-            onClick={() => setIsDialogOpen(true)}
-          >
-            Get Tickets
-          </Button>
         </div>
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] animate-scale-in">
+        <DialogContent className="sm:max-w-[600px] animate-scale-in max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">{artist} - Tickets</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">{artist}</DialogTitle>
           </DialogHeader>
           <div className="relative aspect-video w-full mb-4">
             <img 
@@ -111,12 +104,36 @@ export const ConcertCard = ({
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-5 h-5" />
-              <span className="text-lg">{venue}, {location}</span>
+              <span className="text-lg hover:text-accent cursor-pointer" onClick={handleVenueClick}>
+                {venue}, {location}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5" />
+              <span className="text-lg">{minutesListened.toLocaleString()} minutes listened</span>
+            </div>
+            {similarTo && (
+              <div className="flex items-center gap-2">
+                <Music className="w-5 h-5" />
+                <span className="text-lg">Similar to {similarTo}</span>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              <LinkIcon className="w-5 h-5" />
+              <a 
+                href={venueLink} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-lg text-accent hover:underline"
+              >
+                View Venue Website
+              </a>
             </div>
             <Button 
-              className="w-full text-lg py-6" 
-              onClick={() => window.open(ticketUrl, '_blank')}
+              className="w-full text-lg py-6 mt-4" 
+              onClick={handleTicketClick}
             >
+              <Ticket className="w-5 h-5 mr-2" />
               Purchase Tickets
             </Button>
           </div>

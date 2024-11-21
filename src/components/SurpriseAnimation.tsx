@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Music, Mic } from "lucide-react";
+import { GiphyFetch } from '@giphy/js-fetch-api';
+
+const gf = new GiphyFetch(import.meta.env.VITE_GIPHY_API_KEY || '');
 
 interface SurpriseAnimationProps {
   isOpen: boolean;
@@ -8,11 +10,25 @@ interface SurpriseAnimationProps {
 }
 
 export const SurpriseAnimation = ({ isOpen, onAnimationComplete }: SurpriseAnimationProps) => {
-  React.useEffect(() => {
+  const [gifUrl, setGifUrl] = useState('');
+
+  useEffect(() => {
     if (isOpen) {
+      const fetchGif = async () => {
+        try {
+          const { data } = await gf.random({ tag: 'concert' });
+          setGifUrl(data.images.original.url);
+        } catch (error) {
+          console.error('Error fetching GIF:', error);
+          setGifUrl('https://media.giphy.com/media/3o7aD4GrHwn8vsGBTa/giphy.gif'); // Fallback GIF
+        }
+      };
+      
+      fetchGif();
       const timer = setTimeout(() => {
         onAnimationComplete();
-      }, 3000); // Animation duration
+      }, 3000);
+      
       return () => clearTimeout(timer);
     }
   }, [isOpen, onAnimationComplete]);
@@ -21,11 +37,13 @@ export const SurpriseAnimation = ({ isOpen, onAnimationComplete }: SurpriseAnima
     <Dialog open={isOpen} onOpenChange={() => {}}>
       <DialogContent className="sm:max-w-md border-none bg-transparent shadow-none">
         <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="relative w-32 h-32 animate-bounce">
-            <Mic className="w-full h-full text-accent animate-pulse" />
-            <Music className="absolute top-0 right-0 w-8 h-8 text-accent animate-ping" />
-            <Music className="absolute bottom-0 left-0 w-8 h-8 text-accent animate-ping" />
-          </div>
+          {gifUrl && (
+            <img 
+              src={gifUrl} 
+              alt="Concert animation" 
+              className="w-full h-64 object-cover rounded-lg"
+            />
+          )}
           <p className="text-2xl font-bold text-white animate-fade-in text-center">
             Are you ready for a random concert?!
           </p>
