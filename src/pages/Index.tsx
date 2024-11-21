@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SpotifyLogin } from "@/components/SpotifyLogin";
-import { LocationPicker } from "@/components/LocationPicker";
 import { ConcertCard } from "@/components/ConcertCard";
 import { SurpriseButton } from "@/components/SurpriseButton";
 import { useToast } from "@/components/ui/use-toast";
@@ -10,12 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 import { AddEventDialog } from "@/components/AddEventDialog";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Filter } from "lucide-react";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -101,35 +100,34 @@ const Index = () => {
           ) : (
             <>
               <div className="w-full max-w-6xl mx-auto space-y-6">
-                <div className="flex flex-wrap items-center justify-between gap-4 bg-black/20 backdrop-blur-sm p-4 rounded-lg">
-                  <div className="flex items-center gap-4 flex-1 min-w-[280px]">
-                    <Input
-                      placeholder="Filter by venue..."
-                      value={venueFilter}
-                      onChange={(e) => setVenueFilter(e.target.value)}
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                    />
-                    <Select
-                      value={sortOrder}
-                      onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
-                    >
-                      <SelectTrigger className="w-[180px] bg-white/10 border-white/20 text-white">
-                        <SelectValue placeholder="Sort by date" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="asc">Earliest First</SelectItem>
-                        <SelectItem value="desc">Latest First</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div className="flex items-center justify-end gap-4">
+                  <Input
+                    placeholder="Filter by venue..."
+                    value={venueFilter}
+                    onChange={(e) => setVenueFilter(e.target.value)}
+                    className="max-w-xs bg-white/10 border-white/10 text-white placeholder:text-white/50"
+                  />
                   
-                  <div className="flex items-center gap-4">
-                    <SurpriseButton />
-                    <AddEventDialog onEventAdded={refetch} />
-                  </div>
-                </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="bg-white/10 border-white/10 text-white hover:bg-white/20">
+                        <Filter className="w-4 h-4 mr-2" />
+                        Filters
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => setSortOrder("asc")}>
+                        Earliest First
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSortOrder("desc")}>
+                        Latest First
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
-                <LocationPicker />
+                  <SurpriseButton />
+                  <AddEventDialog onEventAdded={refetch} />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
@@ -142,7 +140,6 @@ const Index = () => {
                         artist={event.title}
                         date={event.date}
                         venue={event.venue}
-                        venueLink={event.venue_link}
                         location={event.location || ""}
                         imageUrl={event.image}
                         ticketUrl={event.link}

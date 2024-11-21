@@ -91,7 +91,7 @@
   
   @media (max-width: 768px) {
     height: 100dvh;
-    width: 100vw;
+    width: 100dvw;
     transform: scale(2.5);
     top: 0;
     left: 0;
@@ -109,5 +109,6 @@
   
   @media (max-width: 768px) {
     height: 100dvh;
+    width: 100dvw;
   }
 }
