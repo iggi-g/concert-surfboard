@@ -9,9 +9,10 @@ import { SurpriseAnimation } from "./SurpriseAnimation";
 export const SurpriseButton = () => {
   const { toast } = useToast();
   const [showAnimation, setShowAnimation] = useState(false);
+  
   const { data: events = [] } = useQuery({
     queryKey: ['events'],
-    queryFn: fetchEvents
+    queryFn: () => fetchEvents(),
   });
 
   const handleSurprise = () => {
