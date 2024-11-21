@@ -13,16 +13,17 @@ export interface Event {
   title: string;
   date: string;
   link: string;
-  image: string;  // Changed from 'images' to 'image' to match the database column
+  image: string;
   venue: string;
   venue_link: string;
   location?: string;
 }
 
-export const fetchEvents = async () => {
+export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
   const { data, error } = await supabase
     .from('events')
-    .select('*');
+    .select('*')
+    .order('date', { ascending: sortOrder === "asc" });
   
   if (error) throw error;
   return data as Event[];

@@ -16,8 +16,9 @@ export const SurpriseAnimation = ({ isOpen, onAnimationComplete }: SurpriseAnima
     if (isOpen) {
       const fetchGif = async () => {
         try {
-          const { data } = await gf.random({ tag: 'concert' });
-          setGifUrl(data.images.original.url);
+          const offset = Math.floor(Math.random() * 100); // Random offset for variety
+          const { data } = await gf.search('concert', { offset, limit: 1 });
+          setGifUrl(data[0].images.original.url);
         } catch (error) {
           console.error('Error fetching GIF:', error);
           setGifUrl('https://media.giphy.com/media/3o7aD4GrHwn8vsGBTa/giphy.gif'); // Fallback GIF

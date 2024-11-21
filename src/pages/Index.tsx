@@ -7,14 +7,25 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { fetchEvents, Event } from "@/lib/supabase-client";
 import { useQuery } from "@tanstack/react-query";
+import { AddEventDialog } from "@/components/AddEventDialog";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { toast } = useToast();
+  const [venueFilter, setVenueFilter] = useState("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  const { data: events = [], isLoading, error } = useQuery({
-    queryKey: ['events'],
-    queryFn: fetchEvents
+  const { data: events = [], isLoading, error, refetch } = useQuery({
+    queryKey: ['events', sortOrder],
+    queryFn: () => fetchEvents(sortOrder)
   });
 
   const handleTestLogin = () => {
@@ -24,6 +35,11 @@ const Index = () => {
       description: "You're now viewing the interface as a logged-in user",
     });
   };
+
+  const filteredEvents = events.filter((event: Event) => {
+    if (!venueFilter) return true;
+    return event.venue.toLowerCase().includes(venueFilter.toLowerCase());
+  });
 
   useEffect(() => {
     const tag = document.createElement('script');
@@ -85,21 +101,44 @@ const Index = () => {
           ) : (
             <>
               <LocationPicker />
-              <div className="flex justify-center mb-8 w-full">
+              <div className="flex flex-wrap justify-center gap-4 w-full mb-8">
                 <SurpriseButton />
+                <AddEventDialog onEventAdded={refetch} />
               </div>
+              
+              <div className="flex flex-wrap gap-4 justify-center w-full mb-8">
+                <Input
+                  placeholder="Filter by venue..."
+                  value={venueFilter}
+                  onChange={(e) => setVenueFilter(e.target.value)}
+                  className="max-w-xs"
+                />
+                <Select
+                  value={sortOrder}
+                  onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Sort by date" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="asc">Earliest First</SelectItem>
+                    <SelectItem value="desc">Latest First</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                 {isLoading ? (
                   <p className="text-white">Loading events...</p>
                 ) : (
-                  events.map((event: Event, index: number) => (
+                  filteredEvents.map((event: Event, index: number) => (
                     <div key={index} className="flex justify-center">
                       <ConcertCard
                         artist={event.title}
                         date={event.date}
                         venue={event.venue}
                         venueLink={event.venue_link}
-                        location="Copenhagen"
+                        location={event.location || ""}
                         imageUrl={event.image}
                         ticketUrl={event.link}
                         minutesListened={0}
