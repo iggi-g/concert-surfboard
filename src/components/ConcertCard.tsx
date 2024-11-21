@@ -34,18 +34,6 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleVenueClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (venueLink) {
-      window.open(venueLink, '_blank');
-    }
-  };
-
-  const handleTicketClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    window.open(ticketUrl, '_blank');
-  };
-
   return (
     <>
       <Card 
@@ -70,72 +58,75 @@ export const ConcertCard = ({
             <Calendar className="w-4 h-4" />
             <span>{date}</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600 mb-2">
+          <div className="flex items-center gap-2 text-gray-600">
             <MapPin className="w-4 h-4" />
-            <span 
-              className={venueLink ? "cursor-pointer hover:text-accent" : ""}
-              onClick={handleVenueClick}
-            >
-              {venue}, {location}
-            </span>
+            <span>{venue}, {location}</span>
           </div>
         </div>
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] animate-scale-in max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-0">
+          <DialogHeader className="p-6 pb-0">
             <DialogTitle className="text-2xl font-bold">{artist}</DialogTitle>
           </DialogHeader>
-          <div className="relative aspect-video w-full mb-4">
-            <img 
-              src={imageUrl} 
-              alt={artist} 
-              className="absolute inset-0 w-full h-full object-cover rounded-md"
-              onError={(e) => {
-                e.currentTarget.src = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3";
-              }}
-            />
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-5 h-5" />
-              <span className="text-lg">{date}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              <span className="text-lg hover:text-accent cursor-pointer" onClick={handleVenueClick}>
-                {venue}, {location}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5" />
-              <span className="text-lg">{minutesListened.toLocaleString()} minutes listened</span>
-            </div>
-            {similarTo && (
-              <div className="flex items-center gap-2">
-                <Music className="w-5 h-5" />
-                <span className="text-lg">Similar to {similarTo}</span>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+            <div className="space-y-4">
+              <div className="relative aspect-video w-full">
+                <img 
+                  src={imageUrl} 
+                  alt={artist} 
+                  className="absolute inset-0 w-full h-full object-cover rounded-md"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3";
+                  }}
+                />
               </div>
-            )}
-            <div className="flex items-center gap-2">
-              <LinkIcon className="w-5 h-5" />
-              <a 
-                href={venueLink} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-lg text-accent hover:underline"
+              
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5" />
+                  <span className="text-lg">{date}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  <span className="text-lg">{venue}, {location}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  <span className="text-lg">{minutesListened.toLocaleString()} minutes listened</span>
+                </div>
+                {similarTo && (
+                  <div className="flex items-center gap-2">
+                    <Music className="w-5 h-5" />
+                    <span className="text-lg">Similar to {similarTo}</span>
+                  </div>
+                )}
+              </div>
+
+              <Button 
+                className="w-full text-lg py-6" 
+                onClick={() => window.open(ticketUrl, '_blank')}
               >
-                View Venue Website
-              </a>
+                <Ticket className="w-5 h-5 mr-2" />
+                Purchase Tickets
+              </Button>
             </div>
-            <Button 
-              className="w-full text-lg py-6 mt-4" 
-              onClick={handleTicketClick}
-            >
-              <Ticket className="w-5 h-5 mr-2" />
-              Purchase Tickets
-            </Button>
+
+            <div className="h-[600px] w-full rounded-md overflow-hidden border">
+              {venueLink ? (
+                <iframe
+                  src={venueLink}
+                  className="w-full h-full"
+                  title="Venue Website"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                  <p className="text-gray-500">Venue website not available</p>
+                </div>
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>

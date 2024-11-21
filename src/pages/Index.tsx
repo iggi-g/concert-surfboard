@@ -100,34 +100,39 @@ const Index = () => {
             </div>
           ) : (
             <>
-              <LocationPicker />
-              <div className="flex flex-wrap justify-center gap-4 w-full mb-8">
-                <SurpriseButton />
-                <AddEventDialog onEventAdded={refetch} />
-              </div>
-              
-              <div className="flex flex-wrap gap-4 justify-center w-full mb-8">
-                <Input
-                  placeholder="Filter by venue..."
-                  value={venueFilter}
-                  onChange={(e) => setVenueFilter(e.target.value)}
-                  className="max-w-xs"
-                />
-                <Select
-                  value={sortOrder}
-                  onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Sort by date" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="asc">Earliest First</SelectItem>
-                    <SelectItem value="desc">Latest First</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="w-full max-w-6xl mx-auto space-y-6">
+                <div className="flex flex-wrap items-center justify-between gap-4 bg-black/20 backdrop-blur-sm p-4 rounded-lg">
+                  <div className="flex items-center gap-4 flex-1 min-w-[280px]">
+                    <Input
+                      placeholder="Filter by venue..."
+                      value={venueFilter}
+                      onChange={(e) => setVenueFilter(e.target.value)}
+                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    />
+                    <Select
+                      value={sortOrder}
+                      onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
+                    >
+                      <SelectTrigger className="w-[180px] bg-white/10 border-white/20 text-white">
+                        <SelectValue placeholder="Sort by date" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="asc">Earliest First</SelectItem>
+                        <SelectItem value="desc">Latest First</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <SurpriseButton />
+                    <AddEventDialog onEventAdded={refetch} />
+                  </div>
+                </div>
+
+                <LocationPicker />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
                 {isLoading ? (
                   <p className="text-white">Loading events...</p>
                 ) : (

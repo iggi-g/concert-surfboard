@@ -90,9 +90,12 @@
   pointer-events: none;
   
   @media (max-width: 768px) {
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
-    transform: scale(2);
+    transform: scale(2.5);
+    top: 0;
+    left: 0;
+    object-fit: cover;
   }
 }
 
@@ -103,4 +106,8 @@
   transform: translate(-50%, -50%);
   width: 100vw;
   height: 100vh;
+  
+  @media (max-width: 768px) {
+    height: 100dvh;
+  }
 }
