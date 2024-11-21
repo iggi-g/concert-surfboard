@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SpotifyLogin } from "@/components/SpotifyLogin";
 import { ConcertCard } from "@/components/ConcertCard";
 import { SurpriseButton } from "@/components/SurpriseButton";
