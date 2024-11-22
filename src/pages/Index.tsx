@@ -183,7 +183,7 @@ const Index = () => {
                         imageUrl={event.image}
                         ticketUrl={event.link}
                         minutesListened={0}
-                        venueLink={event.venueLink}
+                        venueLink={event.venue_link}
                       />
                     </div>
                   ))
