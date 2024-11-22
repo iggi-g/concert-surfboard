@@ -18,6 +18,7 @@ interface ConcertCardProps {
   ticketUrl: string;
   minutesListened: number;
   similarTo?: string;
+  venueLink?: string;
 }
 
 export const ConcertCard = ({
@@ -28,7 +29,8 @@ export const ConcertCard = ({
   imageUrl,
   ticketUrl,
   minutesListened,
-  similarTo
+  similarTo,
+  venueLink
 }: ConcertCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -58,7 +60,19 @@ export const ConcertCard = ({
           </div>
           <div className="flex items-center gap-2 text-white/70">
             <MapPin className="w-4 h-4" />
-            <span>{venue}, {location}</span>
+            {venueLink ? (
+              <a 
+                href={venueLink} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="hover:text-white transition-colors"
+              >
+                {venue}, {location}
+              </a>
+            ) : (
+              <span>{venue}, {location}</span>
+            )}
           </div>
         </div>
       </Card>
@@ -87,7 +101,18 @@ export const ConcertCard = ({
                   </div>
                   <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5" />
-                    <span className="text-lg">{venue}, {location}</span>
+                    {venueLink ? (
+                      <a 
+                        href={venueLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-lg hover:text-white/80 transition-colors"
+                      >
+                        {venue}, {location}
+                      </a>
+                    ) : (
+                      <span className="text-lg">{venue}, {location}</span>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-5 h-5" />
