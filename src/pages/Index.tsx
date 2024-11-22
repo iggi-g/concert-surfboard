@@ -6,7 +6,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { fetchEvents, Event } from "@/lib/supabase-client";
 import { useQuery } from "@tanstack/react-query";
-import { AddEventDialog } from "@/components/AddEventDialog";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -14,12 +13,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Filter } from "lucide-react";
+import { Filter, SortAsc, SortDesc } from "lucide-react";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { toast } = useToast();
-  const [venueFilter, setVenueFilter] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const { data: events = [], isLoading, error, refetch } = useQuery({
@@ -36,8 +35,12 @@ const Index = () => {
   };
 
   const filteredEvents = events.filter((event: Event) => {
-    if (!venueFilter) return true;
-    return event.venue.toLowerCase().includes(venueFilter.toLowerCase());
+    if (!searchTerm) return true;
+    return (
+      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      event.venue.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      event.location.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   });
 
   useEffect(() => {
@@ -91,7 +94,7 @@ const Index = () => {
                 <Button 
                   variant="secondary"
                   onClick={handleTestLogin}
-                  className="text-sm"
+                  className="text-sm bg-white/10 hover:bg-white/20 text-white border-white/10"
                 >
                   View Demo Interface
                 </Button>
@@ -102,9 +105,9 @@ const Index = () => {
               <div className="w-full max-w-6xl mx-auto space-y-6">
                 <div className="flex items-center justify-end gap-4">
                   <Input
-                    placeholder="Filter by venue..."
-                    value={venueFilter}
-                    onChange={(e) => setVenueFilter(e.target.value)}
+                    placeholder="Search events..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="max-w-xs bg-white/10 border-white/10 text-white placeholder:text-white/50"
                   />
                   
@@ -112,21 +115,22 @@ const Index = () => {
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="bg-white/10 border-white/10 text-white hover:bg-white/20">
                         <Filter className="w-4 h-4 mr-2" />
-                        Filters
+                        Sort & Filter
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem onClick={() => setSortOrder("asc")}>
-                        Earliest First
+                        <SortAsc className="w-4 h-4 mr-2" />
+                        Date: Earliest First
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSortOrder("desc")}>
-                        Latest First
+                        <SortDesc className="w-4 h-4 mr-2" />
+                        Date: Latest First
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
 
                   <SurpriseButton />
-                  <AddEventDialog onEventAdded={refetch} />
                 </div>
               </div>
 
