@@ -33,8 +33,11 @@ export const fetchUniqueVenues = async () => {
   const { data, error } = await supabase
     .from('events')
     .select('venue')
-    .distinct();
+    .order('venue');
 
   if (error) throw error;
-  return data.map(item => item.venue);
+  
+  // Filter unique venues manually
+  const uniqueVenues = [...new Set(data.map(item => item.venue))];
+  return uniqueVenues;
 };
