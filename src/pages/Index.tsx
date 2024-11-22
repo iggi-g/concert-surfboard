@@ -6,35 +6,21 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { fetchEvents, Event } from "@/lib/supabase-client";
 import { useQuery } from "@tanstack/react-query";
+import { AddEventDialog } from "@/components/AddEventDialog";
 import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Filter } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { toast } = useToast();
-  const [selectedVenue, setSelectedVenue] = useState("");
+  const [venueFilter, setVenueFilter] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [selectedDate, setSelectedDate] = useState<Date>();
 
   const { data: events = [], isLoading, error, refetch } = useQuery({
     queryKey: ['events', sortOrder],
@@ -49,12 +35,9 @@ const Index = () => {
     });
   };
 
-  const uniqueVenues = Array.from(new Set(events.map((event: Event) => event.venue))).sort();
-
   const filteredEvents = events.filter((event: Event) => {
-    const matchesVenue = !selectedVenue || event.venue === selectedVenue;
-    const matchesDate = !selectedDate || format(new Date(event.date), 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
-    return matchesVenue && matchesDate;
+    if (!venueFilter) return true;
+    return event.venue.toLowerCase().includes(venueFilter.toLowerCase());
   });
 
   useEffect(() => {
@@ -118,35 +101,12 @@ const Index = () => {
             <>
               <div className="w-full max-w-6xl mx-auto space-y-6">
                 <div className="flex items-center justify-end gap-4">
-                  <Select value={selectedVenue} onValueChange={setSelectedVenue}>
-                    <SelectTrigger className="w-[200px] bg-white/10 border-white/10 text-white">
-                      <SelectValue placeholder="Select venue" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="">All venues</SelectItem>
-                      {uniqueVenues.map((venue) => (
-                        <SelectItem key={venue} value={venue}>
-                          {venue}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="bg-white/10 border-white/10 text-white hover:bg-white/20">
-                        {selectedDate ? format(selectedDate, 'PPP') : 'Pick a date'}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="end">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Input
+                    placeholder="Filter by venue..."
+                    value={venueFilter}
+                    onChange={(e) => setVenueFilter(e.target.value)}
+                    className="max-w-xs bg-white/10 border-white/10 text-white placeholder:text-white/50"
+                  />
                   
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -166,6 +126,7 @@ const Index = () => {
                   </DropdownMenu>
 
                   <SurpriseButton />
+                  <AddEventDialog onEventAdded={refetch} />
                 </div>
               </div>
 
@@ -183,7 +144,6 @@ const Index = () => {
                         imageUrl={event.image}
                         ticketUrl={event.link}
                         minutesListened={0}
-                        venueLink={event.venue_link}
                       />
                     </div>
                   ))
