@@ -28,16 +28,3 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
   if (error) throw error;
   return data as Event[];
 };
-
-export const fetchUniqueVenues = async () => {
-  const { data, error } = await supabase
-    .from('events')
-    .select('venue')
-    .order('venue');
-
-  if (error) throw error;
-  
-  // Filter unique venues manually
-  const uniqueVenues = [...new Set(data.map(item => item.venue))];
-  return uniqueVenues;
-};

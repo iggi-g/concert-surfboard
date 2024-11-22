@@ -4,7 +4,7 @@ import { ConcertCard } from "@/components/ConcertCard";
 import { SurpriseButton } from "@/components/SurpriseButton";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { fetchEvents, fetchUniqueVenues, Event } from "@/lib/supabase-client";
+import { fetchEvents, Event } from "@/lib/supabase-client";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
@@ -19,13 +19,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Filter, Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
@@ -41,11 +34,6 @@ const Index = () => {
     queryFn: () => fetchEvents(sortOrder)
   });
 
-  const { data: venues = [] } = useQuery({
-    queryKey: ['venues'],
-    queryFn: fetchUniqueVenues
-  });
-
   const handleTestLogin = () => {
     setIsAuthenticated(true);
     toast({
@@ -59,7 +47,7 @@ const Index = () => {
     let matchesDate = true;
 
     if (venueFilter) {
-      matchesVenue = event.venue.toLowerCase() === venueFilter.toLowerCase();
+      matchesVenue = event.venue.toLowerCase().includes(venueFilter.toLowerCase());
     }
 
     if (date) {
@@ -131,19 +119,12 @@ const Index = () => {
             <>
               <div className="w-full max-w-6xl mx-auto space-y-6">
                 <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
-                  <Select onValueChange={setVenueFilter} value={venueFilter}>
-                    <SelectTrigger className="w-[200px] bg-white/10 border-white/10 text-white">
-                      <SelectValue placeholder="Select venue" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="">All venues</SelectItem>
-                      {venues.map((venue) => (
-                        <SelectItem key={venue} value={venue.toLowerCase()}>
-                          {venue}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    placeholder="Filter by venue..."
+                    value={venueFilter}
+                    onChange={(e) => setVenueFilter(e.target.value)}
+                    className="max-w-[200px] bg-white/10 border-white/10 text-white placeholder:text-white/50"
+                  />
                   
                   <Popover>
                     <PopoverTrigger asChild>
@@ -200,7 +181,6 @@ const Index = () => {
                         imageUrl={event.image}
                         ticketUrl={event.link}
                         minutesListened={0}
-                        venueLink={event.venue_link}
                       />
                     </div>
                   ))
