@@ -6,7 +6,7 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-  
+
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
 
@@ -85,14 +85,16 @@
   min-height: 100%;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
+  z-index: 1;
   transform: scale(1.5);
   pointer-events: none;
   
   @media (max-width: 768px) {
     height: 100dvh;
     width: 100dvw;
-    transform: scale(1);
+    transform: scale(2.5);
+    top: 0;
+    left: 0;
     object-fit: cover;
   }
 }

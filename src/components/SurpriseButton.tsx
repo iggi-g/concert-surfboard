@@ -24,6 +24,7 @@ export const SurpriseButton = () => {
       });
       return;
     }
+
     setShowAnimation(true);
   };
 
@@ -43,12 +44,13 @@ export const SurpriseButton = () => {
       <Button
         onClick={handleSurprise}
         variant="outline"
-        className="bg-white/10 hover:bg-white hover:text-black transition-all duration-300 border-white/20"
+        className="group relative overflow-hidden border-accent hover:border-accent/80"
       >
         <span className="relative z-10 flex items-center gap-2">
           <Sparkles className="w-4 h-4" />
           Surprise Me
         </span>
+        <div className="absolute inset-0 bg-accent/10 transform translate-y-full transition-transform group-hover:translate-y-0" />
       </Button>
       <SurpriseAnimation 
         isOpen={showAnimation}

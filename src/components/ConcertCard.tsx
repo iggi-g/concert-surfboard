@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock, Music, Ticket, ExternalLink } from "lucide-react";
+import { Calendar, MapPin, Clock, Music, Ticket } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -32,15 +32,10 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleLinkClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    window.open(ticketUrl, '_blank');
-  };
-
   return (
     <>
       <Card 
-        className="overflow-hidden w-full max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10 flex flex-col"
+        className="overflow-hidden w-full max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10"
         onClick={() => setIsDialogOpen(true)}
       >
         <div className="relative aspect-[16/9] w-full">
@@ -55,7 +50,7 @@ export const ConcertCard = ({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         </div>
-        <div className="p-4 flex-1">
+        <div className="p-4">
           <h3 className="text-xl font-bold mb-2 text-white">{artist}</h3>
           <div className="flex items-center gap-2 text-white/70 mb-2">
             <Calendar className="w-4 h-4" />
@@ -66,13 +61,6 @@ export const ConcertCard = ({
             <span>{venue}, {location}</span>
           </div>
         </div>
-        <button
-          onClick={handleLinkClick}
-          className="w-full p-3 bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center gap-2 text-white/90 hover:text-white"
-        >
-          <ExternalLink className="w-4 h-4" />
-          View Event
-        </button>
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
