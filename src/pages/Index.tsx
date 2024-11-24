@@ -1,21 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SpotifyLogin } from "@/components/SpotifyLogin";
-import { ConcertCard } from "@/components/ConcertCard";
-import { SurpriseButton } from "@/components/SurpriseButton";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { fetchEvents, Event } from "@/lib/supabase-client";
-import { useQuery } from "@tanstack/react-query";
+import { fetchEvents } from "@/lib/supabase-client";
 import { FilterControls } from "@/components/FilterControls";
 import { DateRange } from "react-day-picker";
 import { isWithinInterval, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Filter } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { useQuery } from "@tanstack/react-query";
+import { VideoBackground } from "@/components/VideoBackground";
+import { EventsList } from "@/components/EventsList";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -24,9 +18,9 @@ const Index = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"date" | "title" | "venue">("date");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  const { data: events = [], isLoading, error, refetch } = useQuery({
+  const { data: events = [], isLoading, error } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
     queryFn: () => fetchEvents(sortOrder)
   });
@@ -50,9 +44,11 @@ const Index = () => {
     });
   };
 
-  const hasActiveFilters = Boolean(venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date");
+  const hasActiveFilters = Boolean(
+    venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date"
+  );
 
-  const filteredEvents = events.filter((event: Event) => {
+  const filteredEvents = events.filter((event) => {
     let matchesVenue = true;
     let matchesDateRange = true;
 
@@ -69,7 +65,7 @@ const Index = () => {
     }
 
     return matchesVenue && matchesDateRange;
-  }).sort((a: Event, b: Event) => {
+  }).sort((a, b) => {
     if (sortBy === "title") {
       return sortOrder === "asc" 
         ? a.title.localeCompare(b.title)
@@ -80,37 +76,10 @@ const Index = () => {
         ? a.venue.localeCompare(b.venue)
         : b.venue.localeCompare(a.venue);
     }
-    // Default sort by date
     return sortOrder === "asc"
       ? new Date(a.date).getTime() - new Date(b.date).getTime()
       : new Date(b.date).getTime() - new Date(a.date).getTime();
   });
-
-  useEffect(() => {
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-
-    window.onYouTubeIframeAPIReady = () => {
-      new window.YT.Player('video-background', {
-        videoId: 'q4xKvHANqjk',
-        playerVars: {
-          autoplay: 1,
-          controls: 0,
-          loop: 1,
-          mute: 1,
-          playlist: 'q4xKvHANqjk',
-          start: 40
-        },
-        events: {
-          onReady: (event: any) => {
-            event.target.playVideo();
-          }
-        }
-      });
-    };
-  }, []);
 
   if (error) {
     toast({
@@ -122,8 +91,8 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen">
+      <VideoBackground />
       <div className={cn("container relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen")}>
-        {/* Logo */}
         <img 
           src="/logo.svg" 
           alt="Logo" 
@@ -161,24 +130,23 @@ const Index = () => {
                   setSortOrder={setSortOrder}
                   sortBy={sortBy}
                   setSortBy={setSortBy}
-                  hasActiveFilters={Boolean(venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date")}
+                  hasActiveFilters={hasActiveFilters}
                   clearFilters={clearFilters}
                 />
               </div>
 
-              {/* Mobile Filter Button */}
-              <div className="md:hidden w-full">
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button 
-                      variant="outline" 
-                      className="w-full bg-white/10 border-white/10 text-white"
-                    >
-                      <Filter className="w-4 h-4 mr-2" />
-                      Filter Options
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent>
+              {/* Mobile Filters */}
+              <div className="md:hidden w-full space-y-4">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowMobileFilters(!showMobileFilters)}
+                  className="w-full bg-white/10 border-white/10 text-white"
+                >
+                  {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
+                </Button>
+                
+                {showMobileFilters && (
+                  <div className="animate-fade-in">
                     <FilterControls
                       venueFilter={venueFilter}
                       setVenueFilter={setVenueFilter}
@@ -188,32 +156,14 @@ const Index = () => {
                       setSortOrder={setSortOrder}
                       sortBy={sortBy}
                       setSortBy={setSortBy}
-                      hasActiveFilters={Boolean(venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date")}
+                      hasActiveFilters={hasActiveFilters}
                       clearFilters={clearFilters}
                     />
-                  </SheetContent>
-                </Sheet>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full max-w-6xl mx-auto">
-                {isLoading ? (
-                  <p className="text-white">Loading events...</p>
-                ) : (
-                  filteredEvents.map((event: Event, index: number) => (
-                    <div key={index} className="flex justify-center">
-                      <ConcertCard
-                        artist={event.title}
-                        date={event.date}
-                        venue={event.venue}
-                        location={event.location || ""}
-                        imageUrl={event.image}
-                        ticketUrl={event.link}
-                        minutesListened={0}
-                      />
-                    </div>
-                  ))
+                  </div>
                 )}
               </div>
+
+              <EventsList events={filteredEvents} isLoading={isLoading} />
             </>
           )}
         </div>
