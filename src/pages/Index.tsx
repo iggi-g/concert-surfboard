@@ -6,22 +6,16 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { fetchEvents, Event } from "@/lib/supabase-client";
 import { useQuery } from "@tanstack/react-query";
-import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Filter, Calendar as CalendarIcon, X } from "lucide-react";
-import { format, isWithinInterval, parseISO } from "date-fns";
+import { FilterControls } from "@/components/FilterControls";
+import { DateRange } from "react-day-picker";
+import { isWithinInterval, parseISO } from "date-fns";
+
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,13 +23,7 @@ const Index = () => {
   const [venueFilter, setVenueFilter] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"date" | "title" | "venue">("date");
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
-    from: undefined,
-    to: undefined,
-  });
+  const [dateRange, setDateRange] = useState<DateRange>();
 
   const { data: events = [], isLoading, error, refetch } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
@@ -52,7 +40,7 @@ const Index = () => {
 
   const clearFilters = () => {
     setVenueFilter("");
-    setDateRange({ from: undefined, to: undefined });
+    setDateRange(undefined);
     setSortOrder("asc");
     setSortBy("date");
     toast({
@@ -61,7 +49,7 @@ const Index = () => {
     });
   };
 
-  const hasActiveFilters = venueFilter || dateRange.from || dateRange.to || sortOrder !== "asc" || sortBy !== "date";
+  const hasActiveFilters = venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date";
 
   const filteredEvents = events.filter((event: Event) => {
     let matchesVenue = true;
@@ -71,7 +59,7 @@ const Index = () => {
       matchesVenue = event.venue.toLowerCase().includes(venueFilter.toLowerCase());
     }
 
-    if (dateRange.from && dateRange.to) {
+    if (dateRange?.from && dateRange?.to) {
       const eventDate = parseISO(event.date);
       matchesDateRange = isWithinInterval(eventDate, {
         start: dateRange.from,
@@ -103,9 +91,8 @@ const Index = () => {
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
 
-    // @ts-ignore
     window.onYouTubeIframeAPIReady = () => {
-      new YT.Player('video-background', {
+      new window.YT.Player('video-background', {
         videoId: 'q4xKvHANqjk',
         playerVars: {
           autoplay: 1,
@@ -155,96 +142,18 @@ const Index = () => {
             </div>
           ) : (
             <>
-              <div className="w-full max-w-6xl mx-auto space-y-6">
-                <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
-                  <Input
-                    placeholder="Filter by venue..."
-                    value={venueFilter}
-                    onChange={(e) => setVenueFilter(e.target.value)}
-                    className="max-w-[200px] bg-white/10 border-white/10 text-white placeholder:text-white/50"
-                  />
-                  
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "bg-white/10 border-white/10 text-white hover:bg-white/20",
-                          dateRange.from && "text-white"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {dateRange.from ? (
-                          dateRange.to ? (
-                            <>
-                              {format(dateRange.from, "LLL dd, y")} -{" "}
-                              {format(dateRange.to, "LLL dd, y")}
-                            </>
-                          ) : (
-                            format(dateRange.from, "LLL dd, y")
-                          )
-                        ) : (
-                          <span>Pick a date range</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="end">
-                      <Calendar
-                        initialFocus
-                        mode="range"
-                        defaultMonth={dateRange.from}
-                        selected={dateRange}
-                        onSelect={setDateRange}
-                        numberOfMonths={2}
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="bg-white/10 border-white/10 text-white hover:bg-white/20">
-                        <Filter className="w-4 h-4 mr-2" />
-                        Sort
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => { setSortBy("date"); setSortOrder("asc"); }}>
-                        Date (Earliest First)
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => { setSortBy("date"); setSortOrder("desc"); }}>
-                        Date (Latest First)
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => { setSortBy("title"); setSortOrder("asc"); }}>
-                        Artist Name (A-Z)
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => { setSortBy("title"); setSortOrder("desc"); }}>
-                        Artist Name (Z-A)
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => { setSortBy("venue"); setSortOrder("asc"); }}>
-                        Venue Name (A-Z)
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => { setSortBy("venue"); setSortOrder("desc"); }}>
-                        Venue Name (Z-A)
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  {hasActiveFilters && (
-                    <Button
-                      variant="outline"
-                      onClick={clearFilters}
-                      className="bg-white/10 border-white/10 text-white hover:bg-white/20"
-                    >
-                      <X className="w-4 h-4 mr-2" />
-                      Clear Filters
-                    </Button>
-                  )}
-
-                  <SurpriseButton />
-                </div>
-              </div>
+              <FilterControls
+                venueFilter={venueFilter}
+                setVenueFilter={setVenueFilter}
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                hasActiveFilters={hasActiveFilters}
+                clearFilters={clearFilters}
+              />
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
                 {isLoading ? (
