@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FilterControls } from "@/components/FilterControls";
 import { DateRange } from "react-day-picker";
 import { isWithinInterval, parseISO } from "date-fns";
+import { cn } from "@/lib/utils";
 
 declare global {
   interface Window {
@@ -23,7 +24,7 @@ const Index = () => {
   const [venueFilter, setVenueFilter] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"date" | "title" | "venue">("date");
-  const [dateRange, setDateRange] = useState<DateRange>();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
   const { data: events = [], isLoading, error, refetch } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
@@ -49,7 +50,7 @@ const Index = () => {
     });
   };
 
-  const hasActiveFilters = venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date";
+  const hasActiveFilters = Boolean(venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date");
 
   const filteredEvents = events.filter((event: Event) => {
     let matchesVenue = true;
@@ -121,7 +122,7 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen">
-      <div className="container relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen">
+      <div className={cn("container relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen")}>
         <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
           Discover Your Next Concert
         </h1>
