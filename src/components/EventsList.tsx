@@ -22,7 +22,6 @@ export const EventsList = ({ events, isLoading }: EventsListProps) => {
             location={event.location || ""}
             imageUrl={event.image}
             ticketUrl={event.link}
-            minutesListened={0}
           />
         </div>
       ))}
