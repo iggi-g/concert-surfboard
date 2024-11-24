@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SpotifyLogin } from "@/components/SpotifyLogin";
 import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
 import { fetchEvents } from "@/lib/supabase-client";
 import { FilterControls } from "@/components/FilterControls";
 import { DateRange } from "react-day-picker";
@@ -12,7 +10,6 @@ import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
 
 const Index = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { toast } = useToast();
   const [venueFilter, setVenueFilter] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -24,14 +21,6 @@ const Index = () => {
     queryKey: ['events', sortOrder, sortBy],
     queryFn: () => fetchEvents(sortOrder)
   });
-
-  const handleTestLogin = () => {
-    setIsAuthenticated(true);
-    toast({
-      title: "Test Mode Activated",
-      description: "You're now viewing the interface as a logged-in user",
-    });
-  };
 
   const clearFilters = () => {
     setVenueFilter("");
@@ -104,23 +93,33 @@ const Index = () => {
         </h1>
         
         <div className="flex-1 flex flex-col items-center justify-center gap-8 px-4">
-          {!isAuthenticated ? (
-            <div className="space-y-4">
-              <SpotifyLogin />
-              <div className="mt-4">
-                <Button 
-                  variant="secondary"
-                  onClick={handleTestLogin}
-                  className="text-sm"
-                >
-                  View Demo Interface
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <>
-              {/* Desktop Filters */}
-              <div className="hidden md:block w-full">
+          {/* Desktop Filters */}
+          <div className="hidden md:block w-full">
+            <FilterControls
+              venueFilter={venueFilter}
+              setVenueFilter={setVenueFilter}
+              dateRange={dateRange}
+              setDateRange={setDateRange}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              hasActiveFilters={hasActiveFilters}
+              clearFilters={clearFilters}
+            />
+          </div>
+
+          {/* Mobile Filters */}
+          <div className="md:hidden w-full space-y-4">
+            <button 
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              className="w-full bg-white/10 border-white/10 text-white px-4 py-2 rounded hover:bg-white/20 transition-colors"
+            >
+              {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
+            </button>
+            
+            {showMobileFilters && (
+              <div className="animate-fade-in">
                 <FilterControls
                   venueFilter={venueFilter}
                   setVenueFilter={setVenueFilter}
@@ -134,38 +133,10 @@ const Index = () => {
                   clearFilters={clearFilters}
                 />
               </div>
+            )}
+          </div>
 
-              {/* Mobile Filters */}
-              <div className="md:hidden w-full space-y-4">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setShowMobileFilters(!showMobileFilters)}
-                  className="w-full bg-white/10 border-white/10 text-white"
-                >
-                  {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
-                </Button>
-                
-                {showMobileFilters && (
-                  <div className="animate-fade-in">
-                    <FilterControls
-                      venueFilter={venueFilter}
-                      setVenueFilter={setVenueFilter}
-                      dateRange={dateRange}
-                      setDateRange={setDateRange}
-                      sortOrder={sortOrder}
-                      setSortOrder={setSortOrder}
-                      sortBy={sortBy}
-                      setSortBy={setSortBy}
-                      hasActiveFilters={hasActiveFilters}
-                      clearFilters={clearFilters}
-                    />
-                  </div>
-                )}
-              </div>
-
-              <EventsList events={filteredEvents} isLoading={isLoading} />
-            </>
-          )}
+          <EventsList events={filteredEvents} isLoading={isLoading} />
         </div>
       </div>
     </div>
