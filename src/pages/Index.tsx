@@ -10,13 +10,12 @@ import { FilterControls } from "@/components/FilterControls";
 import { DateRange } from "react-day-picker";
 import { isWithinInterval, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
-
-declare global {
-  interface Window {
-    YT: any;
-    onYouTubeIframeAPIReady: () => void;
-  }
-}
+import { Filter } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,6 +24,7 @@ const Index = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"date" | "title" | "venue">("date");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const { data: events = [], isLoading, error, refetch } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
@@ -123,8 +123,15 @@ const Index = () => {
   return (
     <div className="relative min-h-screen">
       <div className={cn("container relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen")}>
+        {/* Logo */}
+        <img 
+          src="/logo.svg" 
+          alt="Logo" 
+          className="absolute left-4 top-4 w-12 h-12 md:w-16 md:h-16 logo"
+        />
+        
         <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
-          Discover Your Next Concert
+          Discover Your Next Concert in Copenhagen
         </h1>
         
         <div className="flex-1 flex flex-col items-center justify-center gap-8 px-4">
@@ -143,20 +150,52 @@ const Index = () => {
             </div>
           ) : (
             <>
-              <FilterControls
-                venueFilter={venueFilter}
-                setVenueFilter={setVenueFilter}
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-                sortOrder={sortOrder}
-                setSortOrder={setSortOrder}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                hasActiveFilters={hasActiveFilters}
-                clearFilters={clearFilters}
-              />
+              {/* Desktop Filters */}
+              <div className="hidden md:block w-full">
+                <FilterControls
+                  venueFilter={venueFilter}
+                  setVenueFilter={setVenueFilter}
+                  dateRange={dateRange}
+                  setDateRange={setDateRange}
+                  sortOrder={sortOrder}
+                  setSortOrder={setSortOrder}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  hasActiveFilters={Boolean(venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date")}
+                  clearFilters={clearFilters}
+                />
+              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
+              {/* Mobile Filter Button */}
+              <div className="md:hidden w-full">
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="w-full bg-white/10 border-white/10 text-white"
+                    >
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter Options
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent>
+                    <FilterControls
+                      venueFilter={venueFilter}
+                      setVenueFilter={setVenueFilter}
+                      dateRange={dateRange}
+                      setDateRange={setDateRange}
+                      sortOrder={sortOrder}
+                      setSortOrder={setSortOrder}
+                      sortBy={sortBy}
+                      setSortBy={setSortBy}
+                      hasActiveFilters={Boolean(venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date")}
+                      clearFilters={clearFilters}
+                    />
+                  </SheetContent>
+                </Sheet>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full max-w-6xl mx-auto">
                 {isLoading ? (
                   <p className="text-white">Loading events...</p>
                 ) : (

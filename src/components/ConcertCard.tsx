@@ -37,7 +37,7 @@ export const ConcertCard = ({
   return (
     <>
       <Card 
-        className="overflow-hidden w-full max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10"
+        className="overflow-hidden w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10"
         onClick={() => setIsDialogOpen(true)}
       >
         <div className="relative aspect-[16/9] w-full">
@@ -52,13 +52,13 @@ export const ConcertCard = ({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         </div>
-        <div className="p-4">
-          <h3 className="text-xl font-bold mb-2 text-white">{artist}</h3>
-          <div className="flex items-center gap-2 text-white/70 mb-2">
+        <div className="p-2 md:p-4">
+          <h3 className="text-lg md:text-xl font-bold mb-2 text-white">{artist}</h3>
+          <div className="flex items-center gap-2 text-white/70 mb-2 text-sm md:text-base">
             <Calendar className="w-4 h-4" />
             <span>{date}</span>
           </div>
-          <div className="flex items-center gap-2 text-white/70">
+          <div className="flex items-center gap-2 text-white/70 text-sm md:text-base">
             <MapPin className="w-4 h-4" />
             {venueLink ? (
               <a 
