@@ -4,9 +4,8 @@ import { ConcertCard } from "@/components/ConcertCard";
 import { SurpriseButton } from "@/components/SurpriseButton";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { fetchEvents, Event } from "@/lib/supabase-client";
+import { fetchEvents, fetchUniqueVenues, Event } from "@/lib/supabase-client";
 import { useQuery } from "@tanstack/react-query";
-import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import {
   DropdownMenu,
@@ -19,8 +18,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Filter, Calendar as CalendarIcon } from "lucide-react";
+import { Filter, Calendar as CalendarIcon, X } from "lucide-react";
 import { format } from "date-fns";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,9 +35,14 @@ const Index = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [date, setDate] = useState<Date>();
 
-  const { data: events = [], isLoading, error, refetch } = useQuery({
+  const { data: events = [], isLoading, error } = useQuery({
     queryKey: ['events', sortOrder],
     queryFn: () => fetchEvents(sortOrder)
+  });
+
+  const { data: venues = [] } = useQuery({
+    queryKey: ['venues'],
+    queryFn: fetchUniqueVenues
   });
 
   const handleTestLogin = () => {
@@ -42,12 +53,22 @@ const Index = () => {
     });
   };
 
+  const clearFilters = () => {
+    setVenueFilter("");
+    setDate(undefined);
+    setSortOrder("asc");
+    toast({
+      title: "Filters Cleared",
+      description: "All filters have been reset",
+    });
+  };
+
   const filteredEvents = events.filter((event: Event) => {
     let matchesVenue = true;
     let matchesDate = true;
 
     if (venueFilter) {
-      matchesVenue = event.venue.toLowerCase().includes(venueFilter.toLowerCase());
+      matchesVenue = event.venue === venueFilter;
     }
 
     if (date) {
@@ -119,12 +140,19 @@ const Index = () => {
             <>
               <div className="w-full max-w-6xl mx-auto space-y-6">
                 <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
-                  <Input
-                    placeholder="Filter by venue..."
-                    value={venueFilter}
-                    onChange={(e) => setVenueFilter(e.target.value)}
-                    className="max-w-[200px] bg-white/10 border-white/10 text-white placeholder:text-white/50"
-                  />
+                  <Select value={venueFilter} onValueChange={setVenueFilter}>
+                    <SelectTrigger className="w-[200px] bg-white/10 border-white/10 text-white">
+                      <SelectValue placeholder="Filter by venue..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All venues</SelectItem>
+                      {venues.map((venue) => (
+                        <SelectItem key={venue} value={venue}>
+                          {venue}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   
                   <Popover>
                     <PopoverTrigger asChild>
@@ -162,6 +190,17 @@ const Index = () => {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+
+                  {(venueFilter || date || sortOrder !== "asc") && (
+                    <Button
+                      variant="outline"
+                      onClick={clearFilters}
+                      className="bg-white/10 border-white/10 text-white hover:bg-white/20"
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      Clear Filters
+                    </Button>
+                  )}
 
                   <SurpriseButton />
                 </div>
