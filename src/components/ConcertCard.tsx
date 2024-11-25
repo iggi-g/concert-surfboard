@@ -108,7 +108,7 @@ export const ConcertCard = ({
                       Sorry, we are not able to show you the venue website here. Please click the button below to visit the website for the event.
                     </p>
                     <Button 
-                      className="w-full text-lg py-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-white/10" 
+                      className="w-full text-lg py-6 bg-accent hover:bg-accent/90 backdrop-blur-sm text-white border-white/10 shadow-[0_0_15px_rgba(155,135,245,0.3)] transition-all hover:shadow-[0_0_20px_rgba(155,135,245,0.5)]" 
                       onClick={() => window.open(ticketUrl, '_blank')}
                     >
                       <Ticket className="w-5 h-5 mr-2" />
