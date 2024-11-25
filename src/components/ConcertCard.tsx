@@ -32,7 +32,10 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const isRestrictedVenue = venue === 'Rust' || venue === 'Royal Arena';
+  const isRestrictedVenue = venue === 'Rust' || 
+                           venue === 'Royal Arena' || 
+                           venue === 'Råhuset' || 
+                           venue === 'Basement';
 
   const handleClick = () => {
     setIsDialogOpen(true);

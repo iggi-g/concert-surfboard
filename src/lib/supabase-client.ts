@@ -20,10 +20,13 @@ export interface Event {
 }
 
 export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
+  const today = new Date().toISOString().split('T')[0];
+  
   const { data, error } = await supabase
     .from('events')
     .select('*')
-    .order('date', { ascending: sortOrder === "asc" });
+    .gte('date', today)
+    .order('date', { ascending: true });
   
   if (error) throw error;
   return data as Event[];
