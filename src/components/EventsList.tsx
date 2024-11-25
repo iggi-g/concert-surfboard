@@ -32,16 +32,19 @@ export const EventsList = ({ events, isLoading }: EventsListProps) => {
 
 const getVenueLink = (venue: string): string => {
   const venueLinks: { [key: string]: string } = {
-    'VEGA': 'https://vega.dk/en',
+    'VEGA': 'https://vega.dk/',
+    'Store VEGA': 'https://vega.dk/',
+    'Lille VEGA': 'https://vega.dk/',
+    'Ideal Bar': 'https://vega.dk/',
     'DR Koncerthuset': 'https://www.drkoncerthuset.dk/en',
-    'Royal Arena': 'https://www.ticketmaster.dk/venue/royal-arena-copenhagen-billetter/royalarena/226',
-    'Rust': 'https://www.ticketmaster.dk/venue/rust-copenhagen-billetter/rust_cph/1164',
+    'Royal Arena': 'https://www.royalarena.dk/',
+    'Rust': 'https://rust.dk/',
     'Pumpehuset': 'https://pumpehuset.dk/en',
     'Den Grå Hal': 'https://www.christiania.org/den-graa-hal',
     'Amager Bio': 'https://amagerbio.dk/en',
-    'Hotel Cecil': 'https://hotelcecil.dk/en',
+    'Hotel Cecil': 'https://www.hotelcecil.dk/',
     'Loppen': 'https://loppen.dk/en',
-    'Bremen Teater': 'https://brementeater.dk/en'
+    'Bremen Teater': 'https://www.brementeater.dk/'
   };
   
   return venueLinks[venue] || '';

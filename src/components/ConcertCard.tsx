@@ -52,12 +52,10 @@ export const ConcertCard = ({
         </div>
         <div className="p-2 md:p-4">
           <h3 className="text-lg md:text-xl font-bold mb-2 text-white">{artist}</h3>
-          <div className="flex items-center gap-2 text-white/70 mb-2 text-sm md:text-base">
-            <Calendar className="w-4 h-4" />
+          <div className="flex flex-wrap items-center gap-2 text-white/70 mb-2 text-sm md:text-base">
+            <Calendar className="w-4 h-4 shrink-0" />
             <span>{date}</span>
-          </div>
-          <div className="flex items-center gap-2 text-white/70 text-sm md:text-base">
-            <MapPin className="w-4 h-4" />
+            <span className="text-white/50">•</span>
             {venueLink ? (
               <a 
                 href={venueLink} 
@@ -71,7 +69,10 @@ export const ConcertCard = ({
             ) : (
               <span>{venue}</span>
             )}
-            <span className="text-white/70">{location}</span>
+          </div>
+          <div className="flex items-center gap-2 text-white/70 text-sm md:text-base">
+            <MapPin className="w-4 h-4" />
+            <span>{location}</span>
           </div>
         </div>
       </Card>
