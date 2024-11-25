@@ -79,9 +79,9 @@ const Index = () => {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen w-full">
       <VideoBackground />
-      <div className={cn("container relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen")}>
+      <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
         <img 
           src="/logo.svg" 
           alt="Logo" 
@@ -92,9 +92,9 @@ const Index = () => {
           Discover Your Next Concert in Copenhagen
         </h1>
         
-        <div className="flex-1 flex flex-col items-center justify-center gap-8 px-4">
+        <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
           {/* Desktop Filters */}
-          <div className="hidden md:block w-full">
+          <div className="hidden md:block w-full max-w-[1920px] mx-auto">
             <FilterControls
               venueFilter={venueFilter}
               setVenueFilter={setVenueFilter}

@@ -66,11 +66,12 @@ export const ConcertCard = ({
                 onClick={(e) => e.stopPropagation()}
                 className="hover:text-white transition-colors"
               >
-                {venue}, {location}
+                {venue}
               </a>
             ) : (
-              <span>{venue}, {location}</span>
+              <span>{venue}</span>
             )}
+            <span className="text-white/70">{location}</span>
           </div>
         </div>
       </Card>
