@@ -105,9 +105,15 @@ export const ConcertCard = ({
                   </div>
                   <div className="text-center p-4 bg-white/10 rounded-md">
                     <p className="text-lg mb-4">
-                      Due to website restrictions, we cannot display the ticket purchasing interface directly. 
-                      Please click the button below to visit the official website to purchase tickets.
+                      Sorry, we are not able to show you the venue website here. Please click the button below to visit the website for the event.
                     </p>
+                    <Button 
+                      className="w-full text-lg py-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-white/10" 
+                      onClick={() => window.open(ticketUrl, '_blank')}
+                    >
+                      <Ticket className="w-5 h-5 mr-2" />
+                      Visit Event Website
+                    </Button>
                   </div>
                 </div>
               ) : (
@@ -124,7 +130,7 @@ export const ConcertCard = ({
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-5 h-5" />
-                    <span className="text-lg">{date}</span>
+                    <span className="text-lg">{date} {venue}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5" />
@@ -135,10 +141,10 @@ export const ConcertCard = ({
                         rel="noopener noreferrer"
                         className="text-lg hover:text-white/80 transition-colors"
                       >
-                        {venue}, {location}
+                        {location}
                       </a>
                     ) : (
-                      <span className="text-lg">{venue}, {location}</span>
+                      <span className="text-lg">{location}</span>
                     )}
                   </div>
                   {similarTo && (
@@ -149,13 +155,15 @@ export const ConcertCard = ({
                   )}
                 </div>
 
-                <Button 
-                  className="w-full text-lg py-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-white/10" 
-                  onClick={() => window.open(ticketUrl, '_blank')}
-                >
-                  <Ticket className="w-5 h-5 mr-2" />
-                  Purchase Tickets
-                </Button>
+                {!isRestrictedVenue && (
+                  <Button 
+                    className="w-full text-lg py-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-white/10" 
+                    onClick={() => window.open(ticketUrl, '_blank')}
+                  >
+                    <Ticket className="w-5 h-5 mr-2" />
+                    Purchase Tickets
+                  </Button>
+                )}
               </div>
             </div>
           </div>
