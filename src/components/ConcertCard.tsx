@@ -32,6 +32,19 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const getVenueLink = (venueName: string) => {
+    switch (venueName.toLowerCase()) {
+      case 'royal arena':
+        return 'https://www.royalarena.dk';
+      case 'rust':
+        return 'https://www.rust.dk';
+      default:
+        return venueLink;
+    }
+  };
+
+  const finalVenueLink = getVenueLink(venue);
+
   return (
     <>
       <Card 
@@ -58,9 +71,9 @@ export const ConcertCard = ({
           </div>
           <div className="flex items-center gap-2 text-white/70 text-sm md:text-base">
             <MapPin className="w-4 h-4" />
-            {venueLink ? (
+            {finalVenueLink ? (
               <a 
-                href={venueLink} 
+                href={finalVenueLink} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
@@ -99,9 +112,9 @@ export const ConcertCard = ({
                   </div>
                   <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5" />
-                    {venueLink ? (
+                    {finalVenueLink ? (
                       <a 
-                        href={venueLink} 
+                        href={finalVenueLink} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-lg hover:text-white/80 transition-colors"
