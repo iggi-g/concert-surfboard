@@ -69,9 +69,8 @@ export const ConcertCard = ({
             ) : (
               <span>{venue}</span>
             )}
-          </div>
-          <div className="flex items-center gap-2 text-white/70 text-sm md:text-base">
-            <MapPin className="w-4 h-4" />
+            <span className="text-white/50">•</span>
+            <MapPin className="w-4 h-4 shrink-0" />
             <span>{location}</span>
           </div>
         </div>

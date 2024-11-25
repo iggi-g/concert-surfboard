@@ -34,8 +34,11 @@ const getVenueLink = (venue: string): string => {
   const venueLinks: { [key: string]: string } = {
     'VEGA': 'https://vega.dk/',
     'Store VEGA': 'https://vega.dk/',
+    'STORE VEGA': 'https://vega.dk/',
     'Lille VEGA': 'https://vega.dk/',
+    'LILLE VEGA': 'https://vega.dk/',
     'Ideal Bar': 'https://vega.dk/',
+    'IDEAL BAR': 'https://vega.dk/',
     'DR Koncerthuset': 'https://www.drkoncerthuset.dk/en',
     'Royal Arena': 'https://www.royalarena.dk/',
     'Rust': 'https://rust.dk/',
