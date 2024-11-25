@@ -32,7 +32,6 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Check if the venue is Rust or Royal Arena
   const isRestrictedVenue = venue === 'Rust' || venue === 'Royal Arena';
 
   const handleClick = () => {
@@ -84,16 +83,16 @@ export const ConcertCard = ({
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-0">
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-0 bg-black/40 backdrop-blur-sm border-white/10">
           <DialogHeader className="p-6 pb-0">
-            <DialogTitle className="text-2xl font-bold">{artist}</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-white">{artist}</DialogTitle>
           </DialogHeader>
           
           <div className="p-6">
             <div className="space-y-6">
               {isRestrictedVenue ? (
                 <div className="space-y-6">
-                  <div className="h-[400px] w-full rounded-md overflow-hidden border">
+                  <div className="h-[400px] w-full rounded-md overflow-hidden border border-white/10">
                     <img
                       src={imageUrl}
                       alt={artist}
@@ -103,8 +102,8 @@ export const ConcertCard = ({
                       }}
                     />
                   </div>
-                  <div className="text-center p-4 bg-white/10 rounded-md">
-                    <p className="text-lg mb-4">
+                  <div className="text-center p-4 bg-black/20 backdrop-blur-sm rounded-md border border-white/10">
+                    <p className="text-lg mb-4 text-white">
                       Sorry, we are not able to show you the venue website here. Please click the button below to visit the website for the event.
                     </p>
                     <Button 
@@ -117,7 +116,7 @@ export const ConcertCard = ({
                   </div>
                 </div>
               ) : (
-                <div className="h-[600px] w-full rounded-md overflow-hidden border">
+                <div className="h-[600px] w-full rounded-md overflow-hidden border border-white/10">
                   <iframe
                     src={ticketUrl}
                     className="w-full h-full"
@@ -127,7 +126,7 @@ export const ConcertCard = ({
               )}
               
               <div className="grid grid-cols-1 gap-6">
-                <div className="space-y-3">
+                <div className="space-y-3 text-white">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-5 h-5" />
                     <span className="text-lg">{date} {venue}</span>
@@ -157,7 +156,7 @@ export const ConcertCard = ({
 
                 {!isRestrictedVenue && (
                   <Button 
-                    className="w-full text-lg py-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-white/10" 
+                    className="w-full text-lg py-6 bg-accent hover:bg-accent/90 backdrop-blur-sm text-white border-white/10 shadow-[0_0_15px_rgba(155,135,245,0.3)] transition-all hover:shadow-[0_0_20px_rgba(155,135,245,0.5)]" 
                     onClick={() => window.open(ticketUrl, '_blank')}
                   >
                     <Ticket className="w-5 h-5 mr-2" />
