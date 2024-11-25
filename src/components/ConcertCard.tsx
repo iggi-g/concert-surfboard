@@ -35,9 +35,9 @@ export const ConcertCard = ({
   const getVenueLink = (venueName: string) => {
     switch (venueName.toLowerCase()) {
       case 'royal arena':
-        return 'https://www.royalarena.dk';
+        return 'https://royalarena.dk';
       case 'rust':
-        return 'https://www.rust.dk';
+        return 'https://rust.dk';
       default:
         return venueLink;
     }
