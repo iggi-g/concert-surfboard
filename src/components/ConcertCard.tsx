@@ -32,19 +32,6 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const getVenueLink = (venueName: string) => {
-    switch (venueName.toLowerCase()) {
-      case 'royal arena':
-        return 'https://www.livenation.dk/venue/royal-arena-tickets-copenhagen/royarendk';
-      case 'rust':
-        return 'https://www.ticketmaster.dk/venue/rust-tickets-copenhagen/rustdk';
-      default:
-        return venueLink;
-    }
-  };
-
-  const finalVenueLink = getVenueLink(venue);
-
   return (
     <>
       <Card 
@@ -71,9 +58,9 @@ export const ConcertCard = ({
           </div>
           <div className="flex items-center gap-2 text-white/70 text-sm md:text-base">
             <MapPin className="w-4 h-4" />
-            {finalVenueLink ? (
+            {venueLink ? (
               <a 
-                href={finalVenueLink} 
+                href={venueLink} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
@@ -112,9 +99,9 @@ export const ConcertCard = ({
                   </div>
                   <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5" />
-                    {finalVenueLink ? (
+                    {venueLink ? (
                       <a 
-                        href={finalVenueLink} 
+                        href={venueLink} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-lg hover:text-white/80 transition-colors"
