@@ -33,14 +33,10 @@ export const ConcertCard = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Check if the venue is Rust or Royal Arena
-  const isDirectRedirectVenue = venue === 'Rust' || venue === 'Royal Arena';
+  const isRestrictedVenue = venue === 'Rust' || venue === 'Royal Arena';
 
   const handleClick = () => {
-    if (isDirectRedirectVenue) {
-      window.open(ticketUrl, '_blank');
-    } else {
-      setIsDialogOpen(true);
-    }
+    setIsDialogOpen(true);
   };
 
   return (
@@ -87,15 +83,34 @@ export const ConcertCard = ({
         </div>
       </Card>
 
-      {!isDirectRedirectVenue && (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-0">
-            <DialogHeader className="p-6 pb-0">
-              <DialogTitle className="text-2xl font-bold">{artist}</DialogTitle>
-            </DialogHeader>
-            
-            <div className="p-6">
-              <div className="space-y-6">
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-0">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle className="text-2xl font-bold">{artist}</DialogTitle>
+          </DialogHeader>
+          
+          <div className="p-6">
+            <div className="space-y-6">
+              {isRestrictedVenue ? (
+                <div className="space-y-6">
+                  <div className="h-[400px] w-full rounded-md overflow-hidden border">
+                    <img
+                      src={imageUrl}
+                      alt={artist}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3";
+                      }}
+                    />
+                  </div>
+                  <div className="text-center p-4 bg-white/10 rounded-md">
+                    <p className="text-lg mb-4">
+                      Due to website restrictions, we cannot display the ticket purchasing interface directly. 
+                      Please click the button below to visit the official website to purchase tickets.
+                    </p>
+                  </div>
+                </div>
+              ) : (
                 <div className="h-[600px] w-full rounded-md overflow-hidden border">
                   <iframe
                     src={ticketUrl}
@@ -103,49 +118,49 @@ export const ConcertCard = ({
                     title="Event Website"
                   />
                 </div>
-                
-                <div className="grid grid-cols-1 gap-6">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-5 h-5" />
-                      <span className="text-lg">{date}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-5 h-5" />
-                      {venueLink ? (
-                        <a 
-                          href={venueLink} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-lg hover:text-white/80 transition-colors"
-                        >
-                          {venue}, {location}
-                        </a>
-                      ) : (
-                        <span className="text-lg">{venue}, {location}</span>
-                      )}
-                    </div>
-                    {similarTo && (
-                      <div className="flex items-center gap-2">
-                        <Music className="w-5 h-5" />
-                        <span className="text-lg">Similar to {similarTo}</span>
-                      </div>
+              )}
+              
+              <div className="grid grid-cols-1 gap-6">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-5 h-5" />
+                    <span className="text-lg">{date}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-5 h-5" />
+                    {venueLink ? (
+                      <a 
+                        href={venueLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-lg hover:text-white/80 transition-colors"
+                      >
+                        {venue}, {location}
+                      </a>
+                    ) : (
+                      <span className="text-lg">{venue}, {location}</span>
                     )}
                   </div>
-
-                  <Button 
-                    className="w-full text-lg py-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-white/10" 
-                    onClick={() => window.open(ticketUrl, '_blank')}
-                  >
-                    <Ticket className="w-5 h-5 mr-2" />
-                    Purchase Tickets
-                  </Button>
+                  {similarTo && (
+                    <div className="flex items-center gap-2">
+                      <Music className="w-5 h-5" />
+                      <span className="text-lg">Similar to {similarTo}</span>
+                    </div>
+                  )}
                 </div>
+
+                <Button 
+                  className="w-full text-lg py-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-white/10" 
+                  onClick={() => window.open(ticketUrl, '_blank')}
+                >
+                  <Ticket className="w-5 h-5 mr-2" />
+                  Purchase Tickets
+                </Button>
               </div>
             </div>
-          </DialogContent>
-        </Dialog>
-      )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
