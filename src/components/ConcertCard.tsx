@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Music, Ticket } from "lucide-react";
+import { Calendar, MapPin, Music } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -55,27 +55,30 @@ export const ConcertCard = ({
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        </div>
-        <div className="p-2 md:p-4">
-          <h3 className="text-lg md:text-xl font-bold mb-2 text-white">{artist}</h3>
-          <div className="flex flex-wrap items-center gap-2 text-white/70 mb-2 text-sm md:text-base">
-            <Calendar className="w-4 h-4 shrink-0" />
-            <span>{date}</span>
-            <span className="text-white/50">•</span>
+          <div className="absolute top-2 inset-x-0 flex justify-between items-start px-4">
+            <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+              {date}
+            </span>
             {venueLink ? (
               <a 
                 href={venueLink} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="hover:text-white transition-colors"
+                className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm hover:bg-black/60"
               >
                 {venue}
               </a>
             ) : (
-              <span>{venue}</span>
+              <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+                {venue}
+              </span>
             )}
-            <span className="text-white/50">•</span>
+          </div>
+        </div>
+        <div className="p-2 md:p-4">
+          <h3 className="text-lg md:text-xl font-bold mb-2 text-white">{artist}</h3>
+          <div className="flex flex-wrap items-center gap-2 text-white/70 mb-2 text-sm md:text-base">
             <MapPin className="w-4 h-4 shrink-0" />
             <span>{location}</span>
           </div>
@@ -110,8 +113,7 @@ export const ConcertCard = ({
                       className="w-full text-lg py-6 bg-accent hover:bg-accent/90 backdrop-blur-sm text-white border-white/10 shadow-[0_0_15px_rgba(155,135,245,0.3)] transition-all hover:shadow-[0_0_20px_rgba(155,135,245,0.5)]" 
                       onClick={() => window.open(ticketUrl, '_blank')}
                     >
-                      <Ticket className="w-5 h-5 mr-2" />
-                      Visit Event Website
+                      Go to event
                     </Button>
                   </div>
                 </div>
@@ -153,16 +155,6 @@ export const ConcertCard = ({
                     </div>
                   )}
                 </div>
-
-                {!isRestrictedVenue && (
-                  <Button 
-                    className="w-full text-lg py-6 bg-accent hover:bg-accent/90 backdrop-blur-sm text-white border-white/10 shadow-[0_0_15px_rgba(155,135,245,0.3)] transition-all hover:shadow-[0_0_20px_rgba(155,135,245,0.5)]" 
-                    onClick={() => window.open(ticketUrl, '_blank')}
-                  >
-                    <Ticket className="w-5 h-5 mr-2" />
-                    Purchase Tickets
-                  </Button>
-                )}
               </div>
             </div>
           </div>
