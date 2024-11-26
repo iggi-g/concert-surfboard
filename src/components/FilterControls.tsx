@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
-import { Filter, Calendar as CalendarIcon, X } from "lucide-react";
+import { Filter, Calendar as CalendarIcon, X, Search } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { VenueCheckboxFilter } from "./VenueCheckboxFilter";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,8 +20,11 @@ import {
 import { DateRange } from "react-day-picker";
 
 interface FilterControlsProps {
-  venueFilter: string;
-  setVenueFilter: (value: string) => void;
+  searchQuery: string;
+  setSearchQuery: (value: string) => void;
+  selectedVenues: string[];
+  setSelectedVenues: (venues: string[]) => void;
+  availableVenues: string[];
   dateRange: DateRange | undefined;
   setDateRange: (range: DateRange | undefined) => void;
   sortOrder: "asc" | "desc";
@@ -32,8 +36,11 @@ interface FilterControlsProps {
 }
 
 export const FilterControls = ({
-  venueFilter,
-  setVenueFilter,
+  searchQuery,
+  setSearchQuery,
+  selectedVenues,
+  setSelectedVenues,
+  availableVenues,
   dateRange,
   setDateRange,
   sortOrder,
@@ -46,11 +53,20 @@ export const FilterControls = ({
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
-        <Input
-          placeholder="Filter by venue..."
-          value={venueFilter}
-          onChange={(e) => setVenueFilter(e.target.value)}
-          className="max-w-[200px] bg-white/10 border-white/10 text-white placeholder:text-white/50"
+        <div className="relative flex-grow max-w-md">
+          <Input
+            placeholder="Search events..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-white/10 border-white/10 text-white placeholder:text-white/50 pr-10"
+          />
+          <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 h-4 w-4" />
+        </div>
+
+        <VenueCheckboxFilter
+          venues={availableVenues}
+          selectedVenues={selectedVenues}
+          onVenueChange={setSelectedVenues}
         />
         
         <Popover>

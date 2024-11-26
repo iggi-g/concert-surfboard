@@ -11,7 +11,8 @@ import { EventsList } from "@/components/EventsList";
 
 const Index = () => {
   const { toast } = useToast();
-  const [venueFilter, setVenueFilter] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedVenues, setSelectedVenues] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"date" | "title" | "venue">("date");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
@@ -22,8 +23,11 @@ const Index = () => {
     queryFn: () => fetchEvents(sortOrder)
   });
 
+  const availableVenues = Array.from(new Set(events.map(event => event.venue))).sort();
+
   const clearFilters = () => {
-    setVenueFilter("");
+    setSearchQuery("");
+    setSelectedVenues([]);
     setDateRange(undefined);
     setSortOrder("asc");
     setSortBy("date");
@@ -34,17 +38,30 @@ const Index = () => {
   };
 
   const hasActiveFilters = Boolean(
-    venueFilter || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date"
+    searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date"
   );
 
   const filteredEvents = events.filter((event) => {
+    let matchesSearch = true;
     let matchesVenue = true;
     let matchesDateRange = true;
 
-    if (venueFilter) {
-      matchesVenue = event.venue.toLowerCase().includes(venueFilter.toLowerCase());
+    // Search across all fields
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      matchesSearch = 
+        event.title.toLowerCase().includes(query) ||
+        event.venue.toLowerCase().includes(query) ||
+        event.date.toLowerCase().includes(query) ||
+        (event.location || "").toLowerCase().includes(query);
     }
 
+    // Venue filter
+    if (selectedVenues.length > 0) {
+      matchesVenue = selectedVenues.includes(event.venue);
+    }
+
+    // Date range filter
     if (dateRange?.from && dateRange?.to) {
       const eventDate = parseISO(event.date);
       matchesDateRange = isWithinInterval(eventDate, {
@@ -53,7 +70,7 @@ const Index = () => {
       });
     }
 
-    return matchesVenue && matchesDateRange;
+    return matchesSearch && matchesVenue && matchesDateRange;
   }).sort((a, b) => {
     if (sortBy === "title") {
       return sortOrder === "asc" 
@@ -82,12 +99,6 @@ const Index = () => {
     <div className="relative min-h-screen w-full">
       <VideoBackground />
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
-        <img 
-          src="/logo.svg" 
-          alt="Logo" 
-          className="absolute left-4 top-4 w-12 h-12 md:w-16 md:h-16 logo"
-        />
-        
         <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
           Discover Your Next Concert in Copenhagen
         </h1>
@@ -96,8 +107,11 @@ const Index = () => {
           {/* Desktop Filters */}
           <div className="hidden md:block w-full max-w-[1920px] mx-auto">
             <FilterControls
-              venueFilter={venueFilter}
-              setVenueFilter={setVenueFilter}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedVenues={selectedVenues}
+              setSelectedVenues={setSelectedVenues}
+              availableVenues={availableVenues}
               dateRange={dateRange}
               setDateRange={setDateRange}
               sortOrder={sortOrder}
@@ -121,8 +135,11 @@ const Index = () => {
             {showMobileFilters && (
               <div className="animate-fade-in">
                 <FilterControls
-                  venueFilter={venueFilter}
-                  setVenueFilter={setVenueFilter}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  selectedVenues={selectedVenues}
+                  setSelectedVenues={setSelectedVenues}
+                  availableVenues={availableVenues}
                   dateRange={dateRange}
                   setDateRange={setDateRange}
                   sortOrder={sortOrder}

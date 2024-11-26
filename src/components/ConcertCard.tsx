@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Music } from "lucide-react";
+import { Music, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -86,6 +86,14 @@ export const ConcertCard = ({
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-0 bg-black/40 backdrop-blur-sm border-white/10">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-4 top-4 z-50 rounded-full bg-black/40 text-white hover:bg-black/60 md:hidden"
+            onClick={() => setIsDialogOpen(false)}
+          >
+            <X className="h-4 w-4" />
+          </Button>
           <DialogHeader className="p-6 pb-0">
             <div className="flex items-center justify-between mb-4">
               <span className="text-white/70">{date}</span>
