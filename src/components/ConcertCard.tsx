@@ -58,30 +58,9 @@ export const ConcertCard = ({
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-          <div className="absolute top-2 inset-x-0 flex justify-between items-start px-4">
-            <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
-              {date}
-            </span>
-            {venueLink ? (
-              <a 
-                href={venueLink} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm hover:bg-black/60"
-              >
-                {venue}
-              </a>
-            ) : (
-              <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
-                {venue}
-              </span>
-            )}
-          </div>
         </div>
         <div className="p-2 md:p-4">
-          <h3 className="text-lg md:text-xl font-bold mb-2 text-white">{artist}</h3>
-          <span className="text-white/70 text-sm md:text-base">{location}</span>
+          <h3 className="text-lg md:text-xl font-bold text-white">{artist}</h3>
         </div>
       </Card>
 
