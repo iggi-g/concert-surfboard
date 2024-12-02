@@ -1,12 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Music, X } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Heart } from "lucide-react";
 import { useState } from "react";
 
 interface ConcertCardProps {
@@ -18,152 +12,115 @@ interface ConcertCardProps {
   ticketUrl: string;
   similarTo?: string;
   venueLink?: string;
+  isFavorite?: boolean;
+  onToggleFavorite?: (artist: string) => void;
 }
 
 export const ConcertCard = ({
   artist,
   date,
   venue,
-  location,
   imageUrl,
   ticketUrl,
-  similarTo,
-  venueLink
+  venueLink,
+  isFavorite = false,
+  onToggleFavorite
 }: ConcertCardProps) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const isRestrictedVenue = venue === 'Rust' || 
-                           venue === 'Royal Arena' || 
-                           venue === 'Råhuset' || 
-                           venue === 'Basement';
-
   const handleClick = () => {
-    setIsDialogOpen(true);
+    window.open(ticketUrl, '_blank');
+  };
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onToggleFavorite) {
+      onToggleFavorite(artist);
+    }
+  };
+
+  const generateGoogleCalendarUrl = () => {
+    const eventDate = new Date(date);
+    const endDate = new Date(eventDate);
+    endDate.setHours(endDate.getHours() + 3); // Assuming 3-hour duration
+
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: artist,
+      details: `Concert at ${venue}. Get tickets: ${ticketUrl}`,
+      dates: `${eventDate.toISOString().replace(/-|:|\.\d+/g, '')}/${endDate.toISOString().replace(/-|:|\.\d+/g, '')}`,
+      location: venue
+    });
+
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
   };
 
   return (
-    <>
-      <Card 
-        className="overflow-hidden w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10"
-        onClick={handleClick}
-      >
-        <div className="relative aspect-[16/9] w-full">
-          <img 
-            src={imageUrl} 
-            alt={artist} 
-            className="absolute inset-0 w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.src = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3";
-            }}
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-          <div className="absolute top-2 inset-x-0 flex justify-between items-start px-4">
+    <Card 
+      className="overflow-hidden w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10 relative"
+      onClick={handleClick}
+    >
+      <div className="relative aspect-[16/9] w-full">
+        <img 
+          src={imageUrl} 
+          alt={artist} 
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => {
+            e.currentTarget.src = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3";
+          }}
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute top-2 inset-x-0 flex justify-between items-start px-4">
+          <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+            {date}
+          </span>
+          {venueLink ? (
+            <a 
+              href={venueLink} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm hover:bg-black/60"
+            >
+              {venue}
+            </a>
+          ) : (
             <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
-              {date}
+              {venue}
             </span>
-            {venueLink ? (
-              <a 
-                href={venueLink} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm hover:bg-black/60"
-              >
-                {venue}
-              </a>
-            ) : (
-              <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
-                {venue}
-              </span>
-            )}
-          </div>
+          )}
         </div>
-        <div className="p-2 md:p-4">
-          <h3 className="text-lg md:text-xl font-bold text-white">{artist}</h3>
-        </div>
-      </Card>
-
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-0 bg-black/40 backdrop-blur-sm border-white/10">
+      </div>
+      <div className="p-2 md:p-4 flex justify-between items-center">
+        <h3 className="text-lg md:text-xl font-bold text-white">{artist}</h3>
+        <div className="flex gap-2">
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-4 top-4 z-50 rounded-full bg-black/40 text-white hover:bg-black/60 md:hidden"
-            onClick={() => setIsDialogOpen(false)}
+            className="rounded-full hover:bg-white/10"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(generateGoogleCalendarUrl(), '_blank');
+            }}
           >
-            <X className="h-4 w-4" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+              <line x1="16" x2="16" y1="2" y2="6" />
+              <line x1="8" x2="8" y1="2" y2="6" />
+              <line x1="3" x2="21" y1="10" y2="10" />
+            </svg>
           </Button>
-          <DialogHeader className="p-6 pb-0">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-white/70">{date}</span>
-              {venueLink ? (
-                <a 
-                  href={venueLink} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-white/70 hover:text-white transition-colors"
-                >
-                  {venue}
-                </a>
-              ) : (
-                <span className="text-white/70">{venue}</span>
-              )}
-            </div>
-            <DialogTitle className="text-2xl font-bold text-white">{artist}</DialogTitle>
-          </DialogHeader>
-          
-          <div className="p-6">
-            <div className="space-y-6">
-              {isRestrictedVenue ? (
-                <div className="space-y-6">
-                  <div className="h-[400px] w-full rounded-md overflow-hidden border border-white/10">
-                    <img
-                      src={imageUrl}
-                      alt={artist}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3";
-                      }}
-                    />
-                  </div>
-                  <div className="text-center p-4 bg-black/20 backdrop-blur-sm rounded-md border border-white/10">
-                    <p className="text-lg mb-4 text-white">
-                      Sorry, we are not able to show you the venue website here. Please click the button below to visit the website for the event.
-                    </p>
-                    <Button 
-                      className="w-full text-lg py-6 bg-transparent hover:bg-white/10 backdrop-blur-sm text-white font-bold border border-white/20 shadow-[0_0_15px_rgba(155,135,245,0.3)] transition-all hover:shadow-[0_0_20px_rgba(155,135,245,0.5)]" 
-                      onClick={() => window.open(ticketUrl, '_blank')}
-                    >
-                      Go to event
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="h-[600px] w-full rounded-md overflow-hidden border border-white/10">
-                  <iframe
-                    src={ticketUrl}
-                    className="w-full h-full"
-                    title="Event Website"
-                  />
-                </div>
-              )}
-              
-              <div className="grid grid-cols-1 gap-6">
-                <div className="space-y-3 text-white">
-                  <div className="text-lg">{location}</div>
-                  {similarTo && (
-                    <div className="flex items-center gap-2">
-                      <Music className="w-5 h-5" />
-                      <span className="text-lg">Similar to {similarTo}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full hover:bg-white/10"
+            onClick={handleFavoriteClick}
+          >
+            <Heart 
+              className={`h-5 w-5 ${isFavorite ? 'fill-current text-red-500' : 'text-white'}`} 
+            />
+          </Button>
+        </div>
+      </div>
+    </Card>
   );
 };

@@ -33,6 +33,8 @@ interface FilterControlsProps {
   setSortBy: (by: "date" | "title" | "venue") => void;
   hasActiveFilters: boolean;
   clearFilters: () => void;
+  showFavoritesOnly: boolean;
+  setShowFavoritesOnly: (show: boolean) => void;
 }
 
 export const FilterControls = ({
@@ -49,7 +51,11 @@ export const FilterControls = ({
   setSortBy,
   hasActiveFilters,
   clearFilters,
+  showFavoritesOnly,
+  setShowFavoritesOnly,
 }: FilterControlsProps) => {
+  const today = new Date();
+  
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
@@ -62,6 +68,18 @@ export const FilterControls = ({
           />
           <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 h-4 w-4" />
         </div>
+
+        <Button
+          variant="outline"
+          onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+          className={cn(
+            "bg-white/10 border-white/10 text-white hover:bg-white/20",
+            showFavoritesOnly && "bg-white/20"
+          )}
+        >
+          <Heart className={`h-4 w-4 mr-2 ${showFavoritesOnly ? 'fill-current text-red-500' : ''}`} />
+          Favorites
+        </Button>
 
         <VenueCheckboxFilter
           venues={availableVenues}
@@ -97,10 +115,11 @@ export const FilterControls = ({
             <Calendar
               initialFocus
               mode="range"
-              defaultMonth={dateRange?.from}
+              defaultMonth={today}
               selected={dateRange}
               onSelect={setDateRange}
               numberOfMonths={2}
+              fromDate={today}
             />
           </PopoverContent>
         </Popover>

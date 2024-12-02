@@ -1,19 +1,35 @@
 import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface EventsListProps {
   events: Event[];
   isLoading: boolean;
+  showFavoritesOnly?: boolean;
 }
 
-export const EventsList = ({ events, isLoading }: EventsListProps) => {
+export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: EventsListProps) => {
+  const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
+
+  const handleToggleFavorite = (artist: string) => {
+    setFavorites(prev => 
+      prev.includes(artist) 
+        ? prev.filter(a => a !== artist)
+        : [...prev, artist]
+    );
+  };
+
+  const filteredEvents = showFavoritesOnly 
+    ? events.filter(event => favorites.includes(event.title))
+    : events;
+
   if (isLoading) {
     return <p className="text-white">Loading events...</p>;
   }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
-      {events.map((event: Event, index: number) => (
+      {filteredEvents.map((event: Event, index: number) => (
         <div key={index} className="flex justify-center">
           <ConcertCard
             artist={event.title}
@@ -23,6 +39,8 @@ export const EventsList = ({ events, isLoading }: EventsListProps) => {
             imageUrl={event.image}
             ticketUrl={event.link}
             venueLink={getVenueLink(event.venue)}
+            isFavorite={favorites.includes(event.title)}
+            onToggleFavorite={handleToggleFavorite}
           />
         </div>
       ))}

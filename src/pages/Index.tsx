@@ -17,6 +17,7 @@ const Index = () => {
   const [sortBy, setSortBy] = useState<"date" | "title" | "venue">("date");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const { data: events = [], isLoading, error } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
@@ -31,6 +32,7 @@ const Index = () => {
     setDateRange(undefined);
     setSortOrder("asc");
     setSortBy("date");
+    setShowFavoritesOnly(false);
     toast({
       title: "Filters Cleared",
       description: "All filters have been reset to default values",
@@ -38,7 +40,7 @@ const Index = () => {
   };
 
   const hasActiveFilters = Boolean(
-    searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date"
+    searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly
   );
 
   const filteredEvents = events.filter((event) => {
@@ -104,7 +106,6 @@ const Index = () => {
         </h1>
         
         <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
-          {/* Desktop Filters */}
           <div className="hidden md:block w-full max-w-[1920px] mx-auto">
             <FilterControls
               searchQuery={searchQuery}
@@ -120,10 +121,11 @@ const Index = () => {
               setSortBy={setSortBy}
               hasActiveFilters={hasActiveFilters}
               clearFilters={clearFilters}
+              showFavoritesOnly={showFavoritesOnly}
+              setShowFavoritesOnly={setShowFavoritesOnly}
             />
           </div>
 
-          {/* Mobile Filters */}
           <div className="md:hidden w-full space-y-4">
             <button 
               onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -148,12 +150,18 @@ const Index = () => {
                   setSortBy={setSortBy}
                   hasActiveFilters={hasActiveFilters}
                   clearFilters={clearFilters}
+                  showFavoritesOnly={showFavoritesOnly}
+                  setShowFavoritesOnly={setShowFavoritesOnly}
                 />
               </div>
             )}
           </div>
 
-          <EventsList events={filteredEvents} isLoading={isLoading} />
+          <EventsList 
+            events={filteredEvents} 
+            isLoading={isLoading}
+            showFavoritesOnly={showFavoritesOnly}
+          />
         </div>
       </div>
     </div>
