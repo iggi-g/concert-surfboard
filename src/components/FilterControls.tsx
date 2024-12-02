@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
-import { Filter, Calendar as CalendarIcon, X, Search } from "lucide-react";
+import { Filter, Calendar as CalendarIcon, X, Search, Heart } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { VenueCheckboxFilter } from "./VenueCheckboxFilter";
