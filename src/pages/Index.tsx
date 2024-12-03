@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
+import { SurpriseButton } from "@/components/SurpriseButton";
 
 const Index = () => {
   const { toast } = useToast();
@@ -155,6 +156,10 @@ const Index = () => {
                 />
               </div>
             )}
+          </div>
+
+          <div className="w-full flex justify-center mb-4">
+            <SurpriseButton />
           </div>
 
           <EventsList 
