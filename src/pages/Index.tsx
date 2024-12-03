@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
-import { SurpriseButton } from "@/components/SurpriseButton";
 
 const Index = () => {
   const { toast } = useToast();
@@ -26,6 +25,7 @@ const Index = () => {
   });
 
   const availableVenues = Array.from(new Set(events.map(event => event.venue))).sort();
+  const upcomingEventsCount = events.length;
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -49,7 +49,6 @@ const Index = () => {
     let matchesVenue = true;
     let matchesDateRange = true;
 
-    // Search across all fields
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       matchesSearch = 
@@ -59,12 +58,10 @@ const Index = () => {
         (event.location || "").toLowerCase().includes(query);
     }
 
-    // Venue filter
     if (selectedVenues.length > 0) {
       matchesVenue = selectedVenues.includes(event.venue);
     }
 
-    // Date range filter
     if (dateRange?.from && dateRange?.to) {
       const eventDate = parseISO(event.date);
       matchesDateRange = isWithinInterval(eventDate, {
@@ -103,7 +100,7 @@ const Index = () => {
       <VideoBackground />
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
         <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
-          Discover Your Next Concert in Copenhagen
+          Discover Your Next Concert in Copenhagen - there are {upcomingEventsCount} to choose from
         </h1>
         
         <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
@@ -156,10 +153,6 @@ const Index = () => {
                 />
               </div>
             )}
-          </div>
-
-          <div className="w-full flex justify-center mb-4">
-            <SurpriseButton />
           </div>
 
           <EventsList 

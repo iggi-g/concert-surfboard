@@ -5,6 +5,7 @@ import { Filter, Calendar as CalendarIcon, X, Search, Heart } from "lucide-react
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { VenueCheckboxFilter } from "./VenueCheckboxFilter";
+import { SurpriseButton } from "./SurpriseButton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,6 +57,25 @@ export const FilterControls = ({
 }: FilterControlsProps) => {
   const today = new Date();
   
+  const handleDatePreset = (preset: 'today' | 'week' | 'month') => {
+    const from = new Date();
+    let to = new Date();
+    
+    switch (preset) {
+      case 'today':
+        to = from;
+        break;
+      case 'week':
+        to.setDate(from.getDate() + 7);
+        break;
+      case 'month':
+        to.setMonth(from.getMonth() + 1);
+        break;
+    }
+    
+    setDateRange({ from, to });
+  };
+  
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
@@ -80,6 +100,8 @@ export const FilterControls = ({
           <Heart className={`h-4 w-4 mr-2 ${showFavoritesOnly ? 'fill-current text-red-500' : ''}`} />
           Favorites
         </Button>
+
+        <SurpriseButton />
 
         <VenueCheckboxFilter
           venues={availableVenues}
@@ -112,6 +134,11 @@ export const FilterControls = ({
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="end">
+            <div className="p-2 border-b border-border flex gap-2">
+              <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')}>Today</Button>
+              <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')}>This Week</Button>
+              <Button size="sm" variant="outline" onClick={() => handleDatePreset('month')}>This Month</Button>
+            </div>
             <Calendar
               initialFocus
               mode="range"
