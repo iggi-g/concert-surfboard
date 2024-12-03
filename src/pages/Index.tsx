@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
+import { ContactButton } from "@/components/ContactButton";
 
 const Index = () => {
   const { toast } = useToast();
@@ -162,6 +163,7 @@ const Index = () => {
           />
         </div>
       </div>
+      <ContactButton />
     </div>
   );
 };

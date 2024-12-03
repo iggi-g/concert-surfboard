@@ -18,7 +18,7 @@ interface DateRangeSelectorProps {
 export const DateRangeSelector = ({ dateRange, setDateRange }: DateRangeSelectorProps) => {
   const today = new Date();
   
-  const handleDatePreset = (preset: 'today' | 'week' | 'month') => {
+  const handleDatePreset = (preset: 'today' | 'week' | 'nextWeek' | 'month') => {
     const from = new Date();
     let to = new Date();
     
@@ -27,6 +27,10 @@ export const DateRangeSelector = ({ dateRange, setDateRange }: DateRangeSelector
         to = from;
         break;
       case 'week':
+        to.setDate(from.getDate() + 7);
+        break;
+      case 'nextWeek':
+        from.setDate(from.getDate() + 7);
         to.setDate(from.getDate() + 7);
         break;
       case 'month':
@@ -66,6 +70,7 @@ export const DateRangeSelector = ({ dateRange, setDateRange }: DateRangeSelector
         <div className="p-2 border-b border-border flex gap-2">
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')}>Today</Button>
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')}>This Week</Button>
+          <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')}>Next Week</Button>
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('month')}>This Month</Button>
         </div>
         <Calendar
