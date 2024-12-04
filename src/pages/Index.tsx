@@ -23,7 +23,7 @@ const Index = () => {
   const { data: events = [], isLoading, error } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
     queryFn: () => fetchEvents(sortOrder),
-    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 
@@ -32,7 +32,36 @@ const Index = () => {
     [events]
   );
 
-  const upcomingEventsCount = events.length;
+  const getHeadlineText = (filteredCount: number) => {
+    if (dateRange?.from && dateRange?.to) {
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const nextWeekStart = new Date(today);
+      nextWeekStart.setDate(today.getDate() + 7);
+      const nextWeekEnd = new Date(nextWeekStart);
+      nextWeekEnd.setDate(nextWeekStart.getDate() + 7);
+      const monthEnd = new Date(today);
+      monthEnd.setMonth(today.getMonth() + 1);
+
+      if (dateRange.from.getTime() === today.getTime() && dateRange.to.getTime() === today.getTime()) {
+        return `Copenhagen Concerts - there are ${filteredCount} to choose from today!`;
+      } else if (
+        dateRange.from.getTime() === nextWeekStart.getTime() && 
+        dateRange.to.getTime() === nextWeekEnd.getTime()
+      ) {
+        return `Copenhagen Concerts - there are ${filteredCount} to choose from next week!`;
+      } else if (
+        dateRange.from.getTime() === today.getTime() && 
+        dateRange.to.getTime() === monthEnd.getTime()
+      ) {
+        return `Copenhagen Concerts - there are ${filteredCount} to choose from this month!`;
+      } else {
+        return `Copenhagen Concerts - there are ${filteredCount} to choose from in your selected dates!`;
+      }
+    }
+    return `Copenhagen Concerts - there are ${filteredCount} to choose from!`;
+  };
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -62,8 +91,7 @@ const Index = () => {
         matchesSearch = 
           event.title.toLowerCase().includes(query) ||
           event.venue.toLowerCase().includes(query) ||
-          event.date.toLowerCase().includes(query) ||
-          (event.location || "").toLowerCase().includes(query);
+          event.date.toLowerCase().includes(query);
       }
 
       if (selectedVenues.length > 0) {
@@ -109,7 +137,7 @@ const Index = () => {
       <VideoBackground />
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
         <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
-          Copenhagen Concerts - there are <span className="text-[#F97316]">{upcomingEventsCount}</span> to choose from!
+          {getHeadlineText(filteredEvents.length).replace(/(\d+)/, '<span class="text-[#F97316]">$1</span>')}
         </h1>
         
         <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
