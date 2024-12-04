@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
 import { ContactButton } from "@/components/ContactButton";
+import { HeadlineText } from "@/components/HeadlineText";
 
 const Index = () => {
   const { toast } = useToast();
@@ -32,37 +33,6 @@ const Index = () => {
     [events]
   );
 
-  const getHeadlineText = (filteredCount: number) => {
-    if (dateRange?.from && dateRange?.to) {
-      const today = new Date();
-      const tomorrow = new Date(today);
-      tomorrow.setDate(today.getDate() + 1);
-      const nextWeekStart = new Date(today);
-      nextWeekStart.setDate(today.getDate() + 7);
-      const nextWeekEnd = new Date(nextWeekStart);
-      nextWeekEnd.setDate(nextWeekStart.getDate() + 7);
-      const monthEnd = new Date(today);
-      monthEnd.setMonth(today.getMonth() + 1);
-
-      if (dateRange.from.getTime() === today.getTime() && dateRange.to.getTime() === today.getTime()) {
-        return `Copenhagen Concerts - there are ${filteredCount} to choose from today!`;
-      } else if (
-        dateRange.from.getTime() === nextWeekStart.getTime() && 
-        dateRange.to.getTime() === nextWeekEnd.getTime()
-      ) {
-        return `Copenhagen Concerts - there are ${filteredCount} to choose from next week!`;
-      } else if (
-        dateRange.from.getTime() === today.getTime() && 
-        dateRange.to.getTime() === monthEnd.getTime()
-      ) {
-        return `Copenhagen Concerts - there are ${filteredCount} to choose from this month!`;
-      } else {
-        return `Copenhagen Concerts - there are ${filteredCount} to choose from in your selected dates!`;
-      }
-    }
-    return `Copenhagen Concerts - there are ${filteredCount} to choose from!`;
-  };
-
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedVenues([]);
@@ -77,7 +47,8 @@ const Index = () => {
   };
 
   const hasActiveFilters = Boolean(
-    searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly
+    searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || 
+    sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly
   );
 
   const filteredEvents = useMemo(() => {
@@ -136,9 +107,7 @@ const Index = () => {
     <div className="relative min-h-screen w-full">
       <VideoBackground />
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
-        <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
-          {getHeadlineText(filteredEvents.length).replace(/(\d+)/, '<span class="text-[#F97316]">$1</span>')}
-        </h1>
+        <HeadlineText filteredCount={filteredEvents.length} dateRange={dateRange} />
         
         <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
           <div className="hidden md:block w-full max-w-[1920px] mx-auto">
