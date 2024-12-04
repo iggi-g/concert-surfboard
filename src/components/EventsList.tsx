@@ -1,6 +1,8 @@
 import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { FixedSizeGrid } from 'react-window';
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 interface EventsListProps {
   events: Event[];
@@ -10,6 +12,7 @@ interface EventsListProps {
 
 export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: EventsListProps) => {
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
+  const windowSize = useWindowSize();
 
   const handleToggleFavorite = (artist: string) => {
     setFavorites(prev => 
@@ -27,10 +30,27 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
     return <p className="text-white">Loading events...</p>;
   }
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
-      {filteredEvents.map((event: Event, index: number) => (
-        <div key={index} className="flex justify-center">
+  const getColumnCount = () => {
+    if (windowSize.width < 768) return 1;
+    if (windowSize.width < 1024) return 2;
+    if (windowSize.width < 1280) return 3;
+    if (windowSize.width < 1536) return 4;
+    return 5;
+  };
+
+  const columnCount = getColumnCount();
+  const rowCount = Math.ceil(filteredEvents.length / columnCount);
+  const columnWidth = Math.min(350, (windowSize.width - 32) / columnCount);
+  const rowHeight = 280;
+
+  const Cell = ({ columnIndex, rowIndex, style }: any) => {
+    const index = rowIndex * columnCount + columnIndex;
+    if (index >= filteredEvents.length) return null;
+
+    const event = filteredEvents[index];
+    return (
+      <div style={style}>
+        <div className="p-2">
           <ConcertCard
             artist={event.title}
             date={event.date}
@@ -43,7 +63,22 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
             onToggleFavorite={handleToggleFavorite}
           />
         </div>
-      ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="w-full max-w-[1920px] mx-auto">
+      <FixedSizeGrid
+        columnCount={columnCount}
+        columnWidth={columnWidth}
+        height={Math.min(windowSize.height - 300, rowCount * rowHeight)}
+        rowCount={rowCount}
+        rowHeight={rowHeight}
+        width={windowSize.width - 32}
+      >
+        {Cell}
+      </FixedSizeGrid>
     </div>
   );
 };
