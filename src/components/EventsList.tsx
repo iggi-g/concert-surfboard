@@ -49,32 +49,36 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
 
     const event = filteredEvents[index];
     return (
-      <div style={style}>
-        <div className="p-2">
-          <ConcertCard
-            artist={event.title}
-            date={event.date}
-            venue={event.venue}
-            imageUrl={event.image}
-            ticketUrl={event.link}
-            venueLink={getVenueLink(event.venue)}
-            isFavorite={favorites.includes(event.title)}
-            onToggleFavorite={handleToggleFavorite}
-          />
-        </div>
+      <div style={{
+        ...style,
+        paddingLeft: columnIndex === 0 ? '16px' : '8px',
+        paddingRight: columnIndex === columnCount - 1 ? '16px' : '8px',
+        paddingTop: '8px',
+        paddingBottom: '8px'
+      }}>
+        <ConcertCard
+          artist={event.title}
+          date={event.date}
+          venue={event.venue}
+          imageUrl={event.image}
+          ticketUrl={event.link}
+          venueLink={getVenueLink(event.venue)}
+          isFavorite={favorites.includes(event.title)}
+          onToggleFavorite={handleToggleFavorite}
+        />
       </div>
     );
   };
 
   return (
-    <div className="w-full max-w-[1920px] mx-auto overflow-hidden">
+    <div className="w-full max-w-[1920px] mx-auto overflow-hidden px-4">
       <FixedSizeGrid
         columnCount={columnCount}
         columnWidth={columnWidth}
         height={windowSize.height - 200}
         rowCount={rowCount}
         rowHeight={rowHeight}
-        width={windowSize.width - 32}
+        width={windowSize.width - 64}
       >
         {Cell}
       </FixedSizeGrid>
