@@ -17,7 +17,6 @@ interface ConcertCardProps {
   artist: string;
   date: string;
   venue: string;
-  location: string;
   imageUrl: string;
   ticketUrl: string;
   similarTo?: string;

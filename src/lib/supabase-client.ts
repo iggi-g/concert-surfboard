@@ -16,7 +16,6 @@ export interface Event {
   image: string;
   venue: string;
   venue_link: string;
-  location?: string;
 }
 
 export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
@@ -24,7 +23,7 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
   
   const { data, error } = await supabase
     .from('events')
-    .select('title, date, link, image, venue, venue_link, location')
+    .select('title, date, link, image, venue, venue_link')
     .gte('date', today)
     .order('date', { ascending: true });
   

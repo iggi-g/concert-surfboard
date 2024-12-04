@@ -55,7 +55,6 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
             artist={event.title}
             date={event.date}
             venue={event.venue}
-            location={event.location || ""}
             imageUrl={event.image}
             ticketUrl={event.link}
             venueLink={getVenueLink(event.venue)}
