@@ -67,11 +67,11 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   };
 
   return (
-    <div className="w-full max-w-[1920px] mx-auto">
+    <div className="w-full max-w-[1920px] mx-auto overflow-hidden">
       <FixedSizeGrid
         columnCount={columnCount}
         columnWidth={columnWidth}
-        height={Math.min(windowSize.height - 300, rowCount * rowHeight)}
+        height={windowSize.height - 200}
         rowCount={rowCount}
         rowHeight={rowHeight}
         width={windowSize.width - 32}
