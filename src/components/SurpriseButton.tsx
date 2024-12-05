@@ -6,7 +6,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { SurpriseAnimation } from "./SurpriseAnimation";
 
-export const SurpriseButton = () => {
+interface SurpriseButtonProps {
+  className?: string;
+}
+
+export const SurpriseButton = ({ className }: SurpriseButtonProps) => {
   const { toast } = useToast();
   const [showAnimation, setShowAnimation] = useState(false);
   
@@ -44,7 +48,7 @@ export const SurpriseButton = () => {
       <Button
         onClick={handleSurprise}
         variant="outline"
-        className="group relative overflow-hidden border-accent hover:border-accent/80"
+        className={`group relative overflow-hidden border-accent hover:border-accent/80 ${className}`}
       >
         <span className="relative z-10 flex items-center gap-2">
           <Sparkles className="w-4 h-4" />
