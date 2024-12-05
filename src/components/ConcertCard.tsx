@@ -128,7 +128,7 @@ export const ConcertCard = ({
               onClick={handleFavoriteClick}
             >
               <Heart 
-                className={`h-5 w-5 ${isFavorite ? 'fill-current text-red-500' : 'text-white'}`} 
+                className={`h-5 w-5 ${isFavorite ? 'fill-current text-orange-500' : 'text-white'}`} 
               />
             </Button>
           </div>

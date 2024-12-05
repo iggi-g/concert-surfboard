@@ -107,14 +107,16 @@ const Index = () => {
   return (
     <div className="relative min-h-screen w-full">
       <VideoBackground />
-      <a 
-        href="https://buymeacoffee.com/cphconcerts" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="fixed top-4 right-4 z-50 group"
-      >
-        <Heart className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" fill="currentColor" />
-      </a>
+      <div className="fixed top-0 right-0 w-full h-16 bg-gradient-to-b from-black/50 to-transparent z-40">
+        <a 
+          href="https://buymeacoffee.com/cphconcerts" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="absolute top-4 right-4 group"
+        >
+          <Heart className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" fill="currentColor" />
+        </a>
+      </div>
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
         <div className="space-y-2 mb-8">
           <h1 className="text-4xl font-bold text-white animate-fade-in flex-grow-0">

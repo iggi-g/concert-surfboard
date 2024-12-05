@@ -43,7 +43,10 @@ export const VenueCheckboxFilter = ({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-screen h-[100dvh] md:w-[280px] md:h-auto p-0 bg-black/90 border-white/10 fixed bottom-0 left-0 md:static rounded-t-xl md:rounded-xl" align="start">
+      <PopoverContent 
+        className="w-screen h-screen md:w-[280px] md:h-auto p-0 bg-black/90 border-white/10 fixed inset-0 md:relative md:rounded-xl" 
+        align="start"
+      >
         <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/90 z-10">
           <h3 className="text-lg font-semibold text-white">Select Venues</h3>
           <Button 
@@ -55,7 +58,7 @@ export const VenueCheckboxFilter = ({
             <X className="h-5 w-5" />
           </Button>
         </div>
-        <div className="grid gap-2 p-4 max-h-[calc(100dvh-80px)] md:max-h-[60vh] overflow-y-auto">
+        <div className="grid gap-2 p-4 h-[calc(100vh-64px)] md:h-auto md:max-h-[60vh] overflow-y-auto">
           {venues.map((venue) => (
             <div key={venue} className="flex items-center space-x-2">
               <Checkbox

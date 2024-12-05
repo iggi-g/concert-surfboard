@@ -68,7 +68,7 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
         </Button>
       </PopoverTrigger>
       <PopoverContent 
-        className="w-screen h-[100dvh] md:w-auto md:h-auto p-0 bg-black/90 border-white/10 fixed bottom-0 left-0 md:static rounded-t-xl md:rounded-xl" 
+        className="w-screen h-screen md:w-auto md:h-auto p-0 bg-black/90 border-white/10 fixed inset-0 md:relative md:rounded-xl" 
         align="start"
       >
         <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/90 z-10">
