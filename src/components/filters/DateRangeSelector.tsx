@@ -13,10 +13,9 @@ import { DateRange } from "react-day-picker";
 interface DateRangeSelectorProps {
   dateRange: DateRange | undefined;
   setDateRange: (range: DateRange | undefined) => void;
-  className?: string;
 }
 
-export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRangeSelectorProps) => {
+export const DateRangeSelector = ({ dateRange, setDateRange }: DateRangeSelectorProps) => {
   const today = new Date();
   
   const handleDatePreset = (preset: 'today' | 'week' | 'nextWeek' | 'month') => {
@@ -43,49 +42,47 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
   };
 
   return (
-    <div className={className}>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className={cn(
-              "bg-white/10 border-white/10 text-white hover:bg-white/20",
-              dateRange?.from && "text-white"
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {dateRange?.from ? (
-              dateRange.to ? (
-                <>
-                  {format(dateRange.from, "LLL dd, y")} -{" "}
-                  {format(dateRange.to, "LLL dd, y")}
-                </>
-              ) : (
-                format(dateRange.from, "LLL dd, y")
-              )
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn(
+            "bg-white/10 border-white/10 text-white hover:bg-white/20",
+            dateRange?.from && "text-white"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {dateRange?.from ? (
+            dateRange.to ? (
+              <>
+                {format(dateRange.from, "LLL dd, y")} -{" "}
+                {format(dateRange.to, "LLL dd, y")}
+              </>
             ) : (
-              <span>Pick a date range</span>
-            )}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="end">
-          <div className="p-2 border-b border-border flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')}>Today</Button>
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')}>This Week</Button>
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')}>Next Week</Button>
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('month')}>This Month</Button>
-          </div>
-          <Calendar
-            initialFocus
-            mode="range"
-            defaultMonth={today}
-            selected={dateRange}
-            onSelect={setDateRange}
-            numberOfMonths={2}
-            fromDate={today}
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
+              format(dateRange.from, "LLL dd, y")
+            )
+          ) : (
+            <span>Pick a date range</span>
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="end">
+        <div className="p-2 border-b border-border flex gap-2">
+          <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')}>Today</Button>
+          <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')}>This Week</Button>
+          <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')}>Next Week</Button>
+          <Button size="sm" variant="outline" onClick={() => handleDatePreset('month')}>This Month</Button>
+        </div>
+        <Calendar
+          initialFocus
+          mode="range"
+          defaultMonth={today}
+          selected={dateRange}
+          onSelect={setDateRange}
+          numberOfMonths={2}
+          fromDate={today}
+        />
+      </PopoverContent>
+    </Popover>
   );
 };

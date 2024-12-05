@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchEvents } from "@/lib/supabase-client";
 import { FilterControls } from "@/components/FilterControls";
@@ -9,7 +9,6 @@ import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
 import { ContactButton } from "@/components/ContactButton";
-import { HeadlineText } from "@/components/HeadlineText";
 
 const Index = () => {
   const { toast } = useToast();
@@ -23,15 +22,11 @@ const Index = () => {
 
   const { data: events = [], isLoading, error } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
-    queryFn: () => fetchEvents(sortOrder),
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
+    queryFn: () => fetchEvents(sortOrder)
   });
 
-  const availableVenues = useMemo(() => 
-    Array.from(new Set(events.map(event => event.venue))).sort(),
-    [events]
-  );
+  const availableVenues = Array.from(new Set(events.map(event => event.venue))).sort();
+  const upcomingEventsCount = events.length;
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -47,53 +42,51 @@ const Index = () => {
   };
 
   const hasActiveFilters = Boolean(
-    searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || 
-    sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly
+    searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly
   );
 
-  const filteredEvents = useMemo(() => {
-    return events.filter((event) => {
-      let matchesSearch = true;
-      let matchesVenue = true;
-      let matchesDateRange = true;
+  const filteredEvents = events.filter((event) => {
+    let matchesSearch = true;
+    let matchesVenue = true;
+    let matchesDateRange = true;
 
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        matchesSearch = 
-          event.title.toLowerCase().includes(query) ||
-          event.venue.toLowerCase().includes(query) ||
-          event.date.toLowerCase().includes(query);
-      }
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      matchesSearch = 
+        event.title.toLowerCase().includes(query) ||
+        event.venue.toLowerCase().includes(query) ||
+        event.date.toLowerCase().includes(query) ||
+        (event.location || "").toLowerCase().includes(query);
+    }
 
-      if (selectedVenues.length > 0) {
-        matchesVenue = selectedVenues.includes(event.venue);
-      }
+    if (selectedVenues.length > 0) {
+      matchesVenue = selectedVenues.includes(event.venue);
+    }
 
-      if (dateRange?.from && dateRange?.to) {
-        const eventDate = parseISO(event.date);
-        matchesDateRange = isWithinInterval(eventDate, {
-          start: dateRange.from,
-          end: dateRange.to,
-        });
-      }
+    if (dateRange?.from && dateRange?.to) {
+      const eventDate = parseISO(event.date);
+      matchesDateRange = isWithinInterval(eventDate, {
+        start: dateRange.from,
+        end: dateRange.to,
+      });
+    }
 
-      return matchesSearch && matchesVenue && matchesDateRange;
-    }).sort((a, b) => {
-      if (sortBy === "title") {
-        return sortOrder === "asc" 
-          ? a.title.localeCompare(b.title)
-          : b.title.localeCompare(a.title);
-      }
-      if (sortBy === "venue") {
-        return sortOrder === "asc"
-          ? a.venue.localeCompare(b.venue)
-          : b.venue.localeCompare(a.venue);
-      }
+    return matchesSearch && matchesVenue && matchesDateRange;
+  }).sort((a, b) => {
+    if (sortBy === "title") {
+      return sortOrder === "asc" 
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title);
+    }
+    if (sortBy === "venue") {
       return sortOrder === "asc"
-        ? new Date(a.date).getTime() - new Date(b.date).getTime()
-        : new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
-  }, [events, searchQuery, selectedVenues, dateRange, sortOrder, sortBy]);
+        ? a.venue.localeCompare(b.venue)
+        : b.venue.localeCompare(a.venue);
+    }
+    return sortOrder === "asc"
+      ? new Date(a.date).getTime() - new Date(b.date).getTime()
+      : new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
 
   if (error) {
     toast({
@@ -107,7 +100,9 @@ const Index = () => {
     <div className="relative min-h-screen w-full">
       <VideoBackground />
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
-        <HeadlineText filteredCount={filteredEvents.length} dateRange={dateRange} />
+        <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
+          Discover Your Next Concert in Copenhagen - there are {upcomingEventsCount} to choose from
+        </h1>
         
         <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
           <div className="hidden md:block w-full max-w-[1920px] mx-auto">

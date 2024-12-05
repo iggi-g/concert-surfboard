@@ -11,14 +11,12 @@ interface VenueCheckboxFilterProps {
   venues: string[];
   selectedVenues: string[];
   onVenueChange: (venues: string[]) => void;
-  className?: string;
 }
 
 export const VenueCheckboxFilter = ({
   venues,
   selectedVenues,
   onVenueChange,
-  className
 }: VenueCheckboxFilterProps) => {
   const handleVenueToggle = (venue: string) => {
     if (selectedVenues.includes(venue)) {
@@ -33,7 +31,7 @@ export const VenueCheckboxFilter = ({
       <PopoverTrigger asChild>
         <Button 
           variant="outline" 
-          className={`bg-white/10 border-white/10 text-white hover:bg-white/20 ${className}`}
+          className="bg-white/10 border-white/10 text-white hover:bg-white/20"
         >
           {selectedVenues.length === 0 ? (
             "Select Venues"

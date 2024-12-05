@@ -1,8 +1,6 @@
 import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { FixedSizeGrid } from 'react-window';
-import { useWindowSize } from "@/hooks/useWindowSize";
 
 interface EventsListProps {
   events: Event[];
@@ -12,7 +10,6 @@ interface EventsListProps {
 
 export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: EventsListProps) => {
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
-  const windowSize = useWindowSize();
 
   const handleToggleFavorite = (artist: string) => {
     setFavorites(prev => 
@@ -30,68 +27,23 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
     return <p className="text-white">Loading events...</p>;
   }
 
-  const getColumnCount = () => {
-    if (windowSize.width < 640) return 1;
-    if (windowSize.width < 1024) return 2;
-    if (windowSize.width < 1280) return 3;
-    return 4;
-  };
-
-  const columnCount = getColumnCount();
-  const rowCount = Math.ceil(filteredEvents.length / columnCount);
-  
-  // Calculate the available width for the grid
-  const GRID_PADDING = windowSize.width < 640 ? 16 : 32;
-  const CARD_GAP = 16;
-  const availableWidth = windowSize.width - (GRID_PADDING * 2);
-  
-  // Calculate the width for each column including gaps
-  const columnWidth = Math.floor((availableWidth - (CARD_GAP * (columnCount - 1))) / columnCount);
-  const rowHeight = windowSize.width < 640 ? 360 : 320; // Taller cards on mobile
-
-  const Cell = ({ columnIndex, rowIndex, style }: any) => {
-    const index = rowIndex * columnCount + columnIndex;
-    if (index >= filteredEvents.length) return null;
-
-    const event = filteredEvents[index];
-    
-    // Calculate the left and right padding to create gaps between cards
-    const leftPadding = columnIndex === 0 ? 0 : CARD_GAP / 2;
-    const rightPadding = columnIndex === columnCount - 1 ? 0 : CARD_GAP / 2;
-
-    return (
-      <div style={{
-        ...style,
-        left: `${parseFloat(style.left as string) + leftPadding}px`,
-        width: `${columnWidth - leftPadding - rightPadding}px`,
-        padding: '8px 0',
-      }}>
-        <ConcertCard
-          artist={event.title}
-          date={event.date}
-          venue={event.venue}
-          imageUrl={event.image}
-          ticketUrl={event.link}
-          venueLink={getVenueLink(event.venue)}
-          isFavorite={favorites.includes(event.title)}
-          onToggleFavorite={handleToggleFavorite}
-        />
-      </div>
-    );
-  };
-
   return (
-    <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8">
-      <FixedSizeGrid
-        columnCount={columnCount}
-        columnWidth={columnWidth}
-        height={windowSize.height - 200}
-        rowCount={rowCount}
-        rowHeight={rowHeight}
-        width={availableWidth}
-      >
-        {Cell}
-      </FixedSizeGrid>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
+      {filteredEvents.map((event: Event, index: number) => (
+        <div key={index} className="flex justify-center">
+          <ConcertCard
+            artist={event.title}
+            date={event.date}
+            venue={event.venue}
+            location={event.location || ""}
+            imageUrl={event.image}
+            ticketUrl={event.link}
+            venueLink={getVenueLink(event.venue)}
+            isFavorite={favorites.includes(event.title)}
+            onToggleFavorite={handleToggleFavorite}
+          />
+        </div>
+      ))}
     </div>
   );
 };
