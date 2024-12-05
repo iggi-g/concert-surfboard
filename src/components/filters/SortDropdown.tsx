@@ -11,13 +11,14 @@ import {
 interface SortDropdownProps {
   setSortOrder: (order: "asc" | "desc") => void;
   setSortBy: (by: "date" | "title" | "venue") => void;
+  className?: string;
 }
 
-export const SortDropdown = ({ setSortOrder, setSortBy }: SortDropdownProps) => {
+export const SortDropdown = ({ setSortOrder, setSortBy, className }: SortDropdownProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="bg-white/10 border-white/10 text-white hover:bg-white/20">
+        <Button variant="outline" className={`bg-white/10 border-white/10 text-white hover:bg-white/20 ${className}`}>
           <Filter className="w-4 h-4 mr-2" />
           Sort
         </Button>
