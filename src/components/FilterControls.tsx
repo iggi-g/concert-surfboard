@@ -7,6 +7,7 @@ import { SearchInput } from "./filters/SearchInput";
 import { FavoritesToggle } from "./filters/FavoritesToggle";
 import { DateRangeSelector } from "./filters/DateRangeSelector";
 import { SortDropdown } from "./filters/SortDropdown";
+import { Event } from "@/lib/supabase-client";
 
 interface FilterControlsProps {
   searchQuery: string;
@@ -24,6 +25,7 @@ interface FilterControlsProps {
   clearFilters: () => void;
   showFavoritesOnly: boolean;
   setShowFavoritesOnly: (show: boolean) => void;
+  filteredEvents: Event[];
 }
 
 export const FilterControls = ({
@@ -42,6 +44,7 @@ export const FilterControls = ({
   clearFilters,
   showFavoritesOnly,
   setShowFavoritesOnly,
+  filteredEvents,
 }: FilterControlsProps) => {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
@@ -56,7 +59,7 @@ export const FilterControls = ({
           setShowFavoritesOnly={setShowFavoritesOnly}
         />
 
-        <SurpriseButton />
+        <SurpriseButton filteredEvents={filteredEvents} />
 
         <VenueCheckboxFilter
           venues={availableVenues}

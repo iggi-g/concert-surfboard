@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchEvents, Event } from "@/lib/supabase-client";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { SurpriseAnimation } from "./SurpriseAnimation";
+import { Event } from "@/lib/supabase-client";
+import { cn } from "@/lib/utils";
 
 interface SurpriseButtonProps {
   className?: string;
