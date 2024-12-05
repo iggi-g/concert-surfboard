@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, X } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  PopoverClose,
 } from "@/components/ui/popover";
 import { DateRange } from "react-day-picker";
 
@@ -68,25 +69,33 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
         </Button>
       </PopoverTrigger>
       <PopoverContent 
-        className="w-auto p-0 bg-black/90 border-white/10" 
+        className="w-screen h-[90vh] md:w-auto md:h-auto p-0 bg-black/90 border-white/10 fixed bottom-0 left-0 md:static rounded-t-xl md:rounded-xl" 
         align="start"
       >
+        <div className="flex justify-between items-center p-4 border-b border-white/10">
+          <h3 className="text-lg font-semibold text-white">Select Dates</h3>
+          <PopoverClose className="text-white hover:text-gray-300">
+            <X className="h-5 w-5" />
+          </PopoverClose>
+        </div>
         <div className="p-2 border-b border-white/10 flex gap-2 flex-wrap">
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Today</Button>
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">This Week</Button>
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Next Week</Button>
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('month')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">This Month</Button>
         </div>
-        <Calendar
-          initialFocus
-          mode="range"
-          defaultMonth={today}
-          selected={dateRange}
-          onSelect={setDateRange}
-          numberOfMonths={2}
-          fromDate={today}
-          className="text-white"
-        />
+        <div className="overflow-y-auto max-h-[calc(90vh-200px)] md:max-h-none">
+          <Calendar
+            initialFocus
+            mode="range"
+            defaultMonth={today}
+            selected={dateRange}
+            onSelect={setDateRange}
+            numberOfMonths={1}
+            fromDate={today}
+            className="text-white"
+          />
+        </div>
       </PopoverContent>
     </Popover>
   );

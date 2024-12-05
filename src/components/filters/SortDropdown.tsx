@@ -27,25 +27,25 @@ export const SortDropdown = ({ setSortOrder, setSortBy, className }: SortDropdow
           Sort
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-black/90 border-white/10">
-        <DropdownMenuItem onClick={() => { setSortBy("date"); setSortOrder("asc"); }}>
+      <DropdownMenuContent className="bg-black/90 border-white/10 text-white">
+        <DropdownMenuItem onClick={() => { setSortBy("date"); setSortOrder("asc"); }} className="text-white focus:text-white hover:text-white">
           Date (Earliest First)
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => { setSortBy("date"); setSortOrder("desc"); }}>
+        <DropdownMenuItem onClick={() => { setSortBy("date"); setSortOrder("desc"); }} className="text-white focus:text-white hover:text-white">
           Date (Latest First)
         </DropdownMenuItem>
         <DropdownMenuSeparator className="bg-white/10" />
-        <DropdownMenuItem onClick={() => { setSortBy("title"); setSortOrder("asc"); }}>
+        <DropdownMenuItem onClick={() => { setSortBy("title"); setSortOrder("asc"); }} className="text-white focus:text-white hover:text-white">
           Artist Name (A-Z)
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => { setSortBy("title"); setSortOrder("desc"); }}>
+        <DropdownMenuItem onClick={() => { setSortBy("title"); setSortOrder("desc"); }} className="text-white focus:text-white hover:text-white">
           Artist Name (Z-A)
         </DropdownMenuItem>
         <DropdownMenuSeparator className="bg-white/10" />
-        <DropdownMenuItem onClick={() => { setSortBy("venue"); setSortOrder("asc"); }}>
+        <DropdownMenuItem onClick={() => { setSortBy("venue"); setSortOrder("asc"); }} className="text-white focus:text-white hover:text-white">
           Venue Name (A-Z)
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => { setSortBy("venue"); setSortOrder("desc"); }}>
+        <DropdownMenuItem onClick={() => { setSortBy("venue"); setSortOrder("desc"); }} className="text-white focus:text-white hover:text-white">
           Venue Name (Z-A)
         </DropdownMenuItem>
       </DropdownMenuContent>

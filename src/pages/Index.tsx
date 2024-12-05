@@ -99,6 +99,15 @@ const Index = () => {
   return (
     <div className="relative min-h-screen w-full">
       <VideoBackground />
+      <a 
+        href="https://buymeacoffee.com/cphconcerts" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed top-4 right-4 z-50 bg-[#FFDD00] text-black px-4 py-2 rounded-full font-bold hover:bg-[#FFDD00]/90 transition-colors flex items-center gap-2"
+      >
+        <img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee" className="h-6 w-6" />
+        <span className="hidden sm:inline">Buy me a coffee</span>
+      </a>
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
         <div className="space-y-2 mb-8">
           <h1 className="text-4xl font-bold text-white animate-fade-in flex-grow-0">
