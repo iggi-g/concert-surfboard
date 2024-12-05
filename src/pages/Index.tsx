@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchEvents } from "@/lib/supabase-client";
 import { FilterControls } from "@/components/FilterControls";
@@ -9,6 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
 import { ContactButton } from "@/components/ContactButton";
+import { Heart, ArrowUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const { toast } = useToast();
@@ -19,6 +21,20 @@ const Index = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollToTop(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const { data: events = [], isLoading, error } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
@@ -74,7 +90,7 @@ const Index = () => {
     return matchesSearch && matchesVenue && matchesDateRange;
   }).sort((a, b) => {
     if (sortBy === "title") {
-      return sortOrder === "asc" 
+      return sortOrder === "asc"
         ? a.title.localeCompare(b.title)
         : b.title.localeCompare(a.title);
     }
@@ -88,14 +104,6 @@ const Index = () => {
       : new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
-  if (error) {
-    toast({
-      title: "Error loading events",
-      description: "Could not load events from the database",
-      variant: "destructive",
-    });
-  }
-
   return (
     <div className="relative min-h-screen w-full">
       <VideoBackground />
@@ -103,10 +111,10 @@ const Index = () => {
         href="https://buymeacoffee.com/cphconcerts" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="fixed top-4 right-4 z-50 bg-[#FFDD00] text-black px-4 py-2 rounded-full font-bold hover:bg-[#FFDD00]/90 transition-colors flex items-center gap-2"
+        className="fixed top-4 right-4 z-50 flex flex-col items-center group"
       >
-        <img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee" className="h-6 w-6" />
-        <span className="hidden sm:inline">Buy me a coffee</span>
+        <Heart className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" fill="currentColor" />
+        <span className="text-xs text-orange-500 mt-1">buy me a coffee?</span>
       </a>
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
         <div className="space-y-2 mb-8">
@@ -180,6 +188,16 @@ const Index = () => {
         </div>
       </div>
       <ContactButton />
+      {showScrollToTop && (
+        <Button
+          variant="outline"
+          size="icon"
+          className="fixed bottom-20 right-4 rounded-full bg-white/10 border-white/10 text-white hover:bg-white/20 z-50"
+          onClick={scrollToTop}
+        >
+          <ArrowUp className="h-4 w-4" />
+        </Button>
+      )}
     </div>
   );
 };

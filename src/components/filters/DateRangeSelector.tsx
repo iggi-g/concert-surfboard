@@ -69,10 +69,10 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
         </Button>
       </PopoverTrigger>
       <PopoverContent 
-        className="w-screen h-[90vh] md:w-auto md:h-auto p-0 bg-black/90 border-white/10 fixed bottom-0 left-0 md:static rounded-t-xl md:rounded-xl" 
+        className="w-screen h-[100dvh] md:w-auto md:h-auto p-0 bg-black/90 border-white/10 fixed bottom-0 left-0 md:static rounded-t-xl md:rounded-xl" 
         align="start"
       >
-        <div className="flex justify-between items-center p-4 border-b border-white/10">
+        <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/90 z-10">
           <h3 className="text-lg font-semibold text-white">Select Dates</h3>
           <PopoverClose className="text-white hover:text-gray-300">
             <X className="h-5 w-5" />
@@ -84,7 +84,7 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Next Week</Button>
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('month')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">This Month</Button>
         </div>
-        <div className="overflow-y-auto max-h-[calc(90vh-200px)] md:max-h-none">
+        <div className="overflow-y-auto max-h-[calc(100dvh-200px)] md:max-h-none p-4">
           <Calendar
             initialFocus
             mode="range"
@@ -93,7 +93,7 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
             onSelect={setDateRange}
             numberOfMonths={1}
             fromDate={today}
-            className="text-white"
+            className="text-white mx-auto"
           />
         </div>
       </PopoverContent>
