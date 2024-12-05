@@ -3,7 +3,6 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  PopoverClose,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
@@ -47,9 +46,14 @@ export const VenueCheckboxFilter = ({
       <PopoverContent className="w-screen h-[100dvh] md:w-[280px] md:h-auto p-0 bg-black/90 border-white/10 fixed bottom-0 left-0 md:static rounded-t-xl md:rounded-xl" align="start">
         <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/90 z-10">
           <h3 className="text-lg font-semibold text-white">Select Venues</h3>
-          <PopoverClose className="text-white hover:text-gray-300">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="text-white hover:bg-white/10"
+            onClick={() => document.querySelector('[data-radix-popper-content-wrapper]')?.querySelector('button')?.click()}
+          >
             <X className="h-5 w-5" />
-          </PopoverClose>
+          </Button>
         </div>
         <div className="grid gap-2 p-4 max-h-[calc(100dvh-80px)] md:max-h-[60vh] overflow-y-auto">
           {venues.map((venue) => (

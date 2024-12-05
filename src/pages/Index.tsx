@@ -111,10 +111,9 @@ const Index = () => {
         href="https://buymeacoffee.com/cphconcerts" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="fixed top-4 right-4 z-50 flex flex-col items-center group"
+        className="fixed top-4 right-4 z-50 group"
       >
         <Heart className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" fill="currentColor" />
-        <span className="text-xs text-orange-500 mt-1">buy me a coffee?</span>
       </a>
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
         <div className="space-y-2 mb-8">

@@ -7,7 +7,6 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  PopoverClose,
 } from "@/components/ui/popover";
 import { DateRange } from "react-day-picker";
 
@@ -74,9 +73,14 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
       >
         <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/90 z-10">
           <h3 className="text-lg font-semibold text-white">Select Dates</h3>
-          <PopoverClose className="text-white hover:text-gray-300">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="text-white hover:bg-white/10"
+            onClick={() => document.querySelector('[data-radix-popper-content-wrapper]')?.querySelector('button')?.click()}
+          >
             <X className="h-5 w-5" />
-          </PopoverClose>
+          </Button>
         </div>
         <div className="p-2 border-b border-white/10 flex gap-2 flex-wrap">
           <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Today</Button>
