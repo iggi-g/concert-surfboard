@@ -1,22 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchEvents } from "@/lib/supabase-client";
+import { fetchEvents, Event } from "@/lib/supabase-client";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { SurpriseAnimation } from "./SurpriseAnimation";
 
-export const SurpriseButton = () => {
+interface SurpriseButtonProps {
+  className?: string;
+  filteredEvents: Event[];
+}
+
+export const SurpriseButton = ({ className, filteredEvents }: SurpriseButtonProps) => {
   const { toast } = useToast();
   const [showAnimation, setShowAnimation] = useState(false);
-  
-  const { data: events = [] } = useQuery({
-    queryKey: ['events'],
-    queryFn: () => fetchEvents(),
-  });
 
   const handleSurprise = () => {
-    if (events.length === 0) {
+    if (filteredEvents.length === 0) {
       toast({
         title: "No events available",
         description: "Sorry, there are no events to choose from at the moment.",
@@ -30,7 +30,7 @@ export const SurpriseButton = () => {
 
   const handleAnimationComplete = () => {
     setShowAnimation(false);
-    const randomEvent = events[Math.floor(Math.random() * events.length)];
+    const randomEvent = filteredEvents[Math.floor(Math.random() * filteredEvents.length)];
     window.open(randomEvent.link, '_blank');
     
     toast({
@@ -44,10 +44,13 @@ export const SurpriseButton = () => {
       <Button
         onClick={handleSurprise}
         variant="outline"
-        className="group relative overflow-hidden border-accent hover:border-accent/80"
+        className={cn(
+          "group relative overflow-hidden border-accent hover:border-accent/80",
+          className
+        )}
       >
         <span className="relative z-10 flex items-center gap-2">
-          <Sparkles className="w-4 h-4" />
+          <Star className="w-4 h-4 text-orange-500 fill-orange-500" />
           Surprise Me
         </span>
         <div className="absolute inset-0 bg-accent/10 transform translate-y-full transition-transform group-hover:translate-y-0" />

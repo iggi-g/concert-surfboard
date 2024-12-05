@@ -6,17 +6,20 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface VenueCheckboxFilterProps {
   venues: string[];
   selectedVenues: string[];
   onVenueChange: (venues: string[]) => void;
+  className?: string;
 }
 
 export const VenueCheckboxFilter = ({
   venues,
   selectedVenues,
   onVenueChange,
+  className,
 }: VenueCheckboxFilterProps) => {
   const handleVenueToggle = (venue: string) => {
     if (selectedVenues.includes(venue)) {
@@ -31,7 +34,7 @@ export const VenueCheckboxFilter = ({
       <PopoverTrigger asChild>
         <Button 
           variant="outline" 
-          className="bg-white/10 border-white/10 text-white hover:bg-white/20"
+          className={cn("bg-white/10 border-white/10 text-white hover:bg-white/20", className)}
         >
           {selectedVenues.length === 0 ? (
             "Select Venues"
@@ -40,18 +43,19 @@ export const VenueCheckboxFilter = ({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align="start">
-        <div className="grid gap-2 p-4">
+      <PopoverContent className="w-[280px] p-0 bg-black/90 border-white/10" align="start">
+        <div className="grid gap-2 p-4 max-h-[60vh] overflow-y-auto">
           {venues.map((venue) => (
             <div key={venue} className="flex items-center space-x-2">
               <Checkbox
                 id={venue}
                 checked={selectedVenues.includes(venue)}
                 onCheckedChange={() => handleVenueToggle(venue)}
+                className="border-white/50 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
               />
               <label
                 htmlFor={venue}
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm font-medium leading-none text-white peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {venue}
               </label>

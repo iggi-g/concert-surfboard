@@ -13,9 +13,10 @@ import { DateRange } from "react-day-picker";
 interface DateRangeSelectorProps {
   dateRange: DateRange | undefined;
   setDateRange: (range: DateRange | undefined) => void;
+  className?: string;
 }
 
-export const DateRangeSelector = ({ dateRange, setDateRange }: DateRangeSelectorProps) => {
+export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRangeSelectorProps) => {
   const today = new Date();
   
   const handleDatePreset = (preset: 'today' | 'week' | 'nextWeek' | 'month') => {
@@ -48,7 +49,7 @@ export const DateRangeSelector = ({ dateRange, setDateRange }: DateRangeSelector
           variant="outline"
           className={cn(
             "bg-white/10 border-white/10 text-white hover:bg-white/20",
-            dateRange?.from && "text-white"
+            className
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -66,12 +67,15 @@ export const DateRangeSelector = ({ dateRange, setDateRange }: DateRangeSelector
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="end">
-        <div className="p-2 border-b border-border flex gap-2">
-          <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')}>Today</Button>
-          <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')}>This Week</Button>
-          <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')}>Next Week</Button>
-          <Button size="sm" variant="outline" onClick={() => handleDatePreset('month')}>This Month</Button>
+      <PopoverContent 
+        className="w-auto p-0 bg-black/90 border-white/10" 
+        align="start"
+      >
+        <div className="p-2 border-b border-white/10 flex gap-2 flex-wrap">
+          <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Today</Button>
+          <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">This Week</Button>
+          <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Next Week</Button>
+          <Button size="sm" variant="outline" onClick={() => handleDatePreset('month')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">This Month</Button>
         </div>
         <Calendar
           initialFocus
@@ -81,6 +85,7 @@ export const DateRangeSelector = ({ dateRange, setDateRange }: DateRangeSelector
           onSelect={setDateRange}
           numberOfMonths={2}
           fromDate={today}
+          className="text-white"
         />
       </PopoverContent>
     </Popover>

@@ -100,9 +100,14 @@ const Index = () => {
     <div className="relative min-h-screen w-full">
       <VideoBackground />
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
-        <h1 className="text-4xl font-bold text-white mb-8 animate-fade-in flex-grow-0">
-          Discover Your Next Concert in Copenhagen - there are {upcomingEventsCount} to choose from
-        </h1>
+        <div className="space-y-2 mb-8">
+          <h1 className="text-4xl font-bold text-white animate-fade-in flex-grow-0">
+            Discover Your Next Concert in Copenhagen
+          </h1>
+          <p className="text-xl text-orange-500 animate-fade-in">
+            {filteredEvents.length} concerts to choose from
+          </p>
+        </div>
         
         <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
           <div className="hidden md:block w-full max-w-[1920px] mx-auto">
@@ -122,6 +127,7 @@ const Index = () => {
               clearFilters={clearFilters}
               showFavoritesOnly={showFavoritesOnly}
               setShowFavoritesOnly={setShowFavoritesOnly}
+              filteredEvents={filteredEvents}
             />
           </div>
 
@@ -151,6 +157,7 @@ const Index = () => {
                   clearFilters={clearFilters}
                   showFavoritesOnly={showFavoritesOnly}
                   setShowFavoritesOnly={setShowFavoritesOnly}
+                  filteredEvents={filteredEvents}
                 />
               </div>
             )}
