@@ -44,41 +44,46 @@ export const FilterControls = ({
   setShowFavoritesOnly,
 }: FilterControlsProps) => {
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6">
-      <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
+    <div className="w-full max-w-6xl mx-auto space-y-4 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap items-center justify-end gap-2 sm:gap-3">
         <SearchInput 
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          className="w-full sm:w-auto"
         />
 
         <FavoritesToggle
           showFavoritesOnly={showFavoritesOnly}
           setShowFavoritesOnly={setShowFavoritesOnly}
+          className="w-full sm:w-auto"
         />
 
-        <SurpriseButton />
+        <SurpriseButton className="w-full sm:w-auto" />
 
         <VenueCheckboxFilter
           venues={availableVenues}
           selectedVenues={selectedVenues}
           onVenueChange={setSelectedVenues}
+          className="w-full sm:w-auto"
         />
         
         <DateRangeSelector
           dateRange={dateRange}
           setDateRange={setDateRange}
+          className="w-full sm:w-auto"
         />
 
         <SortDropdown
           setSortOrder={setSortOrder}
           setSortBy={setSortBy}
+          className="w-full sm:w-auto"
         />
 
         {hasActiveFilters && (
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="bg-white/10 border-white/10 text-white hover:bg-white/20"
+            className="w-full sm:w-auto bg-white/10 border-white/10 text-white hover:bg-white/20"
           >
             <X className="w-4 h-4 mr-2" />
             Clear Filters

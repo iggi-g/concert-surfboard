@@ -31,30 +31,40 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   }
 
   const getColumnCount = () => {
-    if (windowSize.width < 768) return 1;
+    if (windowSize.width < 640) return 1;
     if (windowSize.width < 1024) return 2;
     if (windowSize.width < 1280) return 3;
-    if (windowSize.width < 1536) return 4;
-    return 5;
+    return 4;
   };
 
   const columnCount = getColumnCount();
   const rowCount = Math.ceil(filteredEvents.length / columnCount);
-  const columnWidth = Math.min(350, (windowSize.width - 32) / columnCount);
-  const rowHeight = 280;
+  
+  // Calculate the available width for the grid
+  const GRID_PADDING = windowSize.width < 640 ? 16 : 32;
+  const CARD_GAP = 16;
+  const availableWidth = windowSize.width - (GRID_PADDING * 2);
+  
+  // Calculate the width for each column including gaps
+  const columnWidth = Math.floor((availableWidth - (CARD_GAP * (columnCount - 1))) / columnCount);
+  const rowHeight = windowSize.width < 640 ? 360 : 320; // Taller cards on mobile
 
   const Cell = ({ columnIndex, rowIndex, style }: any) => {
     const index = rowIndex * columnCount + columnIndex;
     if (index >= filteredEvents.length) return null;
 
     const event = filteredEvents[index];
+    
+    // Calculate the left and right padding to create gaps between cards
+    const leftPadding = columnIndex === 0 ? 0 : CARD_GAP / 2;
+    const rightPadding = columnIndex === columnCount - 1 ? 0 : CARD_GAP / 2;
+
     return (
       <div style={{
         ...style,
-        paddingLeft: columnIndex === 0 ? '16px' : '8px',
-        paddingRight: columnIndex === columnCount - 1 ? '16px' : '8px',
-        paddingTop: '8px',
-        paddingBottom: '8px'
+        left: `${parseFloat(style.left as string) + leftPadding}px`,
+        width: `${columnWidth - leftPadding - rightPadding}px`,
+        padding: '8px 0',
       }}>
         <ConcertCard
           artist={event.title}
@@ -71,14 +81,14 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   };
 
   return (
-    <div className="w-full max-w-[1920px] mx-auto overflow-hidden px-4">
+    <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8">
       <FixedSizeGrid
         columnCount={columnCount}
         columnWidth={columnWidth}
         height={windowSize.height - 200}
         rowCount={rowCount}
         rowHeight={rowHeight}
-        width={windowSize.width - 64}
+        width={availableWidth}
       >
         {Cell}
       </FixedSizeGrid>
