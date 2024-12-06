@@ -45,27 +45,27 @@ export const VenueCheckboxFilter = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent 
-        className="w-screen h-screen md:w-[280px] md:h-auto p-0 bg-black/90 border-white/10 fixed inset-0 md:relative md:rounded-xl" 
+        className="w-screen h-[100dvh] md:w-[280px] md:h-auto p-0 bg-black/95 border-white/10 fixed inset-0 md:relative md:rounded-xl overflow-hidden" 
         align="start"
       >
-        <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/90 z-10">
+        <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/95 backdrop-blur-sm z-10">
           <h3 className="text-lg font-semibold text-white">Select Venues</h3>
           <PopoverClose className="text-white hover:bg-white/10 rounded-full p-2">
             <X className="h-5 w-5" />
           </PopoverClose>
         </div>
-        <div className="grid gap-2 p-4 h-[calc(100vh-64px)] md:h-auto md:max-h-[60vh] overflow-y-auto">
+        <div className="grid gap-4 p-4 h-[calc(100dvh-64px)] md:h-auto md:max-h-[60vh] overflow-y-auto">
           {venues.map((venue) => (
-            <div key={venue} className="flex items-center space-x-2">
+            <div key={venue} className="flex items-center space-x-3">
               <Checkbox
                 id={venue}
                 checked={selectedVenues.includes(venue)}
                 onCheckedChange={() => handleVenueToggle(venue)}
-                className="border-white/50 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                className="border-white/50 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500 h-5 w-5"
               />
               <label
                 htmlFor={venue}
-                className="text-sm font-medium leading-none text-white peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-base font-medium leading-none text-white peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none"
               >
                 {venue}
               </label>
