@@ -9,9 +9,9 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
   return (
     <div className="space-y-2 mb-8">
       <h1 className="text-4xl font-bold text-white animate-fade-in flex-grow-0">
-        Discover Your Next Concert in Copenhagen
+        Concerts in Copenhagen
       </h1>
-      <p className="text-xl text-orange-500 animate-fade-in">
+      <p className="text-xl font-bold text-orange-500 animate-fade-in">
         {showFavoritesOnly 
           ? `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from`
           : `${filteredEventsCount} concerts to choose from`
