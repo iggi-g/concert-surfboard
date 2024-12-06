@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
 import { ContactButton } from "@/components/ContactButton";
-import { Heart, ArrowUp } from "lucide-react";
+import { Beer, Heart, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
@@ -114,7 +114,7 @@ const Index = () => {
           rel="noopener noreferrer"
           className="absolute top-4 right-4 group"
         >
-          <Heart className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" fill="currentColor" />
+          <Beer className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
         </a>
       </div>
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
@@ -123,7 +123,10 @@ const Index = () => {
             Discover Your Next Concert in Copenhagen
           </h1>
           <p className="text-xl text-orange-500 animate-fade-in">
-            {filteredEvents.length} concerts to choose from
+            {showFavoritesOnly 
+              ? `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} to choose from`
+              : `${filteredEvents.length} concerts to choose from`
+            }
           </p>
         </div>
         
