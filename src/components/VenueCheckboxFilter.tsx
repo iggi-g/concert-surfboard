@@ -35,7 +35,10 @@ export const VenueCheckboxFilter = ({
       <PopoverTrigger asChild>
         <Button 
           variant="outline" 
-          className={cn("bg-white/10 border-white/10 text-white hover:bg-white/20", className)}
+          className={cn(
+            "bg-white/10 border-white/10 text-white hover:bg-white/20 transition-colors", 
+            className
+          )}
         >
           {selectedVenues.length === 0 ? (
             "Select Venues"
@@ -45,32 +48,52 @@ export const VenueCheckboxFilter = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent 
-        className="w-screen h-[100dvh] md:w-[280px] md:h-auto p-0 bg-black/95 border-white/10 fixed inset-0 md:relative md:rounded-xl overflow-hidden" 
+        className="w-screen h-[100dvh] md:w-[280px] md:h-auto p-0 bg-black/95 border-white/10 fixed inset-0 md:relative md:rounded-xl overflow-hidden backdrop-blur-sm" 
         align="start"
+        side="bottom"
       >
-        <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/95 backdrop-blur-sm z-10">
-          <h3 className="text-lg font-semibold text-white">Select Venues</h3>
-          <PopoverClose className="text-white hover:bg-white/10 rounded-full p-2">
-            <X className="h-5 w-5" />
-          </PopoverClose>
-        </div>
-        <div className="grid gap-4 p-4 h-[calc(100dvh-64px)] md:h-auto md:max-h-[60vh] overflow-y-auto">
-          {venues.map((venue) => (
-            <div key={venue} className="flex items-center space-x-3">
-              <Checkbox
-                id={venue}
-                checked={selectedVenues.includes(venue)}
-                onCheckedChange={() => handleVenueToggle(venue)}
-                className="border-white/50 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500 h-5 w-5"
-              />
-              <label
-                htmlFor={venue}
-                className="text-base font-medium leading-none text-white peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none"
-              >
-                {venue}
-              </label>
+        <div className="flex flex-col h-full md:h-auto">
+          <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/95 backdrop-blur-sm z-10">
+            <h3 className="text-lg font-semibold text-white">Select Venues</h3>
+            <PopoverClose className="text-white hover:bg-white/10 rounded-full p-2 transition-colors">
+              <X className="h-5 w-5" />
+            </PopoverClose>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto overscroll-contain">
+            <div className="grid gap-4 p-4">
+              {venues.map((venue) => (
+                <div 
+                  key={venue} 
+                  className="flex items-center space-x-3 py-2 px-1 hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  <Checkbox
+                    id={venue}
+                    checked={selectedVenues.includes(venue)}
+                    onCheckedChange={() => handleVenueToggle(venue)}
+                    className="border-white/50 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500 h-5 w-5"
+                  />
+                  <label
+                    htmlFor={venue}
+                    className="flex-1 text-base font-medium leading-none text-white peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none"
+                  >
+                    {venue}
+                  </label>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          <div className="p-4 border-t border-white/10 bg-black/95 sticky bottom-0">
+            <PopoverClose asChild>
+              <Button 
+                className="w-full bg-white/10 border-white/10 text-white hover:bg-white/20"
+                variant="outline"
+              >
+                Done
+              </Button>
+            </PopoverClose>
+          </div>
         </div>
       </PopoverContent>
     </Popover>
