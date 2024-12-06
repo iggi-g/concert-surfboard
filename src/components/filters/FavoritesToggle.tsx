@@ -17,7 +17,7 @@ export const FavoritesToggle = ({ showFavoritesOnly, setShowFavoritesOnly }: Fav
         showFavoritesOnly && "bg-white/20"
       )}
     >
-      <Heart className={`h-4 w-4 mr-2 ${showFavoritesOnly ? 'fill-current text-red-500' : ''}`} />
+      <Heart className={`h-4 w-4 mr-2 ${showFavoritesOnly ? 'fill-current text-orange-500' : ''}`} />
       Favorites
     </Button>
   );

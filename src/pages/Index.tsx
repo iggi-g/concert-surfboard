@@ -9,8 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
 import { ContactButton } from "@/components/ContactButton";
-import { Beer, Heart, ArrowUp } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/PageHeader";
 
 const Index = () => {
   const { toast } = useToast();
@@ -42,7 +43,6 @@ const Index = () => {
   });
 
   const availableVenues = Array.from(new Set(events.map(event => event.venue))).sort();
-  const upcomingEventsCount = events.length;
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -107,28 +107,11 @@ const Index = () => {
   return (
     <div className="relative min-h-screen w-full">
       <VideoBackground />
-      <div className="fixed top-0 right-0 w-full h-16 bg-gradient-to-b from-black/50 to-transparent z-40">
-        <a 
-          href="https://buymeacoffee.com/cphconcerts" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="absolute top-4 right-4 group"
-        >
-          <Beer className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
-        </a>
-      </div>
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
-        <div className="space-y-2 mb-8">
-          <h1 className="text-4xl font-bold text-white animate-fade-in flex-grow-0">
-            Discover Your Next Concert in Copenhagen
-          </h1>
-          <p className="text-xl text-orange-500 animate-fade-in">
-            {showFavoritesOnly 
-              ? `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} to choose from`
-              : `${filteredEvents.length} concerts to choose from`
-            }
-          </p>
-        </div>
+        <PageHeader 
+          filteredEventsCount={filteredEvents.length}
+          showFavoritesOnly={showFavoritesOnly}
+        />
         
         <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
           <div className="hidden md:block w-full max-w-[1920px] mx-auto">
