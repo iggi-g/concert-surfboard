@@ -14,7 +14,7 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
       <p className="text-xl font-bold text-orange-500 animate-fade-in">
         {showFavoritesOnly 
           ? `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from`
-          : `${filteredEventsCount} concerts to choose from`
+          : `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from`
         }
       </p>
       <a 
