@@ -179,7 +179,7 @@ const Index = () => {
         <Button
           variant="outline"
           size="icon"
-          className="fixed bottom-20 right-4 rounded-full bg-white/10 border-white/10 text-white hover:bg-white/20 z-50"
+          className="fixed bottom-20 right-4 rounded-full bg-white/10 border-white/10 text-orange-500 hover:bg-white/20 z-50"
           onClick={scrollToTop}
         >
           <ArrowUp className="h-4 w-4" />
