@@ -1,10 +1,10 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  PopoverClose
-} from "@/components/ui/popover";
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogClose
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -31,8 +31,8 @@ export const VenueCheckboxFilter = ({
   };
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <Dialog>
+      <DialogTrigger asChild>
         <Button 
           variant="outline" 
           className={cn(
@@ -46,18 +46,14 @@ export const VenueCheckboxFilter = ({
             `${selectedVenues.length} venue${selectedVenues.length === 1 ? "" : "s"} selected`
           )}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent 
-        className="w-screen h-[100dvh] md:w-[280px] md:h-auto p-0 bg-black/95 border-white/10 fixed inset-0 md:relative md:rounded-xl overflow-hidden backdrop-blur-sm" 
-        align="start"
-        side="bottom"
-      >
-        <div className="flex flex-col h-full md:h-auto">
+      </DialogTrigger>
+      <DialogContent className="w-screen h-screen p-0 bg-black/95 border-white/10 max-w-full m-0 rounded-none">
+        <div className="flex flex-col h-full">
           <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/95 backdrop-blur-sm z-10">
             <h3 className="text-lg font-semibold text-white">Select Venues</h3>
-            <PopoverClose className="text-white hover:bg-white/10 rounded-full p-2 transition-colors">
+            <DialogClose className="text-white hover:bg-white/10 rounded-full p-2 transition-colors">
               <X className="h-5 w-5" />
-            </PopoverClose>
+            </DialogClose>
           </div>
           
           <div className="flex-1 overflow-y-auto overscroll-contain">
@@ -85,17 +81,17 @@ export const VenueCheckboxFilter = ({
           </div>
 
           <div className="p-4 border-t border-white/10 bg-black/95 sticky bottom-0">
-            <PopoverClose asChild>
+            <DialogClose asChild>
               <Button 
                 className="w-full bg-white/10 border-white/10 text-white hover:bg-white/20"
                 variant="outline"
               >
                 Done
               </Button>
-            </PopoverClose>
+            </DialogClose>
           </div>
         </div>
-      </PopoverContent>
-    </Popover>
+      </DialogContent>
+    </Dialog>
   );
 };
