@@ -26,7 +26,6 @@ interface FilterControlsProps {
   showFavoritesOnly: boolean;
   setShowFavoritesOnly: (show: boolean) => void;
   filteredEvents: Event[];
-  favoriteEvents: Event[];
 }
 
 export const FilterControls = ({
@@ -46,15 +45,13 @@ export const FilterControls = ({
   showFavoritesOnly,
   setShowFavoritesOnly,
   filteredEvents,
-  favoriteEvents,
 }: FilterControlsProps) => {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
-      <div className="flex flex-nowrap items-center justify-end gap-2 sm:gap-4 overflow-x-auto pb-2 sm:pb-0 scrollbar-none">
+      <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
         <SearchInput 
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          className="min-w-[200px] sm:min-w-[300px]"
         />
 
         <FavoritesToggle
@@ -62,9 +59,7 @@ export const FilterControls = ({
           setShowFavoritesOnly={setShowFavoritesOnly}
         />
 
-        <SurpriseButton 
-          filteredEvents={showFavoritesOnly ? favoriteEvents : filteredEvents} 
-        />
+        <SurpriseButton filteredEvents={filteredEvents} />
 
         <VenueCheckboxFilter
           venues={availableVenues}
@@ -86,7 +81,7 @@ export const FilterControls = ({
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="bg-white/10 border-white/10 text-white hover:bg-white/20 whitespace-nowrap"
+            className="bg-white/10 border-white/10 text-white hover:bg-white/20"
           >
             <X className="w-4 h-4 mr-2" />
             Clear Filters

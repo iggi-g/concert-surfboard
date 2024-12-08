@@ -1,16 +1,14 @@
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface SearchInputProps {
   searchQuery: string;
   setSearchQuery: (value: string) => void;
-  className?: string;
 }
 
-export const SearchInput = ({ searchQuery, setSearchQuery, className }: SearchInputProps) => {
+export const SearchInput = ({ searchQuery, setSearchQuery }: SearchInputProps) => {
   return (
-    <div className={cn("relative flex-grow max-w-md", className)}>
+    <div className="relative flex-grow max-w-md">
       <Input
         placeholder="Search events..."
         value={searchQuery}
