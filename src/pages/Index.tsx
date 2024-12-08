@@ -12,6 +12,7 @@ import { ContactButton } from "@/components/ContactButton";
 import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const Index = () => {
   const { toast } = useToast();
@@ -61,6 +62,9 @@ const Index = () => {
     searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly
   );
 
+  const [favorites] = useLocalStorage<string[]>("favorites", []);
+
+  const favoriteEvents = events.filter(event => favorites.includes(event.title));
   const filteredEvents = events.filter((event) => {
     let matchesSearch = true;
     let matchesVenue = true;
@@ -109,7 +113,7 @@ const Index = () => {
       <VideoBackground />
       <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
         <PageHeader 
-          filteredEventsCount={filteredEvents.length}
+          filteredEventsCount={showFavoritesOnly ? favoriteEvents.length : filteredEvents.length}
           showFavoritesOnly={showFavoritesOnly}
         />
         
@@ -132,6 +136,7 @@ const Index = () => {
               showFavoritesOnly={showFavoritesOnly}
               setShowFavoritesOnly={setShowFavoritesOnly}
               filteredEvents={filteredEvents}
+              favoriteEvents={favoriteEvents}
             />
           </div>
 
@@ -162,13 +167,14 @@ const Index = () => {
                   showFavoritesOnly={showFavoritesOnly}
                   setShowFavoritesOnly={setShowFavoritesOnly}
                   filteredEvents={filteredEvents}
+                  favoriteEvents={favoriteEvents}
                 />
               </div>
             )}
           </div>
 
           <EventsList 
-            events={filteredEvents} 
+            events={showFavoritesOnly ? favoriteEvents : filteredEvents} 
             isLoading={isLoading}
             showFavoritesOnly={showFavoritesOnly}
           />
