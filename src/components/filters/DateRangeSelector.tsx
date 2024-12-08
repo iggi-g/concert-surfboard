@@ -54,33 +54,32 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
           {dateRange?.from ? (
             dateRange.to ? (
               <>
-                {format(dateRange.from, "LLL dd, y")} -{" "}
-                {format(dateRange.to, "LLL dd, y")}
+                {format(dateRange.from, "LLL dd")} - {format(dateRange.to, "LLL dd")}
               </>
             ) : (
               format(dateRange.from, "LLL dd, y")
             )
           ) : (
-            <span>Pick a date range</span>
+            <span>Pick dates</span>
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[90vw] max-w-lg p-0 bg-black/95 border-white/10">
-        <div className="flex flex-col h-full max-h-[80vh]">
-          <div className="flex justify-between items-center p-4 border-b border-white/10 sticky top-0 bg-black/95 backdrop-blur-sm z-10">
+      <DialogContent className="w-fit max-w-[95vw] p-0 bg-black/95 border-white/10">
+        <div className="flex flex-col">
+          <div className="flex justify-between items-center p-3 border-b border-white/10 bg-black/95 backdrop-blur-sm">
             <h3 className="text-lg font-semibold text-white">Select Dates</h3>
-            <DialogClose className="text-white hover:bg-white/10 rounded-full p-2 transition-colors">
-              <X className="h-5 w-5" />
+            <DialogClose className="text-white hover:bg-white/10 rounded-full p-1.5 transition-colors">
+              <X className="h-4 w-4" />
             </DialogClose>
           </div>
           
-          <div className="p-2 border-b border-white/10 flex gap-2 flex-wrap">
+          <div className="p-2 border-b border-white/10 flex gap-2">
             <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Today</Button>
             <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">This Week</Button>
             <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Next Week</Button>
           </div>
           
-          <div className="flex-1 overflow-y-auto overscroll-contain p-4">
+          <div className="p-3">
             <Calendar
               initialFocus
               mode="range"
@@ -93,7 +92,7 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
             />
           </div>
 
-          <div className="p-4 border-t border-white/10 bg-black/95 sticky bottom-0">
+          <div className="p-3 border-t border-white/10 bg-black/95">
             <DialogClose asChild>
               <Button 
                 className="w-full bg-white/10 border-white/10 text-white hover:bg-white/20"

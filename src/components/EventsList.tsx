@@ -1,6 +1,7 @@
 import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { isAfter, startOfDay, parseISO } from "date-fns";
 
 interface EventsListProps {
   events: Event[];
@@ -19,9 +20,11 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
     );
   };
 
-  const filteredEvents = showFavoritesOnly 
-    ? events.filter(event => favorites.includes(event.title))
-    : events;
+  const today = startOfDay(new Date());
+  
+  const filteredEvents = events
+    .filter(event => isAfter(parseISO(event.date), today))
+    .filter(event => !showFavoritesOnly || favorites.includes(event.title));
 
   if (isLoading) {
     return <p className="text-white">Loading events...</p>;

@@ -13,8 +13,35 @@
   color: #888;
 }
 
+/* Improve scrolling performance */
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Add will-change for elements that animate */
+.animate-fade-in {
+  will-change: opacity;
+}
+
+/* Optimize paint operations */
+.fixed {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
 @media (max-width: 768px) {
   #root {
     padding: 1rem;
   }
+}
+
+/* Reduce paint operations during scroll */
+.grid {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
