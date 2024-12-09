@@ -12,10 +12,7 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
         Concerts in Copenhagen
       </h1>
       <p className="text-xl font-bold text-orange-500 animate-fade-in">
-        {showFavoritesOnly 
-          ? `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from`
-          : `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from`
-        }
+        {filteredEventsCount} {showFavoritesOnly ? 'favorite' : ''} {filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from
       </p>
       <a 
         href="https://buymeacoffee.com/cphconcerts" 
