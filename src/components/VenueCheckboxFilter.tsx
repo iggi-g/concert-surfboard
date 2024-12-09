@@ -56,7 +56,7 @@ export const VenueCheckboxFilter = ({
             </DialogClose>
           </div>
           
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto pb-[60px]">
             <div className="grid grid-cols-1 gap-1">
               {venues.map((venue) => (
                 <div 
@@ -81,7 +81,7 @@ export const VenueCheckboxFilter = ({
             </div>
           </div>
 
-          <div className="p-3 border-t border-white/10 bg-black/95 sticky bottom-0">
+          <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/10 bg-black/95">
             <DialogClose asChild>
               <Button 
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none"
