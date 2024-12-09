@@ -88,14 +88,14 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
               onSelect={setDateRange}
               numberOfMonths={1}
               fromDate={today}
-              className="text-white mx-auto"
+              className="text-white mx-auto [&_.rdp-day_focus]:bg-orange-500 [&_.rdp-day_hover]:bg-orange-500/50 [&_.rdp-day_selected]:bg-orange-500 [&_.rdp-day_selected]:text-white [&_.rdp-day_selected:hover]:bg-orange-600"
             />
           </div>
 
           <div className="p-3 border-t border-white/10 bg-black/95">
             <DialogClose asChild>
               <Button 
-                className="w-full bg-white/10 border-white/10 text-white hover:bg-white/20"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none"
                 variant="outline"
               >
                 Done
