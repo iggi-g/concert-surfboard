@@ -11,7 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ConcertCardProps {
   artist: string;
@@ -37,6 +37,14 @@ export const ConcertCard = ({
   onToggleFavorite
 }: ConcertCardProps) => {
   const [showCalendarDialog, setShowCalendarDialog] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    // Preload image
+    const img = new Image();
+    img.src = imageUrl;
+    img.onload = () => setLoaded(true);
+  }, [imageUrl]);
 
   const handleClick = () => {
     window.open(ticketUrl, '_blank');
@@ -57,7 +65,7 @@ export const ConcertCard = ({
   const generateGoogleCalendarUrl = () => {
     const eventDate = new Date(date);
     const endDate = new Date(eventDate);
-    endDate.setDate(endDate.getDate() + 1); // Make it an all-day event
+    endDate.setDate(endDate.getDate() + 1);
 
     const params = new URLSearchParams({
       action: 'TEMPLATE',
@@ -75,17 +83,45 @@ export const ConcertCard = ({
     setShowCalendarDialog(false);
   };
 
+  // Schema.org event structured data
+  const eventSchema = {
+    "@context": "https://schema.org",
+    "@type": "MusicEvent",
+    "name": `${artist} Concert in Copenhagen`,
+    "startDate": date,
+    "location": {
+      "@type": "Place",
+      "name": venue,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Copenhagen",
+        "addressCountry": "DK"
+      }
+    },
+    "performer": {
+      "@type": "MusicGroup",
+      "name": artist
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": ticketUrl
+    }
+  };
+
   return (
     <>
       <Card 
         className="overflow-hidden w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10 relative"
         onClick={handleClick}
       >
+        <script type="application/ld+json">
+          {JSON.stringify(eventSchema)}
+        </script>
         <div className="relative aspect-[16/9] w-full">
           <img 
             src={imageUrl} 
-            alt={artist} 
-            className="absolute inset-0 w-full h-full object-cover"
+            alt={`${artist} concert at ${venue} in Copenhagen`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
             onError={(e) => {
               e.currentTarget.src = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3";
             }}
@@ -103,6 +139,7 @@ export const ConcertCard = ({
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
                 className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm hover:bg-black/60"
+                aria-label={`Visit ${venue} website`}
               >
                 {venue}
               </a>
@@ -118,6 +155,7 @@ export const ConcertCard = ({
               size="icon"
               className="rounded-full bg-black/40 hover:bg-black/60"
               onClick={handleCalendarClick}
+              aria-label="Add to calendar"
             >
               <Calendar className="h-5 w-5 text-white" />
             </Button>
@@ -126,6 +164,7 @@ export const ConcertCard = ({
               size="icon"
               className="rounded-full bg-black/40 hover:bg-black/60"
               onClick={handleFavoriteClick}
+              aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
             >
               <Heart 
                 className={`h-5 w-5 ${isFavorite ? 'fill-current text-orange-500' : 'text-white'}`} 
@@ -134,7 +173,7 @@ export const ConcertCard = ({
           </div>
         </div>
         <div className="p-2 md:p-4">
-          <h3 className="text-lg md:text-xl font-bold text-white">{artist}</h3>
+          <h2 className="text-lg md:text-xl font-bold text-white">{artist}</h2>
         </div>
       </Card>
 

@@ -21,11 +21,14 @@
 body {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Add will-change for elements that animate */
 .animate-fade-in {
-  will-change: opacity;
+  will-change: opacity, transform;
 }
 
 /* Optimize paint operations */
@@ -34,14 +37,39 @@ body {
   transform: translateZ(0);
 }
 
-@media (max-width: 768px) {
-  #root {
-    padding: 1rem;
-  }
+/* Content-visibility optimization for off-screen content */
+.card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
 }
 
 /* Reduce paint operations during scroll */
 .grid {
   transform: translateZ(0);
   backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none;
+  }
+}
+
+/* Prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
