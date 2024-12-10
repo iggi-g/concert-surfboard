@@ -62,24 +62,55 @@ export const ConcertCard = ({
     setShowCalendarDialog(true);
   };
 
-  const generateGoogleCalendarUrl = () => {
+  const generateCalendarUrl = () => {
     const eventDate = new Date(date);
     const endDate = new Date(eventDate);
     endDate.setDate(endDate.getDate() + 1);
 
-    const params = new URLSearchParams({
-      action: 'TEMPLATE',
-      text: artist,
-      details: `Concert at ${venue}. Get tickets: ${ticketUrl}`,
-      dates: `${eventDate.toISOString().split('T')[0].replace(/-/g, '')}/${endDate.toISOString().split('T')[0].replace(/-/g, '')}`,
-      location: venue
-    });
+    // Check if the device is mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+    if (isMobile) {
+      // Format for mobile calendar apps
+      const details = `Concert at ${venue}. Get tickets: ${ticketUrl}`;
+      return `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${eventDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z
+DTEND:${endDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z
+SUMMARY:${artist}
+DESCRIPTION:${details}
+LOCATION:${venue}
+END:VEVENT
+END:VCALENDAR`;
+    } else {
+      // Use Google Calendar for desktop
+      const params = new URLSearchParams({
+        action: 'TEMPLATE',
+        text: artist,
+        details: `Concert at ${venue}. Get tickets: ${ticketUrl}`,
+        dates: `${eventDate.toISOString().split('T')[0].replace(/-/g, '')}/${endDate.toISOString().split('T')[0].replace(/-/g, '')}`,
+        location: venue
+      });
+      return `https://calendar.google.com/calendar/render?${params.toString()}`;
+    }
   };
 
   const handleAddToCalendar = () => {
-    window.open(generateGoogleCalendarUrl(), '_blank');
+    const calendarUrl = generateCalendarUrl();
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // Create a temporary link and trigger download of .ics file
+      const link = document.createElement('a');
+      link.href = calendarUrl;
+      link.download = `${artist}-concert.ics`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      window.open(calendarUrl, '_blank');
+    }
     setShowCalendarDialog(false);
   };
 
@@ -193,4 +224,3 @@ export const ConcertCard = ({
       </AlertDialog>
     </>
   );
-};
