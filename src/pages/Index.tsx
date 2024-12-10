@@ -12,6 +12,7 @@ import { ContactButton } from "@/components/ContactButton";
 import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const Index = () => {
   const { toast } = useToast();
@@ -23,6 +24,7 @@ const Index = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
+  const [favorites] = useLocalStorage<string[]>("favorites", []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,6 +67,7 @@ const Index = () => {
     let matchesSearch = true;
     let matchesVenue = true;
     let matchesDateRange = true;
+    let matchesFavorites = true;
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -87,7 +90,11 @@ const Index = () => {
       });
     }
 
-    return matchesSearch && matchesVenue && matchesDateRange;
+    if (showFavoritesOnly) {
+      matchesFavorites = favorites.includes(event.title);
+    }
+
+    return matchesSearch && matchesVenue && matchesDateRange && matchesFavorites;
   }).sort((a, b) => {
     if (sortBy === "title") {
       return sortOrder === "asc"
@@ -136,35 +143,61 @@ const Index = () => {
           </div>
 
           <div className="md:hidden w-full space-y-4">
-            <button 
-              onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="w-full bg-white/10 border-white/10 text-white px-4 py-2 rounded hover:bg-white/20 transition-colors"
-            >
-              {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
-            </button>
-            
-            {showMobileFilters && (
-              <div className="animate-fade-in">
-                <FilterControls
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  selectedVenues={selectedVenues}
-                  setSelectedVenues={setSelectedVenues}
-                  availableVenues={availableVenues}
-                  dateRange={dateRange}
-                  setDateRange={setDateRange}
-                  sortOrder={sortOrder}
-                  setSortOrder={setSortOrder}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  hasActiveFilters={hasActiveFilters}
-                  clearFilters={clearFilters}
-                  showFavoritesOnly={showFavoritesOnly}
-                  setShowFavoritesOnly={setShowFavoritesOnly}
-                  filteredEvents={filteredEvents}
-                />
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <div className="relative flex-grow">
+                  <FilterControls
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    selectedVenues={selectedVenues}
+                    setSelectedVenues={setSelectedVenues}
+                    availableVenues={availableVenues}
+                    dateRange={dateRange}
+                    setDateRange={setDateRange}
+                    sortOrder={sortOrder}
+                    setSortOrder={setSortOrder}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    hasActiveFilters={hasActiveFilters}
+                    clearFilters={clearFilters}
+                    showFavoritesOnly={showFavoritesOnly}
+                    setShowFavoritesOnly={setShowFavoritesOnly}
+                    filteredEvents={filteredEvents}
+                    isMobile={true}
+                  />
+                </div>
               </div>
-            )}
+              <button 
+                onClick={() => setShowMobileFilters(!showMobileFilters)}
+                className="w-full bg-white/10 border-white/10 text-white px-4 py-2 rounded hover:bg-white/20 transition-colors"
+              >
+                {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
+              </button>
+              
+              {showMobileFilters && (
+                <div className="animate-fade-in">
+                  <FilterControls
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    selectedVenues={selectedVenues}
+                    setSelectedVenues={setSelectedVenues}
+                    availableVenues={availableVenues}
+                    dateRange={dateRange}
+                    setDateRange={setDateRange}
+                    sortOrder={sortOrder}
+                    setSortOrder={setSortOrder}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    hasActiveFilters={hasActiveFilters}
+                    clearFilters={clearFilters}
+                    showFavoritesOnly={showFavoritesOnly}
+                    setShowFavoritesOnly={setShowFavoritesOnly}
+                    filteredEvents={filteredEvents}
+                    showOnlyAdvancedFilters={true}
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           <EventsList 
