@@ -14,6 +14,7 @@ interface SurpriseButtonProps {
 export const SurpriseButton = ({ className, filteredEvents }: SurpriseButtonProps) => {
   const { toast } = useToast();
   const [showAnimation, setShowAnimation] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleSurprise = () => {
     if (filteredEvents.length === 0) {
@@ -43,17 +44,18 @@ export const SurpriseButton = ({ className, filteredEvents }: SurpriseButtonProp
     <>
       <Button
         onClick={handleSurprise}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         variant="outline"
         className={cn(
-          "group relative overflow-hidden border-accent hover:border-accent/80",
+          "w-full md:w-auto bg-white/10 border-white/10 text-white hover:bg-white/20",
           className
         )}
       >
         <span className="relative z-10 flex items-center gap-2">
-          <Star className="w-4 h-4 text-orange-500 fill-orange-500" />
+          <Star className={`w-4 h-4 ${isHovered ? 'text-orange-500 fill-orange-500' : 'text-white'}`} />
           Surprise Me
         </span>
-        <div className="absolute inset-0 bg-accent/10 transform translate-y-full transition-transform group-hover:translate-y-0" />
       </Button>
       <SurpriseAnimation 
         isOpen={showAnimation}

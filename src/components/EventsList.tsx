@@ -10,21 +10,17 @@ interface EventsListProps {
 }
 
 export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: EventsListProps) => {
-  const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
-
-  const handleToggleFavorite = (artist: string) => {
-    setFavorites(prev => 
-      prev.includes(artist) 
-        ? prev.filter(a => a !== artist)
-        : [...prev, artist]
-    );
-  };
+  const [favorites] = useLocalStorage<string[]>("favorites", []);
+  console.log('Current favorites:', favorites); // Debug log
 
   const today = startOfDay(new Date());
   
   const filteredEvents = events
     .filter(event => isAfter(parseISO(event.date), today))
     .filter(event => !showFavoritesOnly || favorites.includes(event.title));
+
+  console.log('Filtered events:', filteredEvents.length); // Debug log
+  console.log('Show favorites only:', showFavoritesOnly); // Debug log
 
   if (isLoading) {
     return <p className="text-white">Loading events...</p>;
@@ -43,7 +39,9 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
             ticketUrl={event.link}
             venueLink={getVenueLink(event.venue)}
             isFavorite={favorites.includes(event.title)}
-            onToggleFavorite={handleToggleFavorite}
+            onToggleFavorite={(artist) => {
+              console.log('Toggle favorite for:', artist); // Debug log
+            }}
           />
         </div>
       ))}

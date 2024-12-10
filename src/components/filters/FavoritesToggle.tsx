@@ -13,7 +13,7 @@ export const FavoritesToggle = ({ showFavoritesOnly, setShowFavoritesOnly }: Fav
       variant="outline"
       onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
       className={cn(
-        "bg-white/10 border-white/10 text-white hover:bg-white/20",
+        "w-full md:w-auto bg-white/10 border-white/10 text-white hover:bg-white/20",
         showFavoritesOnly && "bg-white/20"
       )}
     >
