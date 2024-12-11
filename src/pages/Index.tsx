@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchEvents } from "@/lib/supabase-client";
-import { FilterControls } from "@/components/FilterControls";
 import { DateRange } from "react-day-picker";
 import { isWithinInterval, parseISO } from "date-fns";
-import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
@@ -13,6 +11,9 @@ import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { MobileFilters } from "@/components/filters/MobileFilters";
+import { DesktopFilters } from "@/components/filters/DesktopFilters";
 
 const Index = () => {
   const { toast } = useToast();
@@ -26,23 +27,25 @@ const Index = () => {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [favorites] = useLocalStorage<string[]>("favorites", []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollToTop(window.scrollY > 300);
-    };
+  const { data: events = [], isLoading } = useQuery({
+    queryKey: ['events', sortOrder, sortBy],
+    queryFn: () => fetchEvents(sortOrder),
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+    refetchOnWindowFocus: false,
+  });
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+  const handleScroll = useCallback(() => {
+    setShowScrollToTop(window.scrollY > 300);
   }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  const { data: events = [], isLoading, error } = useQuery({
-    queryKey: ['events', sortOrder, sortBy],
-    queryFn: () => fetchEvents(sortOrder)
-  });
 
   const availableVenues = Array.from(new Set(events.map(event => event.venue))).sort();
 
@@ -60,41 +63,45 @@ const Index = () => {
   };
 
   const hasActiveFilters = Boolean(
-    searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly
+    searchQuery || 
+    selectedVenues.length > 0 || 
+    dateRange?.from || 
+    dateRange?.to || 
+    sortOrder !== "asc" || 
+    sortBy !== "date" || 
+    showFavoritesOnly
   );
 
   const filteredEvents = events.filter((event) => {
-    let matchesSearch = true;
-    let matchesVenue = true;
-    let matchesDateRange = true;
-    let matchesFavorites = true;
-
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      matchesSearch = 
-        event.title.toLowerCase().includes(query) ||
-        event.venue.toLowerCase().includes(query) ||
-        event.date.toLowerCase().includes(query) ||
-        (event.location || "").toLowerCase().includes(query);
+      if (!event.title.toLowerCase().includes(query) &&
+          !event.venue.toLowerCase().includes(query) &&
+          !event.date.toLowerCase().includes(query) &&
+          !(event.location || "").toLowerCase().includes(query)) {
+        return false;
+      }
     }
 
-    if (selectedVenues.length > 0) {
-      matchesVenue = selectedVenues.includes(event.venue);
+    if (selectedVenues.length > 0 && !selectedVenues.includes(event.venue)) {
+      return false;
     }
 
     if (dateRange?.from && dateRange?.to) {
       const eventDate = parseISO(event.date);
-      matchesDateRange = isWithinInterval(eventDate, {
+      if (!isWithinInterval(eventDate, {
         start: dateRange.from,
         end: dateRange.to,
-      });
+      })) {
+        return false;
+      }
     }
 
-    if (showFavoritesOnly) {
-      matchesFavorites = favorites.includes(event.title);
+    if (showFavoritesOnly && !favorites.includes(event.title)) {
+      return false;
     }
 
-    return matchesSearch && matchesVenue && matchesDateRange && matchesFavorites;
+    return true;
   }).sort((a, b) => {
     if (sortBy === "title") {
       return sortOrder === "asc"
@@ -112,102 +119,63 @@ const Index = () => {
   });
 
   return (
-    <div className="relative min-h-screen w-full">
+    <PageContainer>
       <VideoBackground />
-      <div className={cn("relative z-20 py-8 mx-auto text-center flex flex-col min-h-screen w-full px-4 md:px-8")}>
+      <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
         <PageHeader 
           filteredEventsCount={filteredEvents.length}
           showFavoritesOnly={showFavoritesOnly}
         />
-        
-        <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
-          <div className="hidden md:block w-full max-w-[1920px] mx-auto">
-            <FilterControls
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              selectedVenues={selectedVenues}
-              setSelectedVenues={setSelectedVenues}
-              availableVenues={availableVenues}
-              dateRange={dateRange}
-              setDateRange={setDateRange}
-              sortOrder={sortOrder}
-              setSortOrder={setSortOrder}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-              hasActiveFilters={hasActiveFilters}
-              clearFilters={clearFilters}
-              showFavoritesOnly={showFavoritesOnly}
-              setShowFavoritesOnly={setShowFavoritesOnly}
-              filteredEvents={filteredEvents}
-            />
-          </div>
 
-          <div className="md:hidden w-full space-y-4">
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <div className="relative flex-grow">
-                  <FilterControls
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    selectedVenues={selectedVenues}
-                    setSelectedVenues={setSelectedVenues}
-                    availableVenues={availableVenues}
-                    dateRange={dateRange}
-                    setDateRange={setDateRange}
-                    sortOrder={sortOrder}
-                    setSortOrder={setSortOrder}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                    hasActiveFilters={hasActiveFilters}
-                    clearFilters={clearFilters}
-                    showFavoritesOnly={showFavoritesOnly}
-                    setShowFavoritesOnly={setShowFavoritesOnly}
-                    filteredEvents={filteredEvents}
-                    isMobile={true}
-                  />
-                </div>
-              </div>
-              <button 
-                onClick={() => setShowMobileFilters(!showMobileFilters)}
-                className="w-full bg-white/10 border-white/10 text-white px-4 py-2 rounded hover:bg-white/20 transition-colors"
-              >
-                {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
-              </button>
-              
-              {showMobileFilters && (
-                <div className="animate-fade-in">
-                  <FilterControls
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    selectedVenues={selectedVenues}
-                    setSelectedVenues={setSelectedVenues}
-                    availableVenues={availableVenues}
-                    dateRange={dateRange}
-                    setDateRange={setDateRange}
-                    sortOrder={sortOrder}
-                    setSortOrder={setSortOrder}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                    hasActiveFilters={hasActiveFilters}
-                    clearFilters={clearFilters}
-                    showFavoritesOnly={showFavoritesOnly}
-                    setShowFavoritesOnly={setShowFavoritesOnly}
-                    filteredEvents={filteredEvents}
-                    showOnlyAdvancedFilters={true}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
+        <DesktopFilters
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          selectedVenues={selectedVenues}
+          setSelectedVenues={setSelectedVenues}
+          availableVenues={availableVenues}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          hasActiveFilters={hasActiveFilters}
+          clearFilters={clearFilters}
+          showFavoritesOnly={showFavoritesOnly}
+          setShowFavoritesOnly={setShowFavoritesOnly}
+          filteredEvents={filteredEvents}
+        />
 
-          <EventsList 
-            events={filteredEvents} 
-            isLoading={isLoading}
-            showFavoritesOnly={showFavoritesOnly}
-          />
-        </div>
+        <MobileFilters
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          selectedVenues={selectedVenues}
+          setSelectedVenues={setSelectedVenues}
+          availableVenues={availableVenues}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          hasActiveFilters={hasActiveFilters}
+          clearFilters={clearFilters}
+          showFavoritesOnly={showFavoritesOnly}
+          setShowFavoritesOnly={setShowFavoritesOnly}
+          filteredEvents={filteredEvents}
+          showMobileFilters={showMobileFilters}
+          setShowMobileFilters={setShowMobileFilters}
+        />
+
+        <EventsList 
+          events={filteredEvents} 
+          isLoading={isLoading}
+          showFavoritesOnly={showFavoritesOnly}
+        />
       </div>
+
       <ContactButton />
+      
       {showScrollToTop && (
         <Button
           variant="outline"
@@ -218,7 +186,7 @@ const Index = () => {
           <ArrowUp className="h-4 w-4" />
         </Button>
       )}
-    </div>
+    </PageContainer>
   );
 };
 
