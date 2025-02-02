@@ -47,7 +47,7 @@ export const VenueCheckboxFilter = ({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[90vw] max-w-md p-0 bg-black/95 border-white/10">
+      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md p-0 bg-black/95 border-white/10">
         <div className="flex flex-col h-[70vh] max-h-[600px]">
           <div className="flex justify-between items-center p-3 border-b border-white/10 sticky top-0 bg-black/95 backdrop-blur-sm z-10">
             <h3 className="text-base font-medium text-white">Venues</h3>
