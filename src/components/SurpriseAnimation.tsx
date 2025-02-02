@@ -25,38 +25,28 @@ export const SurpriseAnimation = ({ isOpen, onAnimationComplete }: SurpriseAnima
           
           if (data.length > 0) {
             setGifUrl(data[0].images.original.url);
-          } else {
-            setGifUrl('https://media.giphy.com/media/3o7aD4GrHwn8vsGBTa/giphy.gif');
           }
         } catch (error) {
           console.error('Error fetching GIF:', error);
-          setGifUrl('https://media.giphy.com/media/3o7aD4GrHwn8vsGBTa/giphy.gif');
         }
       };
       
       fetchGif();
-      const timer = setTimeout(() => {
-        onAnimationComplete();
-      }, 3000);
-      
-      return () => clearTimeout(timer);
+      onAnimationComplete();
     }
   }, [isOpen, onAnimationComplete]);
 
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-md border-none bg-transparent shadow-none">
-        <div className="flex flex-col items-center justify-center space-y-4">
+      <DialogContent className="w-[90vw] max-w-md mx-auto p-4 border-none bg-transparent shadow-none">
+        <div className="flex flex-col items-center justify-center w-full">
           {gifUrl && (
             <img 
               src={gifUrl} 
               alt="Concert animation" 
-              className="w-full h-64 object-cover rounded-lg"
+              className="w-full max-w-[300px] h-auto object-cover rounded-lg mx-auto"
             />
           )}
-          <p className="text-2xl font-bold text-white animate-fade-in text-center">
-            Are you ready for a random concert?!
-          </p>
         </div>
       </DialogContent>
     </Dialog>
