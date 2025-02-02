@@ -6,13 +6,17 @@ interface PageHeaderProps {
 }
 
 export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeaderProps) => {
+  const concertCountText = filteredEventsCount > 1000 
+    ? "More than 1000 concerts to choose from"
+    : `${filteredEventsCount} ${showFavoritesOnly ? 'favorite' : ''} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from`;
+
   return (
     <div className="space-y-2 mb-8">
       <h1 className="text-4xl font-bold text-white animate-fade-in flex-grow-0">
         Concerts in Copenhagen
       </h1>
       <p className="text-xl font-bold text-orange-500 animate-fade-in">
-        {filteredEventsCount} {showFavoritesOnly ? 'favorite' : ''} {filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from
+        {concertCountText}
       </p>
       <a 
         href="https://buymeacoffee.com/cphconcerts" 

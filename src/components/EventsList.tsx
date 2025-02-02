@@ -59,34 +59,23 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   }
 
   return (
-    <>
-      {filteredEvents.length > 1000 ? (
-        <div className="text-white text-lg mb-4">
-          More than 1000 concerts to choose from
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
+      {visibleEvents.map((event: Event, index: number) => (
+        <div key={index} className="flex justify-center">
+          <ConcertCard
+            artist={event.title}
+            date={event.date}
+            venue={event.venue}
+            location={event.location || ""}
+            imageUrl={event.image}
+            ticketUrl={event.link}
+            venueLink={getVenueLink(event.venue)}
+            isFavorite={favorites.includes(event.title)}
+            onToggleFavorite={handleToggleFavorite}
+          />
         </div>
-      ) : filteredEvents.length > 0 ? (
-        <div className="text-white text-lg mb-4">
-          {filteredEvents.length} {filteredEvents.length === 1 ? 'concert' : 'concerts'} to choose from
-        </div>
-      ) : null}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
-        {visibleEvents.map((event: Event, index: number) => (
-          <div key={index} className="flex justify-center">
-            <ConcertCard
-              artist={event.title}
-              date={event.date}
-              venue={event.venue}
-              location={event.location || ""}
-              imageUrl={event.image}
-              ticketUrl={event.link}
-              venueLink={getVenueLink(event.venue)}
-              isFavorite={favorites.includes(event.title)}
-              onToggleFavorite={handleToggleFavorite}
-            />
-          </div>
-        ))}
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
 
