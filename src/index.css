@@ -74,41 +74,11 @@
   body {
     @apply bg-background text-foreground;
     overflow-x: hidden;
+    background: linear-gradient(135deg, #000000 0%, #FF6B00 100%);
+    background-attachment: fixed;
   }
 }
 
 #video-background {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  transform: scale(1.5);
-  pointer-events: none;
-  
-  @media (max-width: 768px) {
-    height: 100dvh;
-    width: 100dvw;
-    transform: scale(2.5);
-    top: 0;
-    left: 0;
-    object-fit: cover;
-  }
-}
-
-#video-background iframe {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100vw;
-  height: 100vh;
-  
-  @media (max-width: 768px) {
-    height: 100dvh;
-    width: 100dvw;
-  }
+  display: none; /* Remove video background for better performance */
 }
