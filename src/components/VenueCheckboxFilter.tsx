@@ -47,9 +47,9 @@ export const VenueCheckboxFilter = ({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-md max-h-[90vh] p-0 bg-black/95 border-white/10 overflow-hidden">
-        <div className="flex flex-col h-full">
-          <div className="flex justify-between items-center p-3 border-b border-white/10 bg-black/95 backdrop-blur-sm">
+      <DialogContent className="fixed inset-4 m-auto h-auto max-h-[calc(100vh-32px)] w-full max-w-md bg-black/95 border-white/10 p-0 overflow-hidden">
+        <div className="flex flex-col h-full max-h-[calc(100vh-32px)]">
+          <div className="flex justify-between items-center p-4 border-b border-white/10">
             <h3 className="text-base font-medium text-white">Venues</h3>
             <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1.5 transition-colors">
               <X className="h-4 w-4" />
@@ -57,11 +57,11 @@ export const VenueCheckboxFilter = ({
           </div>
           
           <div className="flex-1 overflow-y-auto">
-            <div className="grid grid-cols-1 gap-1 p-1">
+            <div className="p-2">
               {venues.map((venue) => (
                 <div 
                   key={venue} 
-                  className="flex items-center space-x-3 py-2.5 px-3 hover:bg-white/5 transition-colors cursor-pointer"
+                  className="flex items-center space-x-3 py-3 px-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
                   onClick={() => handleVenueToggle(venue)}
                 >
                   <Checkbox
@@ -81,7 +81,7 @@ export const VenueCheckboxFilter = ({
             </div>
           </div>
 
-          <div className="p-3 border-t border-white/10 bg-black/95">
+          <div className="p-4 border-t border-white/10">
             <DialogClose asChild>
               <Button 
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none"
