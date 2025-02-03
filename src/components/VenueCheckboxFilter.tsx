@@ -47,17 +47,17 @@ export const VenueCheckboxFilter = ({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md p-0 bg-black/95 border-white/10">
-        <div className="flex flex-col h-[70vh] max-h-[600px]">
-          <div className="flex justify-between items-center p-3 border-b border-white/10 sticky top-0 bg-black/95 backdrop-blur-sm z-10">
+      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-md max-h-[90vh] p-0 bg-black/95 border-white/10 overflow-hidden">
+        <div className="flex flex-col h-full">
+          <div className="flex justify-between items-center p-3 border-b border-white/10 bg-black/95 backdrop-blur-sm">
             <h3 className="text-base font-medium text-white">Venues</h3>
             <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1.5 transition-colors">
               <X className="h-4 w-4" />
             </DialogClose>
           </div>
           
-          <div className="flex-1 overflow-y-auto pb-[60px]">
-            <div className="grid grid-cols-1 gap-1">
+          <div className="flex-1 overflow-y-auto">
+            <div className="grid grid-cols-1 gap-1 p-1">
               {venues.map((venue) => (
                 <div 
                   key={venue} 
@@ -81,7 +81,7 @@ export const VenueCheckboxFilter = ({
             </div>
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/10 bg-black/95">
+          <div className="p-3 border-t border-white/10 bg-black/95">
             <DialogClose asChild>
               <Button 
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none"
