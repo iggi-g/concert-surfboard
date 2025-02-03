@@ -64,40 +64,38 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="fixed inset-4 m-auto h-auto max-h-[calc(100vh-32px)] w-full max-w-md bg-black/95 border-white/10 p-0 overflow-hidden">
-        <div className="flex flex-col h-full max-h-[calc(100vh-32px)]">
-          <div className="flex justify-between items-center p-4 border-b border-white/10">
-            <h3 className="text-lg font-semibold text-white">Select Dates</h3>
-            <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1.5 transition-colors">
+      <DialogContent className="p-0 bg-black/95 border-white/10 w-auto max-w-fit">
+        <div className="flex flex-col">
+          <div className="flex justify-between items-center p-2 border-b border-white/10">
+            <h3 className="text-sm font-medium text-white">Select Dates</h3>
+            <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1">
               <X className="h-4 w-4" />
             </DialogClose>
           </div>
           
           <div className="p-2 border-b border-white/10 flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Today</Button>
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">This Week</Button>
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')} className="bg-white/10 border-white/10 text-white hover:bg-white/20">Next Week</Button>
+            <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')} className="text-xs bg-white/10 border-white/10 text-white hover:bg-white/20">Today</Button>
+            <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')} className="text-xs bg-white/10 border-white/10 text-white hover:bg-white/20">This Week</Button>
+            <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')} className="text-xs bg-white/10 border-white/10 text-white hover:bg-white/20">Next Week</Button>
           </div>
           
-          <div className="flex-1 overflow-y-auto">
-            <div className="p-4">
-              <Calendar
-                initialFocus
-                mode="range"
-                defaultMonth={today}
-                selected={dateRange}
-                onSelect={setDateRange}
-                numberOfMonths={1}
-                fromDate={today}
-                className="mx-auto [&_.rdp-day_focus]:bg-orange-500 [&_.rdp-day_hover]:bg-orange-500/50 [&_.rdp-day_selected]:bg-orange-500 [&_.rdp-day_selected]:text-white [&_.rdp-day_selected:hover]:bg-orange-600"
-              />
-            </div>
+          <div className="p-2">
+            <Calendar
+              initialFocus
+              mode="range"
+              defaultMonth={today}
+              selected={dateRange}
+              onSelect={setDateRange}
+              numberOfMonths={1}
+              fromDate={today}
+              className="mx-auto [&_.rdp-day_focus]:bg-orange-500 [&_.rdp-day_hover]:bg-orange-500/50 [&_.rdp-day_selected]:bg-orange-500 [&_.rdp-day_selected]:text-white [&_.rdp-day_selected:hover]:bg-orange-600"
+            />
           </div>
 
-          <div className="p-4 border-t border-white/10">
+          <div className="p-2 border-t border-white/10">
             <DialogClose asChild>
               <Button 
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none text-sm"
               >
                 Done
               </Button>
