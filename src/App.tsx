@@ -4,20 +4,31 @@ import { Toaster } from "@/components/ui/toaster";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Favorites from "@/pages/Favorites";
+import { useGoogleAnalytics } from "@/hooks/useGoogleAnalytics";
 import "./App.css";
 
 const queryClient = new QueryClient();
+
+function AppContent() {
+  useGoogleAnalytics();
+
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/favorites" element={<Favorites />} />
+      </Routes>
+      <Toaster />
+    </>
+  );
+}
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/favorites" element={<Favorites />} />
-        </Routes>
-        <Toaster />
+        <AppContent />
       </Router>
     </QueryClientProvider>
   );
