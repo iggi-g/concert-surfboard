@@ -103,12 +103,12 @@ export const DateRangeSelector = ({
                 caption_label: "text-sm font-medium",
                 nav: "space-x-1 flex items-center",
                 nav_button: "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100 text-white",
-                table: "w-full border-collapse space-y-1",
+                table: "w-full border-collapse",
                 head_row: "flex",
                 head_cell: "text-white/60 rounded-md w-8 font-normal text-[0.8rem]",
                 row: "flex w-full mt-2",
                 cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-white/10",
-                day: "h-7 w-7 p-0 font-normal text-white hover:bg-white/20 rounded-md text-sm aria-selected:bg-white/20",
+                day: "h-9 w-9 p-0 font-normal text-white hover:bg-white/20 rounded-md text-sm aria-selected:bg-white/20",
                 day_selected: "bg-white/20 text-white hover:bg-white/30",
                 day_today: "bg-white/5 text-white",
                 day_outside: "text-white/30 opacity-50",
@@ -119,20 +119,18 @@ export const DateRangeSelector = ({
             />
           </div>
 
-          <div className="p-4 border-t border-white/10">
-            <div className="flex gap-2">
-              {quickSelections.map((selection, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  className="bg-white/10 border-white/10 text-white hover:bg-white/20 text-xs"
-                  onClick={() => handleQuickSelect(selection.range)}
-                >
-                  {selection.label}
-                </Button>
-              ))}
-            </div>
+          <div className="p-4 border-t border-white/10 flex flex-wrap gap-2">
+            {quickSelections.map((selection, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                className="bg-white/10 border-white/10 text-white hover:bg-white/20 text-xs"
+                onClick={() => handleQuickSelect(selection.range)}
+              >
+                {selection.label}
+              </Button>
+            ))}
           </div>
         </div>
       </PopoverContent>
