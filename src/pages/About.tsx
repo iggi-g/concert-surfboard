@@ -63,33 +63,15 @@ const About = () => {
 
         <div className="space-y-4 text-white/90">
           <p className="text-lg leading-relaxed">
-            Welcome to ConcertsCPH, your ultimate guide to live music events in Copenhagen.
-            We're passionate about connecting music lovers with amazing live performances across the city.
-          </p>
-
-          <p className="text-lg leading-relaxed">
-            Our platform helps you discover and keep track of concerts from various venues throughout Copenhagen,
-            making it easier than ever to experience the vibrant and diverse world of live music in the Danish capital.
-          </p>
-
-          <p className="text-lg leading-relaxed">
-            Concerts in Copenhagen are a celebration of culture, creativity, and community. Whether you are
-            seeking intimate gigs in cozy jazz clubs or large-scale concerts featuring international stars,
-            Copenhagen offers an eclectic mix that appeals to all music enthusiasts.
-          </p>
-          <p className="text-lg leading-relaxed">
-            Experience the best of live music in Copenhagen—from rock and pop to classical and electronic genres.
-            Our comprehensive guide ensures you are always updated on upcoming events, exclusive festivals,
-            and hidden musical gems that make the city a top destination for live entertainment.
-          </p>
-          <p className="text-lg leading-relaxed">
-            Dive into the world of Copenhagen concerts and immerse yourself in the local music scene.
-            Discover concert venues that blend modern design with historical charm, and enjoy curated
-            experiences that showcase the rich musical heritage of this vibrant city.
+            ConcertsCPH is your definitive guide to live music and concerts in Copenhagen.
+            Discover top venues, upcoming events, and the best live music experiences in the Danish capital.
           </p>
         </div>
 
         <div className="mt-8">
+          <p className="text-lg text-white mb-2">
+            Are we missing a venue that you want us to add? Write us here below!
+          </p>
           <h2 className="text-2xl font-semibold text-white mb-4">Contact Us</h2>
           <form onSubmit={handleSubmit} className="space-y-4 text-left">
             <div>
