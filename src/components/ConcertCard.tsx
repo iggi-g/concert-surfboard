@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ConcertCardProps {
   artist: string;
@@ -109,26 +110,47 @@ export const ConcertCard = ({
           )}
         </div>
         <div className="absolute bottom-2 inset-x-0 flex justify-between items-center px-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full bg-black/40 hover:bg-black/60"
-            onClick={handleCalendarClick}
-            aria-label="Add to calendar"
-          >
-            <Calendar className="h-5 w-5 text-white" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full bg-black/40 hover:bg-black/60"
-            onClick={handleFavoriteClick}
-            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-          >
-            <Heart 
-              className={`h-5 w-5 ${isFavorite ? 'fill-current text-orange-500' : 'text-white'}`} 
-            />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full bg-black/40 hover:bg-black/60 group"
+                  onClick={handleCalendarClick}
+                  aria-label="Add to calendar"
+                >
+                  <Calendar className="h-5 w-5 text-white group-hover:text-orange-500 transition-colors" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Add to calendar</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full bg-black/40 hover:bg-black/60 group"
+                  onClick={handleFavoriteClick}
+                  aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                >
+                  <Heart 
+                    className={`h-5 w-5 transition-colors group-hover:text-orange-500 ${
+                      isFavorite ? 'fill-current text-orange-500' : 'text-white'
+                    }`} 
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
       <div className="p-2 md:p-4">
