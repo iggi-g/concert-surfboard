@@ -3,7 +3,7 @@ import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { isAfter, startOfDay, parseISO } from "date-fns";
 import { EventSkeleton } from "./EventSkeleton";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 interface EventsListProps {
   events: Event[];
@@ -13,19 +13,20 @@ interface EventsListProps {
 
 export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: EventsListProps) => {
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
-  const [visibleEvents, setVisibleEvents] = useState<Event[]>([]);
   const [page, setPage] = useState(1);
   const eventsPerPage = 12;
 
   const today = startOfDay(new Date());
   
-  const filteredEvents = events
-    .filter(event => isAfter(parseISO(event.date), today))
-    .filter(event => !showFavoritesOnly || favorites.includes(event.title));
+  const filteredEvents = useMemo(() => {
+    return events
+      .filter(event => isAfter(parseISO(event.date), today))
+      .filter(event => !showFavoritesOnly || favorites.includes(event.title));
+  }, [events, showFavoritesOnly, favorites]);
 
-  useEffect(() => {
-    setVisibleEvents(filteredEvents.slice(0, page * eventsPerPage));
-  }, [filteredEvents, page, favorites]);
+  const visibleEvents = useMemo(() => {
+    return filteredEvents.slice(0, page * eventsPerPage);
+  }, [filteredEvents, page]);
 
   useEffect(() => {
     const handleScroll = () => {
