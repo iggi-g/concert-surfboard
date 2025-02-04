@@ -46,13 +46,6 @@ export const DateRangeSelector = ({
         from: startOfWeek(addWeeks(today, 1), { weekStartsOn: 1 }),
         to: endOfWeek(addWeeks(today, 1), { weekStartsOn: 1 })
       }
-    },
-    {
-      label: "This Month",
-      range: {
-        from: startOfMonth(today),
-        to: endOfMonth(today)
-      }
     }
   ];
 
