@@ -73,7 +73,7 @@ export const ConcertCard = ({
 
   return (
     <Card 
-      className="overflow-hidden w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10 relative"
+      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10 relative"
       onClick={handleClick}
     >
       <div className="relative aspect-[16/9] w-full">
@@ -125,8 +125,9 @@ export const ConcertCard = ({
               </TooltipTrigger>
               <TooltipContent 
                 side="top" 
-                sideOffset={5} 
-                className="bg-black/90 text-white border-white/10 z-[100]"
+                sideOffset={5}
+                className="bg-black/90 text-white border-white/10 z-[100] whitespace-nowrap px-3 py-1.5 text-sm font-medium"
+                align="start"
               >
                 <p>Add to calendar</p>
               </TooltipContent>
@@ -152,8 +153,9 @@ export const ConcertCard = ({
               </TooltipTrigger>
               <TooltipContent 
                 side="top" 
-                sideOffset={5} 
-                className="bg-black/90 text-white border-white/10 z-[100]"
+                sideOffset={5}
+                className="bg-black/90 text-white border-white/10 z-[100] whitespace-nowrap px-3 py-1.5 text-sm font-medium"
+                align="end"
               >
                 <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
               </TooltipContent>
