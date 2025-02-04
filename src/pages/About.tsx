@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase-client";
 
 const About = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +72,6 @@ const About = () => {
             making it easier than ever to experience the vibrant and diverse world of live music in the Danish capital.
           </p>
 
-          {/* Additional SEO content */}
           <p className="text-lg leading-relaxed">
             Concerts in Copenhagen are a celebration of culture, creativity, and community. Whether you are
             seeking intimate gigs in cozy jazz clubs or large-scale concerts featuring international stars,
