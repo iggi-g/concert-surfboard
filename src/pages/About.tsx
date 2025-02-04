@@ -22,8 +22,8 @@ const About = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData
+      const { error } = await supabase.functions.invoke("send-contact-email", {
+        body: formData,
       });
 
       if (error) throw error;
@@ -49,28 +49,46 @@ const About = () => {
   return (
     <PageContainer>
       <div className="max-w-2xl mx-auto text-center space-y-6 px-4 md:px-0">
-        <Link 
+        <Link
           to="/"
           className="text-white hover:text-orange-500 transition-colors inline-flex items-center gap-2 text-lg"
         >
           <ArrowLeft className="h-5 w-5" />
           Back to Concerts
         </Link>
-        
-        <h1 className="text-3xl md:text-4xl font-bold text-white">About CPH Concerts</h1>
-        
+
+        <h1 className="text-3xl md:text-4xl font-bold text-white">
+          About CPH Concerts
+        </h1>
+
         <div className="space-y-4 text-white/90">
           <p className="text-lg leading-relaxed">
-            Welcome to ConcertsCPH, your ultimate guide to live music events in Copenhagen. 
-            We're passionate about connecting music lovers with amazing live performances 
-            across the city.
+            Welcome to ConcertsCPH, your ultimate guide to live music events in Copenhagen.
+            We're passionate about connecting music lovers with amazing live performances across the city.
           </p>
-          
+
           <p className="text-lg leading-relaxed">
-            Our platform helps you discover and keep track of concerts from various venues 
-            throughout Copenhagen, making it easier than ever to experience live music in 
-            the city.
+            Our platform helps you discover and keep track of concerts from various venues throughout Copenhagen,
+            making it easier than ever to experience the vibrant and diverse world of live music in the Danish capital.
           </p>
+
+          {/* Additional SEO content */}
+          <p className="text-lg leading-relaxed">
+            Concerts in Copenhagen are a celebration of culture, creativity, and community. Whether you are
+            seeking intimate gigs in cozy jazz clubs or large-scale concerts featuring international stars,
+            Copenhagen offers an eclectic mix that appeals to all music enthusiasts.
+          </p>
+          <p className="text-lg leading-relaxed">
+            Experience the best of live music in Copenhagen—from rock and pop to classical and electronic genres.
+            Our comprehensive guide ensures you are always updated on upcoming events, exclusive festivals,
+            and hidden musical gems that make the city a top destination for live entertainment.
+          </p>
+          <p className="text-lg leading-relaxed">
+            Dive into the world of Copenhagen concerts and immerse yourself in the local music scene.
+            Discover concert venues that blend modern design with historical charm, and enjoy curated
+            experiences that showcase the rich musical heritage of this vibrant city.
+          </p>
+        </div>
 
         <div className="mt-8">
           <h2 className="text-2xl font-semibold text-white mb-4">Contact Us</h2>
@@ -79,7 +97,9 @@ const About = () => {
               <Input
                 placeholder="Your Name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 required
                 className="bg-white/10 border-white/10 text-white placeholder:text-white/50"
               />
@@ -89,7 +109,9 @@ const About = () => {
                 type="email"
                 placeholder="Your Email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 required
                 className="bg-white/10 border-white/10 text-white placeholder:text-white/50"
               />
@@ -98,7 +120,9 @@ const About = () => {
               <Textarea
                 placeholder="Your Message"
                 value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, message: e.target.value })
+                }
                 required
                 className="bg-white/10 border-white/10 text-white placeholder:text-white/50 min-h-[120px]"
               />
@@ -114,7 +138,7 @@ const About = () => {
                   Sending...
                 </>
               ) : (
-                'Send Message'
+                "Send Message"
               )}
             </Button>
           </form>
