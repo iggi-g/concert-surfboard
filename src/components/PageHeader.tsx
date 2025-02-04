@@ -1,6 +1,8 @@
 import { Beer, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { isAfter, startOfDay, parseISO } from "date-fns";
+import { Event } from "@/lib/supabase-client";
 
 interface PageHeaderProps {
   filteredEventsCount: number;
