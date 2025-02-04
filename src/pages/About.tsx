@@ -61,7 +61,7 @@ const About = () => {
         
         <div className="space-y-4 text-white/90">
           <p className="text-lg leading-relaxed">
-            Welcome to CPH Concerts, your ultimate guide to live music events in Copenhagen. 
+            Welcome to ConcertsCPH, your ultimate guide to live music events in Copenhagen. 
             We're passionate about connecting music lovers with amazing live performances 
             across the city.
           </p>
@@ -71,25 +71,6 @@ const About = () => {
             throughout Copenhagen, making it easier than ever to experience live music in 
             the city.
           </p>
-
-          <div className="bg-white/5 rounded-xl p-4 mt-6">
-            <h2 className="text-xl font-semibold text-white mb-3">Features</h2>
-            <ul className="space-y-2 text-left">
-              <li className="flex items-start gap-2">
-                <span className="text-orange-500">•</span>
-                <span>Search and filter concerts by venue, date, and more</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-orange-500">•</span>
-                <span>Save your favorite concerts for quick access</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-orange-500">•</span>
-                <span>Get direct links to ticket sales</span>
-              </li>
-            </ul>
-          </div>
-        </div>
 
         <div className="mt-8">
           <h2 className="text-2xl font-semibold text-white mb-4">Contact Us</h2>
