@@ -7,9 +7,7 @@ interface PageHeaderProps {
 }
 
 export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeaderProps) => {
-  const concertCountText = filteredEventsCount > 1000 
-    ? "More than 1000 concerts to choose from"
-    : `${filteredEventsCount} ${showFavoritesOnly ? 'favorite' : ''} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from`;
+  const concertCountText = `${filteredEventsCount} ${showFavoritesOnly ? 'favorite' : ''} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} to choose from`;
 
   return (
     <div className="space-y-2 mb-8">

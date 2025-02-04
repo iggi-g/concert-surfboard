@@ -40,9 +40,10 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
 
   const handleToggleFavorite = (artist: string) => {
     setFavorites(prev => {
-      return prev.includes(artist) 
+      const newFavorites = prev.includes(artist) 
         ? prev.filter(a => a !== artist)
         : [...prev, artist];
+      return newFavorites;
     });
   };
 

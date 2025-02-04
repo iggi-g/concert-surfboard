@@ -64,8 +64,8 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="p-0 bg-black/95 border-white/10 w-auto max-w-fit">
-        <div className="flex flex-col">
+      <DialogContent className="fixed inset-y-[20%] inset-x-[10%] md:inset-auto m-auto h-auto max-h-[80vh] w-[90%] max-w-md bg-black/95 border-white/10 p-0 overflow-hidden">
+        <div className="flex flex-col h-full">
           <div className="flex justify-between items-center p-2 border-b border-white/10">
             <h3 className="text-sm font-medium text-white">Select Dates</h3>
             <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1">
