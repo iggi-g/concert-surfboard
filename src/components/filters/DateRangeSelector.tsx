@@ -1,146 +1,61 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Calendar as CalendarIcon, X } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
-  DialogClose
 } from "@/components/ui/dialog";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
 
 interface DateRangeSelectorProps {
   dateRange: DateRange | undefined;
-  setDateRange: (range: DateRange | undefined) => void;
-  className?: string;
+  onDateRangeChange: (range: DateRange | undefined) => void;
 }
 
-export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRangeSelectorProps) => {
-  const today = new Date();
-  
-  const handleDatePreset = (preset: 'today' | 'week' | 'nextWeek') => {
-    const from = new Date();
-    let to = new Date();
-    
-    switch (preset) {
-      case 'today':
-        to = from;
-        break;
-      case 'week':
-        to.setDate(from.getDate() + 7);
-        break;
-      case 'nextWeek':
-        from.setDate(from.getDate() + 7);
-        to.setDate(from.getDate() + 7);
-        break;
-    }
-    
-    setDateRange({ from, to });
-  };
-
+export const DateRangeSelector = ({
+  dateRange,
+  onDateRangeChange,
+}: DateRangeSelectorProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button 
-          variant="outline" 
-          className={cn(
-            "bg-white/10 border-white/10 text-white hover:bg-white/20",
-            dateRange?.from && "bg-orange-500/20 border-orange-500/20 hover:bg-orange-500/30",
-            className
-          )}
+        <Button
+          variant="outline"
+          className="bg-white/10 border-white/10 text-white hover:bg-white/20"
         >
-          <CalendarIcon className="mr-2 h-5 w-5" />
+          <CalendarIcon className="mr-2 h-4 w-4" />
           {dateRange?.from ? (
             dateRange.to ? (
               <>
-                {format(dateRange.from, "MMM d")} - {format(dateRange.to, "MMM d")}
+                {format(dateRange.from, "LLL dd")} -{" "}
+                {format(dateRange.to, "LLL dd")}
               </>
             ) : (
-              format(dateRange.from, "MMMM d, yyyy")
+              format(dateRange.from, "LLL dd")
             )
           ) : (
-            <span>Select dates</span>
+            "Pick dates"
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="fixed inset-4 m-auto h-auto max-h-[90vh] w-full max-w-[350px] bg-black/95 border-white/10 p-0 overflow-hidden">
-        <div className="flex flex-col h-full">
-          <div className="flex justify-between items-center p-3 border-b border-white/10">
-            <h3 className="text-base font-medium text-white">Pick Date</h3>
-            <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1 transition-colors">
-              <X className="h-4 w-4" />
-            </DialogClose>
-          </div>
-          
-          <div className="p-2 border-b border-white/10">
-            <div className="flex gap-1">
-              <Button 
-                variant="outline" 
-                onClick={() => handleDatePreset('today')} 
-                className="bg-white/10 border-white/10 text-white hover:bg-white/20 flex-1 h-9 text-sm font-medium transition-colors"
-              >
-                Today
-              </Button>
-              <Button 
-                variant="outline" 
-                onClick={() => handleDatePreset('week')} 
-                className="bg-white/10 border-white/10 text-white hover:bg-white/20 flex-1 h-9 text-sm font-medium transition-colors"
-              >
-                This Week
-              </Button>
-              <Button 
-                variant="outline" 
-                onClick={() => handleDatePreset('nextWeek')} 
-                className="bg-white/10 border-white/10 text-white hover:bg-white/20 flex-1 h-9 text-sm font-medium transition-colors"
-              >
-                Next Week
-              </Button>
-            </div>
-          </div>
-          
-          <div className="p-2">
-            <Calendar
-              initialFocus
-              mode="range"
-              defaultMonth={today}
-              selected={dateRange}
-              onSelect={setDateRange}
-              numberOfMonths={1}
-              fromDate={today}
-              className="w-full mx-auto bg-transparent text-white 
-                [&_.rdp]:w-full
-                [&_.rdp-months]:w-full
-                [&_.rdp-month]:w-full
-                [&_.rdp-table]:w-full
-                [&_.rdp-cell]:w-[14.28%]
-                [&_.rdp-day]:w-full [&_.rdp-day]:h-9 
-                [&_.rdp-day]:text-base [&_.rdp-day]:transition-colors
-                [&_.rdp-day_focus]:bg-orange-500 
-                [&_.rdp-day_hover]:bg-orange-500/50 
-                [&_.rdp-day_selected]:bg-orange-500 
-                [&_.rdp-day_selected]:text-white 
-                [&_.rdp-day_selected:hover]:bg-orange-600 
-                [&_.rdp-day]:rounded-lg 
-                [&_.rdp-head_cell]:text-white/70 
-                [&_.rdp-caption]:text-white 
-                [&_.rdp-caption_label]:text-base
-                [&_.rdp-nav_button]:hover:bg-white/10
-                [&_.rdp-nav_button]:transition-colors
-                [&_.rdp-nav_button]:border-white/10"
-            />
-          </div>
-
-          <div className="p-2 border-t border-white/10">
-            <DialogClose asChild>
-              <Button 
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none h-9 text-sm font-semibold transition-colors"
-              >
-                Done
-              </Button>
-            </DialogClose>
-          </div>
+      <DialogContent className="max-w-sm p-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <DialogHeader className="p-4 pb-0">
+          <DialogTitle className="text-lg">Select date range</DialogTitle>
+        </DialogHeader>
+        <div className="p-4">
+          <Calendar
+            initialFocus
+            mode="range"
+            defaultMonth={dateRange?.from}
+            selected={dateRange}
+            onSelect={onDateRangeChange}
+            numberOfMonths={1}
+            className="border-0"
+          />
         </div>
       </DialogContent>
     </Dialog>
