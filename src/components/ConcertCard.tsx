@@ -73,12 +73,12 @@ export const ConcertCard = ({
 
   return (
     <Card 
-      className="overflow-hidden w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10 relative"
+      className="overflow-hidden w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-lovable-dark/20 backdrop-blur-sm border-lovable-light/10 relative"
       onClick={handleClick}
     >
       <div className="relative aspect-[16/9] w-full">
         {!loaded && (
-          <div className="absolute inset-0 bg-white/10 animate-pulse" />
+          <div className="absolute inset-0 bg-lovable-light/10 animate-pulse" />
         )}
         <img 
           src={error ? "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3" : imageUrl}
@@ -87,9 +87,9 @@ export const ConcertCard = ({
           loading="lazy"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-lovable-dark/60 to-transparent" />
         <div className="absolute top-2 inset-x-0 flex justify-between items-start px-4">
-          <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+          <span className="text-white text-sm bg-lovable-dark/40 px-3 py-1 rounded-full backdrop-blur-sm">
             {date}
           </span>
           {venueLink ? (
@@ -98,13 +98,13 @@ export const ConcertCard = ({
               target="_blank" 
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm hover:bg-black/60"
+              className="text-white text-sm bg-lovable-dark/40 px-3 py-1 rounded-full backdrop-blur-sm hover:bg-lovable-dark/60"
               aria-label={`Visit ${venue} website`}
             >
               {venue}
             </a>
           ) : (
-            <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+            <span className="text-white text-sm bg-lovable-dark/40 px-3 py-1 rounded-full backdrop-blur-sm">
               {venue}
             </span>
           )}
@@ -116,17 +116,17 @@ export const ConcertCard = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full bg-black/40 hover:bg-black/60 group"
+                  className="rounded-full bg-lovable-dark/40 hover:bg-lovable-dark/60 group"
                   onClick={handleCalendarClick}
                   aria-label="Add to calendar"
                 >
-                  <Calendar className="h-5 w-5 text-white group-hover:text-orange-500 transition-colors" />
+                  <Calendar className="h-5 w-5 text-white group-hover:text-lovable-primary transition-colors" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent 
                 side="top" 
                 sideOffset={5} 
-                className="bg-black/90 text-white border-white/10 z-[100]"
+                className="bg-lovable-dark/90 text-white border-lovable-light/10 z-[100]"
               >
                 <p>Add to calendar</p>
               </TooltipContent>
@@ -139,13 +139,13 @@ export const ConcertCard = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full bg-black/40 hover:bg-black/60 group"
+                  className="rounded-full bg-lovable-dark/40 hover:bg-lovable-dark/60 group"
                   onClick={handleFavoriteClick}
                   aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 >
                   <Heart 
-                    className={`h-5 w-5 transition-colors group-hover:text-orange-500 ${
-                      isFavorite ? 'fill-current text-orange-500' : 'text-white'
+                    className={`h-5 w-5 transition-colors group-hover:text-lovable-primary ${
+                      isFavorite ? 'fill-current text-lovable-primary' : 'text-white'
                     }`} 
                   />
                 </Button>
@@ -153,7 +153,7 @@ export const ConcertCard = ({
               <TooltipContent 
                 side="top" 
                 sideOffset={5} 
-                className="bg-black/90 text-white border-white/10 z-[100]"
+                className="bg-lovable-dark/90 text-white border-lovable-light/10 z-[100]"
               >
                 <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
               </TooltipContent>
