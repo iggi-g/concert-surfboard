@@ -1,4 +1,4 @@
-import { Beer, Music2 } from "lucide-react";
+import { Beer, Info, Music2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -43,6 +43,12 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'
         }`}
       >
+        <Link 
+          to="/about"
+          className="group"
+        >
+          <Info className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
+        </Link>
         <a 
           href="https://buymeacoffee.com/cphconcerts" 
           target="_blank" 
