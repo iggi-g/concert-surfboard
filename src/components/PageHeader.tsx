@@ -8,13 +8,10 @@ interface PageHeaderProps {
 }
 
 export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeaderProps) => {
-  // State to control the visibility of the right navigation elements.
   const [isNavVisible, setIsNavVisible] = useState(true);
-  // State to control the visibility of the left logo.
   const [isLogoVisible, setIsLogoVisible] = useState(true);
   const lastScrollY = useRef(0);
 
-  // Build the concert counter text with proper pluralization and favorites handling.
   const concertCountText = showFavoritesOnly
     ? `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`
     : `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
@@ -23,7 +20,6 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Right navigation: show if scrolling up or near the top.
       if (currentScrollY < lastScrollY.current || currentScrollY < 100) {
         setIsNavVisible(true);
       } else {
@@ -31,7 +27,6 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
       }
       lastScrollY.current = currentScrollY;
 
-      // Left logo: hide as soon as the user scrolls away from the top.
       if (currentScrollY > 0) {
         setIsLogoVisible(false);
       } else {
@@ -45,7 +40,6 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
 
   return (
     <header className="space-y-2 mb-8">
-      {/* Left logo: fixed at top-left, only showing text, and disappears on scroll */}
       <div
         className={`fixed top-4 left-4 z-50 transition-all duration-300 ${
           isLogoVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"
@@ -60,7 +54,6 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
         </Link>
       </div>
 
-      {/* Main SEO heading */}
       <h1 className="text-4xl font-bold text-white animate-fade-in">
         Concerts in Copenhagen
       </h1>
@@ -68,7 +61,6 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
         {concertCountText}
       </p>
 
-      {/* Right-side navigation that shows/hides based on scrolling */}
       <nav
         className={`fixed top-4 right-4 z-50 flex items-center gap-4 transition-all duration-300 ${
           isNavVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"
