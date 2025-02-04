@@ -80,7 +80,7 @@ export const DateRangeSelector = ({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-md p-0 gap-0 bg-black/95 border-white/10">
+      <DialogContent className="max-w-md p-0 bg-black/95 border-white/10">
         <div className="flex flex-col">
           <div className="flex justify-between items-center p-4 border-b border-white/10">
             <h3 className="text-sm font-medium text-white">Select Dates</h3>
@@ -113,7 +113,7 @@ export const DateRangeSelector = ({
               selected={dateRange}
               onSelect={setDateRange}
               numberOfMonths={1}
-              className="border-0 mx-auto"
+              className="mx-auto"
               classNames={{
                 months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                 month: "space-y-3",
@@ -126,7 +126,7 @@ export const DateRangeSelector = ({
                 head_cell: "text-white/60 rounded-md w-8 font-normal text-[0.8rem]",
                 row: "flex w-full mt-2",
                 cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-white/10",
-                day: "h-7 w-7 p-0 font-normal text-white hover:bg-white/20 rounded-md text-sm",
+                day: "h-7 w-7 p-0 font-normal text-white hover:bg-white/20 rounded-md text-sm aria-selected:bg-white/20",
                 day_selected: "bg-white/20 text-white hover:bg-white/30",
                 day_today: "bg-white/5 text-white",
                 day_outside: "text-white/30 opacity-50",
