@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase-client";
 
 const About = () => {
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -16,6 +17,15 @@ const About = () => {
     email: "",
     message: "",
   });
+
+  useEffect(() => {
+    if (location.state?.scrollToContact) {
+      const contactForm = document.querySelector('#contact-form');
+      if (contactForm) {
+        contactForm.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location.state]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +78,7 @@ const About = () => {
           </p>
         </div>
 
-        <div className="mt-8">
+        <div id="contact-form" className="mt-8">
           <p className="text-lg text-white mb-2">
             Am I missing a venue that you want me to add? Or do you have any feedback? Write me here below!
           </p>

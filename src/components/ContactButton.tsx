@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const ContactButton = () => {
+  const navigate = useNavigate();
+
   const handleContact = () => {
-    window.location.href = "mailto:your-email@example.com?subject=Suggestion for Concert Site";
+    navigate('/about', { state: { scrollToContact: true } });
   };
 
   return (
