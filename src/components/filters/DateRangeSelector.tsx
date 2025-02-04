@@ -1,13 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose
-} from "@/components/ui/dialog";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  PopoverClose
+} from "@/components/ui/popover";
 import { Calendar as CalendarIcon, X } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, addWeeks, startOfMonth, endOfMonth } from "date-fns";
@@ -59,11 +57,11 @@ export const DateRangeSelector = ({
   ];
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Popover>
+      <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="bg-white/10 border-white/10 text-white hover:bg-white/20"
+          className="bg-white/10 border-white/10 text-white hover:bg-white/20 flex items-center"
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {dateRange?.from ? (
@@ -79,14 +77,14 @@ export const DateRangeSelector = ({
             "Pick dates"
           )}
         </Button>
-      </DialogTrigger>
-      <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-0 bg-black/95 border-white/10">
+      </PopoverTrigger>
+      <PopoverContent className="w-full max-w-md p-0 bg-black/95 border-white/10 rounded-md shadow-lg">
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-center p-4 border-b border-white/10">
             <h3 className="text-sm font-medium text-white">Select Dates</h3>
-            <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1 transition-colors">
+            <PopoverClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1 transition-colors">
               <X className="h-4 w-4" />
-            </DialogClose>
+            </PopoverClose>
           </div>
           
           <div className="p-4 border-b border-white/10 flex-grow">
@@ -122,16 +120,22 @@ export const DateRangeSelector = ({
           </div>
 
           <div className="p-4 border-t border-white/10">
-            <DialogClose asChild>
-              <Button 
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none"
-              >
-                Done
-              </Button>
-            </DialogClose>
+            <div className="flex gap-2">
+              {quickSelections.map((selection, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  size="sm"
+                  className="bg-white/10 border-white/10 text-white hover:bg-white/20 text-xs"
+                  onClick={() => handleQuickSelect(selection.range)}
+                >
+                  {selection.label}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </PopoverContent>
+    </Popover>
   );
 };
