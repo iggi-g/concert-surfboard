@@ -80,16 +80,16 @@ export const DateRangeSelector = ({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[400px] p-0 gap-0 bg-black/95 border-white/10">
+      <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-md p-0 gap-0 bg-black/95 border-white/10">
         <div className="flex flex-col">
-          <div className="flex justify-between items-center p-3 border-b border-white/10">
+          <div className="flex justify-between items-center p-4 border-b border-white/10">
             <h3 className="text-sm font-medium text-white">Select Dates</h3>
             <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1 transition-colors">
               <X className="h-4 w-4" />
             </DialogClose>
           </div>
           
-          <div className="p-3 border-b border-white/10">
+          <div className="p-4 border-b border-white/10">
             <div className="flex flex-wrap gap-2">
               {quickSelections.map((selection, index) => (
                 <Button
@@ -105,7 +105,7 @@ export const DateRangeSelector = ({
             </div>
           </div>
 
-          <div className="p-3">
+          <div className="p-4">
             <Calendar
               initialFocus
               mode="range"
@@ -113,7 +113,7 @@ export const DateRangeSelector = ({
               selected={dateRange}
               onSelect={setDateRange}
               numberOfMonths={1}
-              className="border-0"
+              className="border-0 mx-auto"
               classNames={{
                 months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                 month: "space-y-3",
@@ -137,7 +137,7 @@ export const DateRangeSelector = ({
             />
           </div>
 
-          <div className="p-3 border-t border-white/10">
+          <div className="p-4 border-t border-white/10">
             <DialogClose asChild>
               <Button 
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none"
