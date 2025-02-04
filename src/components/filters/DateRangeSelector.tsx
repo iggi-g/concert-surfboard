@@ -80,8 +80,8 @@ export const DateRangeSelector = ({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md p-0 bg-black/95 border-white/10">
-        <div className="flex flex-col">
+      <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-0 bg-black/95 border-white/10">
+        <div className="flex flex-col h-full">
           <div className="flex justify-between items-center p-4 border-b border-white/10">
             <h3 className="text-sm font-medium text-white">Select Dates</h3>
             <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1 transition-colors">
@@ -89,23 +89,7 @@ export const DateRangeSelector = ({
             </DialogClose>
           </div>
           
-          <div className="p-4 border-b border-white/10">
-            <div className="flex flex-wrap gap-2">
-              {quickSelections.map((selection, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  className="bg-white/10 border-white/10 text-white hover:bg-white/20 text-xs"
-                  onClick={() => handleQuickSelect(selection.range)}
-                >
-                  {selection.label}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          <div className="p-4">
+          <div className="p-4 border-b border-white/10 flex-grow">
             <Calendar
               initialFocus
               mode="range"
@@ -113,7 +97,7 @@ export const DateRangeSelector = ({
               selected={dateRange}
               onSelect={setDateRange}
               numberOfMonths={1}
-              className="mx-auto"
+              className="w-full"
               classNames={{
                 months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                 month: "space-y-3",
