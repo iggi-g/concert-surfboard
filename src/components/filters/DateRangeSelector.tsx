@@ -101,7 +101,7 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
               </div>
             </div>
             
-            <div className="p-4 w-full">
+            <div className="p-2">
               <Calendar
                 initialFocus
                 mode="range"
