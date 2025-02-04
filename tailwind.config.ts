@@ -19,16 +19,9 @@ export default {
     },
     extend: {
       colors: {
-        lovable: {
-          primary: "#9b87f5",
-          secondary: "#7E69AB",
-          tertiary: "#6E59A5",
-          dark: "#1A1F2C",
-          light: "#D6BCFA",
-          neutral: "#8E9196",
-          "light-gray": "#F1F1F1",
-          "medium-gray": "#8A898C",
-          "dark-gray": "#333333",
+        spotify: {
+          green: "#1DB954",
+          black: "#191414",
         },
         accent: "#9B87F5",
         border: "hsl(var(--border))",

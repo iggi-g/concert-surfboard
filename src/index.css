@@ -57,7 +57,7 @@
   body {
     @apply bg-background text-foreground;
     overflow-x: hidden;
-    background: linear-gradient(135deg, #1A1F2C 0%, #9b87f5 100%);
+    background: linear-gradient(135deg, #000000 0%, #FF6B00 100%);
     background-attachment: fixed;
   }
 }
