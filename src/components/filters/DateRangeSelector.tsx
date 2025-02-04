@@ -101,7 +101,7 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
               </div>
             </div>
             
-            <div className="p-4">
+            <div className="p-4 w-full">
               <Calendar
                 initialFocus
                 mode="range"
@@ -110,8 +110,13 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
                 onSelect={setDateRange}
                 numberOfMonths={1}
                 fromDate={today}
-                className="mx-auto bg-transparent text-white 
-                  [&_.rdp-day]:w-12 [&_.rdp-day]:h-12 
+                className="w-full mx-auto bg-transparent text-white 
+                  [&_.rdp]:w-full
+                  [&_.rdp-months]:w-full
+                  [&_.rdp-month]:w-full
+                  [&_.rdp-table]:w-full
+                  [&_.rdp-cell]:w-[14.28%]
+                  [&_.rdp-day]:w-full [&_.rdp-day]:h-12 
                   [&_.rdp-day]:text-lg [&_.rdp-day]:transition-colors
                   [&_.rdp-day_focus]:bg-orange-500 
                   [&_.rdp-day_hover]:bg-orange-500/50 
