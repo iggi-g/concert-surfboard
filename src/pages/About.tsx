@@ -58,21 +58,21 @@ const About = () => {
         </Link>
 
         <h1 className="text-3xl md:text-4xl font-bold text-white">
-          About CPH Concerts
+          About ConcertsCPH
         </h1>
 
         <div className="space-y-4 text-white/90">
           <p className="text-lg leading-relaxed">
-            ConcertsCPH is your definitive guide to live music and concerts in Copenhagen.
-            Discover top venues, upcoming events, and the best live music experiences in the Danish capital.
+            Hi! I am Igor, and I made this website because I wanted to have a full overview of all the fantastic live music and concerts in Copenhagen.
+            ConcertCPH is a non-profit website, made for everyone to enjoy. 
           </p>
         </div>
 
         <div className="mt-8">
           <p className="text-lg text-white mb-2">
-            Are we missing a venue that you want us to add? Write us here below!
+            Am I missing a venue that you want me to add? Or do you have any feedback? Write me here below!
           </p>
-          <h2 className="text-2xl font-semibold text-white mb-4">Contact Us</h2>
+          <h2 className="text-2xl font-semibold text-white mb-4">Contact</h2>
           <form onSubmit={handleSubmit} className="space-y-4 text-left">
             <div>
               <Input
