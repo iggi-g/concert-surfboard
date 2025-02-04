@@ -123,7 +123,11 @@ export const ConcertCard = ({
                   <Calendar className="h-5 w-5 text-white group-hover:text-orange-500 transition-colors" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="top" sideOffset={5} className="bg-black/90 text-white border-white/10">
+              <TooltipContent 
+                side="top" 
+                sideOffset={5} 
+                className="bg-black/90 text-white border-white/10 z-[100]"
+              >
                 <p>Add to calendar</p>
               </TooltipContent>
             </Tooltip>
@@ -146,7 +150,11 @@ export const ConcertCard = ({
                   />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="top" sideOffset={5} className="bg-black/90 text-white border-white/10">
+              <TooltipContent 
+                side="top" 
+                sideOffset={5} 
+                className="bg-black/90 text-white border-white/10 z-[100]"
+              >
                 <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
               </TooltipContent>
             </Tooltip>

@@ -9,7 +9,7 @@ import { ArrowLeft } from "lucide-react";
 const Favorites = () => {
   const { data: events = [], isLoading } = useQuery({
     queryKey: ['events'],
-    queryFn: fetchEvents,
+    queryFn: () => fetchEvents(),
     staleTime: 1000 * 60 * 5, // Cache for 5 minutes
     refetchOnWindowFocus: true,
   });
