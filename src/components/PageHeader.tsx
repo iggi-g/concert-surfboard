@@ -8,10 +8,13 @@ interface PageHeaderProps {
 }
 
 export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeaderProps) => {
-  const [isVisible, setIsVisible] = useState(true);
+  // State to control the visibility of the right navigation elements.
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  // State to control the visibility of the left logo.
+  const [isLogoVisible, setIsLogoVisible] = useState(true);
   const lastScrollY = useRef(0);
 
-  // Build the concert counter text with accurate pluralization and favorites handling.
+  // Build the concert counter text with proper pluralization and favorites handling.
   const concertCountText = showFavoritesOnly
     ? `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`
     : `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
@@ -19,13 +22,21 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      // Show the right-side links if scrolling up or near the top.
+      
+      // Right navigation: show if scrolling up or near the top.
       if (currentScrollY < lastScrollY.current || currentScrollY < 100) {
-        setIsVisible(true);
+        setIsNavVisible(true);
       } else {
-        setIsVisible(false);
+        setIsNavVisible(false);
       }
       lastScrollY.current = currentScrollY;
+
+      // Left logo: hide as soon as the user scrolls away from the top.
+      if (currentScrollY > 0) {
+        setIsLogoVisible(false);
+      } else {
+        setIsLogoVisible(true);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -33,14 +44,23 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
   }, []);
 
   return (
-    <div className="space-y-2 mb-8">
-      {/* Fixed logo with text only in the top-left corner */}
-      <div className="fixed top-4 left-4 z-50">
-        <Link to="/" className="text-orange-500 hover:text-orange-400 transition-colors">
+    <header className="space-y-2 mb-8">
+      {/* Left logo: fixed at top-left, only showing text, and disappears on scroll */}
+      <div
+        className={`fixed top-4 left-4 z-50 transition-all duration-300 ${
+          isLogoVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"
+        }`}
+      >
+        <Link
+          to="/"
+          className="text-orange-500 hover:text-orange-400 transition-colors"
+          aria-label="ConcertsCPH Homepage"
+        >
           <span className="font-bold text-lg">ConcertsCPH</span>
         </Link>
       </div>
 
+      {/* Main SEO heading */}
       <h1 className="text-4xl font-bold text-white animate-fade-in">
         Concerts in Copenhagen
       </h1>
@@ -48,13 +68,14 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
         {concertCountText}
       </p>
 
-      {/* Fixed right-side navigation that hides/shows based on scroll */}
-      <div
+      {/* Right-side navigation that shows/hides based on scrolling */}
+      <nav
         className={`fixed top-4 right-4 z-50 flex items-center gap-4 transition-all duration-300 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'
+          isNavVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"
         }`}
+        aria-label="Additional Navigation"
       >
-        <Link to="/about" className="group">
+        <Link to="/about" className="group" aria-label="About Page">
           <Info className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
         </Link>
         <a
@@ -62,10 +83,11 @@ export const PageHeader = ({ filteredEventsCount, showFavoritesOnly }: PageHeade
           target="_blank"
           rel="noopener noreferrer"
           className="group"
+          aria-label="Buy Me a Coffee"
         >
           <Beer className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
         </a>
-      </div>
-    </div>
+      </nav>
+    </header>
   );
 };
