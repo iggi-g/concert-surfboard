@@ -13,12 +13,12 @@ import { format } from "date-fns";
 
 interface DateRangeSelectorProps {
   dateRange: DateRange | undefined;
-  onDateRangeChange: (range: DateRange | undefined) => void;
+  setDateRange: (range: DateRange | undefined) => void;
 }
 
 export const DateRangeSelector = ({
   dateRange,
-  onDateRangeChange,
+  setDateRange,
 }: DateRangeSelectorProps) => {
   return (
     <Dialog>
@@ -52,7 +52,7 @@ export const DateRangeSelector = ({
             mode="range"
             defaultMonth={dateRange?.from}
             selected={dateRange}
-            onSelect={onDateRangeChange}
+            onSelect={setDateRange}
             numberOfMonths={1}
             className="border-0"
           />
