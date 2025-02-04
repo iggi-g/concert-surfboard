@@ -45,50 +45,64 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
       <DialogTrigger asChild>
         <Button
           variant="outline"
+          size="lg"
           className={cn(
-            "bg-white/10 border-white/10 text-white hover:bg-white/20",
+            "bg-white/10 border-white/10 text-white hover:bg-white/20 min-w-[200px] h-12",
+            dateRange?.from && "bg-orange-500/20 border-orange-500/20 hover:bg-orange-500/30",
             className
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon className="mr-2 h-5 w-5" />
           {dateRange?.from ? (
             dateRange.to ? (
               <>
-                {format(dateRange.from, "LLL dd")} - {format(dateRange.to, "LLL dd")}
+                {format(dateRange.from, "MMM d")} - {format(dateRange.to, "MMM d")}
               </>
             ) : (
-              format(dateRange.from, "LLL dd, y")
+              format(dateRange.from, "MMMM d, yyyy")
             )
           ) : (
-            <span>Pick dates</span>
+            <span>Select dates</span>
           )}
         </Button>
       </DialogTrigger>
       <DialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-md bg-black/95 border-white/10 p-0 overflow-hidden md:w-auto md:min-w-[380px]">
         <div className="flex flex-col">
-          <div className="flex justify-between items-center p-3 border-b border-white/10">
-            <h3 className="text-base font-medium text-white">Select Dates</h3>
+          <div className="flex justify-between items-center p-4 border-b border-white/10">
+            <h3 className="text-lg font-semibold text-white">Select Dates</h3>
             <DialogClose className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1.5">
               <X className="h-5 w-5" />
             </DialogClose>
           </div>
           
-          <div className="p-3 border-b border-white/10 flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('today')} 
-              className="text-sm bg-white/10 border-white/10 text-white hover:bg-white/20 flex-1">
+          <div className="p-4 border-b border-white/10 flex gap-2">
+            <Button 
+              size="default" 
+              variant="outline" 
+              onClick={() => handleDatePreset('today')} 
+              className="bg-white/10 border-white/10 text-white hover:bg-white/20 flex-1"
+            >
               Today
             </Button>
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('week')} 
-              className="text-sm bg-white/10 border-white/10 text-white hover:bg-white/20 flex-1">
+            <Button 
+              size="default" 
+              variant="outline" 
+              onClick={() => handleDatePreset('week')} 
+              className="bg-white/10 border-white/10 text-white hover:bg-white/20 flex-1"
+            >
               This Week
             </Button>
-            <Button size="sm" variant="outline" onClick={() => handleDatePreset('nextWeek')} 
-              className="text-sm bg-white/10 border-white/10 text-white hover:bg-white/20 flex-1">
+            <Button 
+              size="default" 
+              variant="outline" 
+              onClick={() => handleDatePreset('nextWeek')} 
+              className="bg-white/10 border-white/10 text-white hover:bg-white/20 flex-1"
+            >
               Next Week
             </Button>
           </div>
           
-          <div className="p-3">
+          <div className="p-4">
             <Calendar
               initialFocus
               mode="range"
@@ -97,16 +111,17 @@ export const DateRangeSelector = ({ dateRange, setDateRange, className }: DateRa
               onSelect={setDateRange}
               numberOfMonths={1}
               fromDate={today}
-              className="mx-auto [&_.rdp]:p-0 [&_.rdp-months]:gap-0 [&_.rdp-day]:w-10 [&_.rdp-day]:h-10 [&_.rdp-day_focus]:bg-orange-500 [&_.rdp-day_hover]:bg-orange-500/50 [&_.rdp-day_selected]:bg-orange-500 [&_.rdp-day_selected]:text-white [&_.rdp-day_selected:hover]:bg-orange-600"
+              className="mx-auto bg-transparent text-white [&_.rdp-day]:w-12 [&_.rdp-day]:h-12 [&_.rdp-day]:text-base [&_.rdp-day_focus]:bg-orange-500 [&_.rdp-day_hover]:bg-orange-500/50 [&_.rdp-day_selected]:bg-orange-500 [&_.rdp-day_selected]:text-white [&_.rdp-day_selected:hover]:bg-orange-600 [&_.rdp-day]:rounded-lg [&_.rdp-head_cell]:text-white/70 [&_.rdp-caption]:text-white"
             />
           </div>
 
-          <div className="p-3 border-t border-white/10">
+          <div className="p-4 border-t border-white/10">
             <DialogClose asChild>
               <Button 
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none text-sm"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white border-none"
+                size="lg"
               >
-                Done
+                Apply Dates
               </Button>
             </DialogClose>
           </div>
