@@ -1,7 +1,8 @@
+
 import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { isAfter, startOfDay, parseISO } from "date-fns";
+import { isAfter, startOfDay, parseISO, isSameDay } from "date-fns";
 import { EventSkeleton } from "./EventSkeleton";
 import { useEffect, useState, useMemo } from "react";
 
@@ -20,7 +21,10 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   
   const filteredEvents = useMemo(() => {
     return events
-      .filter(event => isAfter(parseISO(event.date), today))
+      .filter(event => {
+        const eventDate = parseISO(event.date);
+        return isAfter(eventDate, today) || isSameDay(eventDate, today);
+      })
       .filter(event => !showFavoritesOnly || favorites.includes(event.title));
   }, [events, showFavoritesOnly, favorites]);
 
