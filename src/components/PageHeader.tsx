@@ -48,17 +48,27 @@ export const PageHeader = ({
         </Link>
       </div>
 
-      <h1 className="text-white animate-fade-in font-light text-4xl px-0 py-[18px]">Find your next event in Copenhagen!</h1>
+      <h1 className="text-white animate-fade-in font-light text-4xl md:text-4xl px-0 py-[18px] mt-8">Find your next event in Copenhagen!</h1>
       <p className="text-xl font-bold text-orange-500 animate-fade-in">
         {concertCountText}
       </p>
 
-      <nav className={`fixed top-4 right-4 z-50 flex items-center gap-6 transition-all duration-300 ${isNavVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`} aria-label="Additional Navigation">
-        <Link to="/about" className="group p-2" aria-label="About Page">
-          <Info className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
+      <nav className={`fixed top-4 right-2 md:right-4 z-50 flex items-center gap-2 md:gap-6 transition-all duration-300 ${isNavVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`} aria-label="Additional Navigation">
+        <Link 
+          to="/about" 
+          className="group p-2 md:p-3 bg-black/20 rounded-full hover:bg-black/30 transition-colors" 
+          aria-label="About Page"
+        >
+          <Info className="h-6 w-6 md:h-8 md:w-8 text-orange-500 transition-transform group-hover:scale-110" />
         </Link>
-        <a href="https://buymeacoffee.com/cphconcerts" target="_blank" rel="noopener noreferrer" className="group p-2" aria-label="Buy Me a Coffee">
-          <Beer className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
+        <a 
+          href="https://buymeacoffee.com/cphconcerts" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="group p-2 md:p-3 bg-black/20 rounded-full hover:bg-black/30 transition-colors" 
+          aria-label="Buy Me a Coffee"
+        >
+          <Beer className="h-6 w-6 md:h-8 md:w-8 text-orange-500 transition-transform group-hover:scale-110" />
         </a>
       </nav>
     </header>;
