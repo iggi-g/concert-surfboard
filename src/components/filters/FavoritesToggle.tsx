@@ -1,15 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
-
 interface FavoritesToggleProps {
   showFavoritesOnly: boolean;
   setShowFavoritesOnly: (show: boolean) => void;
 }
-
 export const FavoritesToggle = ({
   showFavoritesOnly,
-  setShowFavoritesOnly,
+  setShowFavoritesOnly
 }: FavoritesToggleProps) => {
   // When the toggle is clicked, update the state immediately.
   const handleToggle = () => {
@@ -19,17 +17,8 @@ export const FavoritesToggle = ({
     // so that any new favorites are loaded immediately.
     // e.g. loadFavorites();
   };
-
-  return (
-    <Button
-      onClick={handleToggle}
-      className={cn(
-        "w-full md:w-auto bg-white/10 border-white/10 text-white hover:bg-white/20",
-        showFavoritesOnly && "bg-white/20"
-      )}
-    >
+  return <Button onClick={handleToggle} className="px-[16px] py-0 bg-zinc-950 hover:bg-zinc-800">
       <Heart className="mr-2" />
       Favorites
-    </Button>
-  );
+    </Button>;
 };
