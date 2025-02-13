@@ -42,9 +42,7 @@ export const PageHeader = ({
         </Link>
       </div>
 
-      <h1 className="text-4xl font-bold text-white animate-fade-in">
-        Concerts in Copenhagen
-      </h1>
+      <h1 className="text-4xl text-white animate-fade-in px-0 py-[10px] font-light">Find your next event in Copenhagen!</h1>
       <p className="text-xl font-bold text-orange-500 animate-fade-in">
         {concertCountText}
       </p>
