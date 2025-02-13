@@ -35,14 +35,14 @@ export const PageHeader = ({
     });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  return <header className="space-y-2 mb-8">
+  return <header className="space-y-2 mb-8 py-0">
       <div className={`fixed top-4 left-4 z-50 transition-all duration-300 ${isLogoVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`}>
         <Link to="/" className="text-orange-500 hover:text-orange-400 transition-colors" aria-label="ConcertsCPH Homepage">
-          <span className="text-2xl font-bold">ConcertsCPH</span>
+          <span className="px-[2px] py-[10px] text-base font-extrabold">ConcertsCPH</span>
         </Link>
       </div>
 
-      <h1 className="text-4xl text-white animate-fade-in px-0 py-[10px] font-light">Find your next event in Copenhagen!</h1>
+      <h1 className="text-white animate-fade-in font-light text-4xl px-0 py-[18px]">Find your next event in Copenhagen!</h1>
       <p className="text-xl font-bold text-orange-500 animate-fade-in">
         {concertCountText}
       </p>
