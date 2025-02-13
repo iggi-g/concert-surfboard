@@ -20,13 +20,18 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   const today = startOfDay(new Date());
   
   const filteredEvents = useMemo(() => {
+    console.log('Filtering events, today is:', today.toISOString());
     return events
       .filter(event => {
         const eventDate = parseISO(event.date);
-        return isAfter(eventDate, today) || isSameDay(eventDate, today);
+        const include = isAfter(eventDate, today) || isSameDay(eventDate, today);
+        if (!include) {
+          console.log('Excluding event:', { title: event.title, date: event.date });
+        }
+        return include;
       })
       .filter(event => !showFavoritesOnly || favorites.includes(event.title));
-  }, [events, showFavoritesOnly, favorites]);
+  }, [events, showFavoritesOnly, favorites, today]);
 
   const visibleEvents = useMemo(() => {
     return filteredEvents.slice(0, page * eventsPerPage);
