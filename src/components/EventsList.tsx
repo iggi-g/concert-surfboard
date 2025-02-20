@@ -4,7 +4,7 @@ import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { isAfter, startOfDay, parseISO, isSameDay } from "date-fns";
 import { EventSkeleton } from "./EventSkeleton";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -20,10 +20,11 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   const eventsPerPage = 12;
   const queryClient = useQueryClient();
   const { toast } = useToast();
-
   const today = startOfDay(new Date());
-  
+
+  // Memoize filtered events
   const filteredEvents = useMemo(() => {
+    console.log('Recalculating filtered events. Current favorites:', favorites);
     return events
       .filter(event => {
         const eventDate = parseISO(event.date);
@@ -32,36 +33,41 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
       .filter(event => !showFavoritesOnly || favorites.includes(event.title));
   }, [events, showFavoritesOnly, favorites, today]);
 
+  // Memoize visible events
   const visibleEvents = useMemo(() => {
     return filteredEvents.slice(0, page * eventsPerPage);
   }, [filteredEvents, page]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1000) {
-        setPage(prev => prev + 1);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+  // Handle infinite scroll
+  const handleScroll = useCallback(() => {
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1000) {
+      setPage(prev => prev + 1);
+    }
   }, []);
 
-  const handleToggleFavorite = (artist: string) => {
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  // Handle favorite toggling
+  const handleToggleFavorite = useCallback((artist: string) => {
     const isFavorite = favorites.includes(artist);
-    const newFavorites = isFavorite
-      ? favorites.filter(a => a !== artist)
-      : [...favorites, artist];
+    console.log('Toggling favorite for:', artist, 'Current state:', isFavorite);
     
-    setFavorites(newFavorites);
+    setFavorites(currentFavorites => {
+      const newFavorites = isFavorite
+        ? currentFavorites.filter(a => a !== artist)
+        : [...currentFavorites, artist];
+      console.log('New favorites:', newFavorites);
+      return newFavorites;
+    });
     
     toast({
       title: isFavorite ? "Removed from favorites" : "Added to favorites",
       description: `${artist} has been ${isFavorite ? "removed from" : "added to"} your favorites`,
     });
-
-    queryClient.invalidateQueries({ queryKey: ['events'] });
-  };
+  }, [favorites, setFavorites, toast]);
 
   if (isLoading) {
     return (
@@ -78,7 +84,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
       {visibleEvents.map((event: Event, index: number) => (
-        <div key={index} className="flex justify-center">
+        <div key={`${event.title}-${event.date}`} className="flex justify-center">
           <ConcertCard
             artist={event.title}
             date={event.date}

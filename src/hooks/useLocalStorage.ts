@@ -1,52 +1,45 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
-  // State to store our value
-  // Pass initial state function to useState so logic is only executed once
-  const [storedValue, setStoredValue] = useState<T>(() => {
+  // Initialize state with value from localStorage
+  const [state, setState] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      console.log(error);
+      console.log('Error reading localStorage:', error);
       return initialValue;
     }
   });
 
-  // Handle storage events from other tabs/windows
+  // Update localStorage when state changes
   useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === key && e.newValue !== null) {
-        try {
-          setStoredValue(JSON.parse(e.newValue));
-        } catch (error) {
-          console.log(error);
-        }
+    try {
+      window.localStorage.setItem(key, JSON.stringify(state));
+      // Dispatch custom event for cross-component communication
+      const event = new CustomEvent('localStorage-change', { 
+        detail: { key, value: state } 
+      });
+      window.dispatchEvent(event);
+    } catch (error) {
+      console.log('Error writing to localStorage:', error);
+    }
+  }, [key, state]);
+
+  // Listen for changes from other components
+  useEffect(() => {
+    const handleStorageChange = (e: CustomEvent<{ key: string; value: T }>) => {
+      if (e.detail.key === key) {
+        setState(e.detail.value);
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorage-change', handleStorageChange as EventListener);
+    return () => {
+      window.removeEventListener('localStorage-change', handleStorageChange as EventListener);
+    };
   }, [key]);
 
-  const setValue = useCallback((value: T | ((val: T) => T)) => {
-    try {
-      // Allow value to be a function so we have same API as useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      
-      // Save state
-      setStoredValue(valueToStore);
-      
-      // Save to local storage
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      
-      // Dispatch a custom event to notify other components
-      window.dispatchEvent(new Event('local-storage'));
-    } catch (error) {
-      console.log(error);
-    }
-  }, [key, storedValue]);
-
-  return [storedValue, setValue] as const;
+  return [state, setState] as const;
 }
