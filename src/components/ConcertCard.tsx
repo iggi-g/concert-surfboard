@@ -1,3 +1,4 @@
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
@@ -15,6 +16,7 @@ interface ConcertCardProps {
   venueLink?: string;
   isFavorite?: boolean;
   onToggleFavorite?: (artist: string) => void;
+  isInFavoritesView?: boolean;
 }
 
 export const ConcertCard = ({
@@ -25,7 +27,8 @@ export const ConcertCard = ({
   ticketUrl,
   venueLink,
   isFavorite = false,
-  onToggleFavorite
+  onToggleFavorite,
+  isInFavoritesView = false
 }: ConcertCardProps) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -146,7 +149,7 @@ export const ConcertCard = ({
                 >
                   <Heart 
                     className={`h-5 w-5 transition-colors group-hover:text-orange-500 ${
-                      isFavorite ? 'fill-current text-orange-500' : 'text-white'
+                      isFavorite ? 'fill-current text-orange-500' : isInFavoritesView ? 'text-orange-500' : 'text-white'
                     }`} 
                   />
                 </Button>

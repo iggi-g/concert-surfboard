@@ -95,6 +95,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
             venueLink={getVenueLink(event.venue)}
             isFavorite={favorites.includes(event.title)}
             onToggleFavorite={handleToggleFavorite}
+            isInFavoritesView={showFavoritesOnly}
           />
         </div>
       ))}
