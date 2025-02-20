@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchEvents } from "@/lib/supabase-client";
@@ -30,8 +31,8 @@ const Index = () => {
   const { data: events = [], isLoading } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
     queryFn: () => fetchEvents(sortOrder),
-    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
-    refetchOnWindowFocus: false,
+    staleTime: 0, // Set staleTime to 0 to always get fresh data
+    refetchOnWindowFocus: true,
   });
 
   const handleScroll = useCallback(() => {
