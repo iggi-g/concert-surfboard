@@ -2,7 +2,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ConcertCardProps {
@@ -32,8 +32,32 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsIntersecting(entry.isIntersecting);
+      },
+      {
+        rootMargin: '50px',
+        threshold: 0.1
+      }
+    );
+
+    if (imageRef.current) {
+      observer.observe(imageRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isIntersecting || loaded) return;
+
     const img = new Image();
     img.src = imageUrl;
     img.onload = () => {
@@ -44,7 +68,7 @@ export const ConcertCard = ({
       setError(true);
       setLoaded(true);
     };
-  }, [imageUrl]);
+  }, [imageUrl, isIntersecting, loaded]);
 
   const handleClick = () => {
     window.open(ticketUrl, '_blank');
@@ -74,6 +98,8 @@ export const ConcertCard = ({
     window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
   };
 
+  const placeholderImage = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=75";
+
   return (
     <Card 
       className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10 relative"
@@ -84,11 +110,14 @@ export const ConcertCard = ({
           <div className="absolute inset-0 bg-white/10 animate-pulse" />
         )}
         <img 
-          src={error ? "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3" : imageUrl}
+          ref={imageRef}
+          src={error ? placeholderImage : (isIntersecting ? imageUrl : placeholderImage)}
           alt={`${artist} concert at ${venue} in Copenhagen`}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
           loading="lazy"
           decoding="async"
+          width="400"
+          height="225"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute top-2 inset-x-0 flex justify-between items-start px-4">
