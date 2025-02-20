@@ -1,3 +1,4 @@
+
 import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -19,24 +20,17 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   const eventsPerPage = 12;
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const [localFavorites, setLocalFavorites] = useState<string[]>(favorites);
-
-  useEffect(() => {
-    setLocalFavorites(favorites);
-  }, [favorites]);
 
   const today = startOfDay(new Date());
   
   const filteredEvents = useMemo(() => {
-    console.log('Filtering events with favorites:', localFavorites);
     return events
       .filter(event => {
         const eventDate = parseISO(event.date);
-        const include = isAfter(eventDate, today) || isSameDay(eventDate, today);
-        return include;
+        return isAfter(eventDate, today) || isSameDay(eventDate, today);
       })
-      .filter(event => !showFavoritesOnly || localFavorites.includes(event.title));
-  }, [events, showFavoritesOnly, localFavorites, today]);
+      .filter(event => !showFavoritesOnly || favorites.includes(event.title));
+  }, [events, showFavoritesOnly, favorites, today]);
 
   const visibleEvents = useMemo(() => {
     return filteredEvents.slice(0, page * eventsPerPage);
@@ -54,12 +48,11 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   }, []);
 
   const handleToggleFavorite = (artist: string) => {
-    const isFavorite = localFavorites.includes(artist);
+    const isFavorite = favorites.includes(artist);
     const newFavorites = isFavorite
-      ? localFavorites.filter(a => a !== artist)
-      : [...localFavorites, artist];
+      ? favorites.filter(a => a !== artist)
+      : [...favorites, artist];
     
-    setLocalFavorites(newFavorites);
     setFavorites(newFavorites);
     
     toast({
@@ -94,7 +87,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
             imageUrl={event.image}
             ticketUrl={event.link}
             venueLink={getVenueLink(event.venue)}
-            isFavorite={localFavorites.includes(event.title)}
+            isFavorite={favorites.includes(event.title)}
             onToggleFavorite={handleToggleFavorite}
           />
         </div>
