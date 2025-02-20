@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ConcertCardProps {
   artist: string;
@@ -32,6 +33,7 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
+  const [notes, setNotes] = useState(localStorage.getItem(`notes-${artist}`) || "");
 
   useEffect(() => {
     const img = new Image();
@@ -72,6 +74,13 @@ export const ConcertCard = ({
     });
 
     window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
+  };
+
+  const handleNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.stopPropagation();
+    const newNotes = e.target.value;
+    setNotes(newNotes);
+    localStorage.setItem(`notes-${artist}`, newNotes);
   };
 
   return (
@@ -166,8 +175,15 @@ export const ConcertCard = ({
           </TooltipProvider>
         </div>
       </div>
-      <div className="p-2 md:p-4">
+      <div className="p-2 md:p-4 space-y-2">
         <h2 className="text-lg md:text-xl font-bold text-white">{artist}</h2>
+        <Textarea
+          placeholder="Add your notes here..."
+          value={notes}
+          onChange={handleNotesChange}
+          onClick={(e) => e.stopPropagation()}
+          className="min-h-[60px] resize-none bg-black/20 border-white/10 text-white placeholder:text-white/50 focus:ring-orange-500"
+        />
       </div>
     </Card>
   );
