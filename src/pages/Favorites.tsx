@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+
+import { useState } from "react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { EventsList } from "@/components/EventsList";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +11,7 @@ const Favorites = () => {
   const { data: events = [], isLoading } = useQuery({
     queryKey: ['events'],
     queryFn: () => fetchEvents(),
-    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+    staleTime: 0, // Set staleTime to 0 to always get fresh data
     refetchOnWindowFocus: true,
   });
 

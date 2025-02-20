@@ -5,6 +5,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { isAfter, startOfDay, parseISO, isSameDay } from "date-fns";
 import { EventSkeleton } from "./EventSkeleton";
 import { useEffect, useState, useMemo } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface EventsListProps {
   events: Event[];
@@ -16,6 +17,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
   const [page, setPage] = useState(1);
   const eventsPerPage = 12;
+  const queryClient = useQueryClient();
 
   const today = startOfDay(new Date());
   
@@ -55,6 +57,8 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
         : [...prev, artist];
       return newFavorites;
     });
+    // Force a refetch of the events query to update the UI
+    queryClient.invalidateQueries({ queryKey: ['events'] });
   };
 
   if (isLoading) {
