@@ -1,12 +1,15 @@
+
 import { Beer, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { isAfter, startOfDay, parseISO } from "date-fns";
 import { Event } from "@/lib/supabase-client";
+
 interface PageHeaderProps {
   filteredEventsCount: number;
   showFavoritesOnly: boolean;
 }
+
 export const PageHeader = ({
   filteredEventsCount,
   showFavoritesOnly
@@ -14,7 +17,18 @@ export const PageHeader = ({
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [isLogoVisible, setIsLogoVisible] = useState(true);
   const lastScrollY = useRef(0);
-  const concertCountText = showFavoritesOnly ? `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available` : `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
+
+  const formatConcertCount = (count: number) => {
+    if (count >= 1000) {
+      return count.toLocaleString('en-US'); // This will add commas for thousands
+    }
+    return count;
+  };
+
+  const concertCountText = showFavoritesOnly 
+    ? `${formatConcertCount(filteredEventsCount)} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available` 
+    : `${formatConcertCount(filteredEventsCount)} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -30,12 +44,15 @@ export const PageHeader = ({
         setIsLogoVisible(true);
       }
     };
+
     window.addEventListener("scroll", handleScroll, {
       passive: true
     });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  return <header className="space-y-2 mb-8">
+
+  return (
+    <header className="space-y-2 mb-8">
       <div className={`fixed top-4 left-4 z-50 transition-all duration-300 ${isLogoVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`}>
         <Link to="/" className="text-orange-500 hover:text-orange-400 transition-colors" aria-label="ConcertsCPH Homepage">
           <span className="font-bold text-lg">ConcertsCPH</span>
@@ -57,5 +74,6 @@ export const PageHeader = ({
           <Beer className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
         </a>
       </nav>
-    </header>;
+    </header>
+  );
 };
