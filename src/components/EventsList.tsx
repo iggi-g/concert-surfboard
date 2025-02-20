@@ -1,4 +1,3 @@
-
 import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -6,6 +5,7 @@ import { isAfter, startOfDay, parseISO, isSameDay } from "date-fns";
 import { EventSkeleton } from "./EventSkeleton";
 import { useEffect, useState, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/components/ui/use-toast";
 
 interface EventsListProps {
   events: Event[];
@@ -18,22 +18,25 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   const [page, setPage] = useState(1);
   const eventsPerPage = 12;
   const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const [localFavorites, setLocalFavorites] = useState<string[]>(favorites);
+
+  useEffect(() => {
+    setLocalFavorites(favorites);
+  }, [favorites]);
 
   const today = startOfDay(new Date());
   
   const filteredEvents = useMemo(() => {
-    console.log('Filtering events, today is:', today.toISOString());
+    console.log('Filtering events with favorites:', localFavorites);
     return events
       .filter(event => {
         const eventDate = parseISO(event.date);
         const include = isAfter(eventDate, today) || isSameDay(eventDate, today);
-        if (!include) {
-          console.log('Excluding event:', { title: event.title, date: event.date });
-        }
         return include;
       })
-      .filter(event => !showFavoritesOnly || favorites.includes(event.title));
-  }, [events, showFavoritesOnly, favorites, today]);
+      .filter(event => !showFavoritesOnly || localFavorites.includes(event.title));
+  }, [events, showFavoritesOnly, localFavorites, today]);
 
   const visibleEvents = useMemo(() => {
     return filteredEvents.slice(0, page * eventsPerPage);
@@ -51,13 +54,19 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   }, []);
 
   const handleToggleFavorite = (artist: string) => {
-    setFavorites(prev => {
-      const newFavorites = prev.includes(artist) 
-        ? prev.filter(a => a !== artist)
-        : [...prev, artist];
-      return newFavorites;
+    const isFavorite = localFavorites.includes(artist);
+    const newFavorites = isFavorite
+      ? localFavorites.filter(a => a !== artist)
+      : [...localFavorites, artist];
+    
+    setLocalFavorites(newFavorites);
+    setFavorites(newFavorites);
+    
+    toast({
+      title: isFavorite ? "Removed from favorites" : "Added to favorites",
+      description: `${artist} has been ${isFavorite ? "removed from" : "added to"} your favorites`,
     });
-    // Force a refetch of the events query to update the UI
+
     queryClient.invalidateQueries({ queryKey: ['events'] });
   };
 
@@ -85,7 +94,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
             imageUrl={event.image}
             ticketUrl={event.link}
             venueLink={getVenueLink(event.venue)}
-            isFavorite={favorites.includes(event.title)}
+            isFavorite={localFavorites.includes(event.title)}
             onToggleFavorite={handleToggleFavorite}
           />
         </div>
