@@ -33,6 +33,7 @@ export const ConcertCard = ({
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [isIntersecting, setIsIntersecting] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export const ConcertCard = ({
         setIsIntersecting(entry.isIntersecting);
       },
       {
-        rootMargin: '50px',
+        rootMargin: '100px',
         threshold: 0.1
       }
     );
@@ -102,26 +103,30 @@ export const ConcertCard = ({
 
   return (
     <Card 
-      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10 relative"
+      className="overflow-hidden w-full max-w-[350px] card-hover aspect-[3/4] bg-card/80 dark:bg-card/60 shadow-sm hover:shadow-md rounded-xl cursor-pointer relative border-border/30"
       onClick={handleClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-[16/9] w-full">
+      <div className="relative h-3/4 w-full">
         {!loaded && (
-          <div className="absolute inset-0 bg-white/10 animate-pulse" />
+          <div className="absolute inset-0 skeleton rounded-t-xl" />
         )}
         <img 
           ref={imageRef}
           src={error ? placeholderImage : (isIntersecting ? imageUrl : placeholderImage)}
           alt={`${artist} concert at ${venue} in Copenhagen`}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 rounded-t-xl ${loaded ? 'opacity-100' : 'opacity-0'}`}
           loading="lazy"
           decoding="async"
           width="400"
-          height="225"
+          height="300"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="absolute top-2 inset-x-0 flex justify-between items-start px-4">
-          <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent rounded-t-xl" />
+        
+        {/* Date and venue info */}
+        <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
+          <span className="glass text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-lg font-medium">
             {date}
           </span>
           {venueLink ? (
@@ -130,38 +135,39 @@ export const ConcertCard = ({
               target="_blank" 
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm hover:bg-black/60"
+              className="glass text-white text-xs px-3 py-1.5 rounded-full hover:bg-white/20 transition-colors duration-150"
               aria-label={`Visit ${venue} website`}
             >
               {venue}
             </a>
           ) : (
-            <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+            <span className="glass text-white text-xs px-3 py-1.5 rounded-full">
               {venue}
             </span>
           )}
         </div>
-        <div className="absolute bottom-2 inset-x-0 flex justify-between items-center px-4">
+        
+        {/* Action buttons */}
+        <div className="absolute bottom-4 inset-x-4 flex justify-end items-center gap-2">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full bg-black/40 hover:bg-black/60 group"
+                  className="rounded-full glass hover:bg-white/30 transition-colors duration-150 h-9 w-9"
                   onClick={handleCalendarClick}
                   aria-label="Add to calendar"
                 >
-                  <Calendar className="h-5 w-5 text-white group-hover:text-orange-500 transition-colors" />
+                  <Calendar className={`h-5 w-5 ${isHovered ? 'text-[#FF5C25]' : 'text-white'} transition-colors duration-150`} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent 
                 side="top" 
                 sideOffset={5}
-                className="bg-black/90 text-white border-white/10 z-[100] whitespace-nowrap px-3 py-1.5 text-sm font-medium"
-                align="start"
+                className="bg-black/90 text-white border-white/10 z-[100]"
               >
-                <p>Add to calendar</p>
+                <p className="text-xs">Add to calendar</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -172,13 +178,13 @@ export const ConcertCard = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full bg-black/40 hover:bg-black/60 group"
+                  className="rounded-full glass hover:bg-white/30 transition-colors duration-150 h-9 w-9"
                   onClick={handleFavoriteClick}
                   aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 >
                   <Heart 
-                    className={`h-5 w-5 transition-colors group-hover:text-orange-500 ${
-                      isFavorite ? 'fill-current text-orange-500' : isInFavoritesView ? 'text-orange-500' : 'text-white'
+                    className={`h-5 w-5 transition-colors duration-150 ${
+                      isFavorite ? 'fill-[#FF5C25] text-[#FF5C25]' : isHovered ? 'text-[#FF5C25]' : 'text-white'
                     }`} 
                   />
                 </Button>
@@ -186,17 +192,18 @@ export const ConcertCard = ({
               <TooltipContent 
                 side="top" 
                 sideOffset={5}
-                className="bg-black/90 text-white border-white/10 z-[100] whitespace-nowrap px-3 py-1.5 text-sm font-medium"
-                align="end"
+                className="bg-black/90 text-white border-white/10 z-[100]"
               >
-                <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
+                <p className="text-xs">{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
       </div>
-      <div className="p-2 md:p-4">
-        <h2 className="text-lg md:text-xl font-bold text-white">{artist}</h2>
+      
+      {/* Artist name */}
+      <div className="p-4 h-1/4 flex items-center">
+        <h2 className="text-base font-semibold text-foreground line-clamp-2">{artist}</h2>
       </div>
     </Card>
   );

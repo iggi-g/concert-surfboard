@@ -17,16 +17,16 @@ const Favorites = () => {
 
   return (
     <PageContainer>
-      <div className="w-full max-w-[1920px] mx-auto px-4 space-y-8">
+      <div className="w-full max-w-[1920px] mx-auto space-y-8">
         <div className="flex items-center justify-between">
           <Link
             to="/"
-            className="text-white hover:text-orange-500 transition-colors inline-flex items-center gap-2 text-lg"
+            className="text-foreground hover:text-accent-1 transition-colors inline-flex items-center gap-2 text-lg"
           >
             <ArrowLeft className="h-5 w-5" />
             Back to All Concerts
           </Link>
-          <h1 className="text-2xl md:text-3xl font-bold text-white">Your Favorite Concerts</h1>
+          <h1 className="text-2xl md:text-3xl font-semibold text-foreground">Your Favorite Concerts</h1>
         </div>
         <EventsList events={events} isLoading={isLoading} showFavoritesOnly={true} />
       </div>

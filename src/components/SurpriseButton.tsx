@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -35,12 +36,12 @@ export const SurpriseButton = ({ className, filteredEvents }: SurpriseButtonProp
       onMouseLeave={() => setIsHovered(false)}
       variant="outline"
       className={cn(
-        "w-full md:w-auto bg-white/10 border-white/10 text-white hover:bg-white/20",
+        "w-full md:w-auto rounded-full h-10 border-border/50 dark:bg-white/5 text-foreground hover:bg-accent-1/10 hover:border-accent-1/30 hover:text-accent-1 transition-all duration-150",
         className
       )}
     >
-      <span className="relative z-10 flex items-center gap-2">
-        <Star className={`w-4 h-4 ${isHovered ? 'text-orange-500 fill-orange-500' : 'text-white'}`} />
+      <span className="flex items-center gap-2">
+        <Star className={`w-4 h-4 ${isHovered ? 'text-accent-1 fill-accent-1' : ''}`} />
         Surprise Me
       </span>
     </Button>
