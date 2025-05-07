@@ -2,6 +2,8 @@
 import { Beer, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { isAfter, startOfDay, parseISO } from "date-fns";
+import { Event } from "@/lib/supabase-client";
 
 interface PageHeaderProps {
   filteredEventsCount: number;
@@ -50,32 +52,28 @@ export const PageHeader = ({
   }, []);
 
   return (
-    <header className="relative z-30 pb-6">
-      <div className="fixed top-0 left-0 right-0 h-16 glass z-50 backdrop-blur-md px-4 md:px-6 flex items-center justify-between">
-        <div className={`transition-all duration-300 ${isLogoVisible ? "opacity-0" : "opacity-100"}`}>
-          <Link to="/" className="text-accent-1 hover:text-accent-1/90 transition-colors font-medium" aria-label="ConcertsCPH Homepage">
-            <span className="font-semibold text-lg">ConcertsCPH</span>
-          </Link>
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <Link to="/about" className="group" aria-label="About Page">
-            <Info className="h-5 w-5 text-foreground opacity-70 transition-all group-hover:opacity-100 group-hover:scale-105" />
-          </Link>
-          <a href="https://buymeacoffee.com/cphconcerts" target="_blank" rel="noopener noreferrer" className="group" aria-label="Buy Me a Coffee">
-            <Beer className="h-5 w-5 text-foreground opacity-70 transition-all group-hover:opacity-100 group-hover:scale-105" />
-          </a>
-        </div>
+    <header className="space-y-2 mb-8">
+      <div className={`fixed top-4 left-4 z-50 transition-all duration-300 ${isLogoVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`}>
+        <Link to="/" className="text-orange-500 hover:text-orange-400 transition-colors" aria-label="ConcertsCPH Homepage">
+          <span className="font-bold text-lg">ConcertsCPH</span>
+        </Link>
       </div>
-      
-      <div className="pt-20 pb-4 space-y-2 text-center">
-        <h1 className="text-foreground animate-fade-in">
-          Concerts in Copenhagen
-        </h1>
-        <p className="text-lg font-medium text-accent-1 animate-fade-in">
-          {concertCountText}
-        </p>
-      </div>
+
+      <h1 className="font-bold text-white animate-fade-in text-4xl text-center">
+        Concerts in Copenhagen
+      </h1>
+      <p className="text-xl font-bold text-orange-500 animate-fade-in">
+        {concertCountText}
+      </p>
+
+      <nav className={`fixed top-4 right-4 z-50 flex items-center gap-4 transition-all duration-300 ${isNavVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`} aria-label="Additional Navigation">
+        <Link to="/about" className="group" aria-label="About Page">
+          <Info className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
+        </Link>
+        <a href="https://buymeacoffee.com/cphconcerts" target="_blank" rel="noopener noreferrer" className="group" aria-label="Buy Me a Coffee">
+          <Beer className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
+        </a>
+      </nav>
     </header>
   );
 };

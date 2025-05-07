@@ -1,56 +1,52 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --bg-base: 220 20% 98%;   /* #F9FAFB bone-white canvas */
-    --bg-elev: 0 0% 100%;     /* #FFFFFF cards & nav */
-    --text-main: 222 47% 11%; /* #111827 nearly-black */
-    --text-sub: 220 14% 46%;  /* #6B7280 cool grey */
-    --accent-1: 14 100% 57%;  /* #FF5C25 Copenhagen orange */
-    --accent-2: 216 100% 50%; /* #0060FF electric blue */
-    --border-ui: 220 13% 91%; /* #E5E7EB hairline strokes */
-
-    --background: var(--bg-base);
-    --foreground: var(--text-main);
-    --card: var(--bg-elev);
-    --card-foreground: var(--text-main);
-    --popover: var(--bg-elev);
-    --popover-foreground: var(--text-main);
-    --primary: var(--accent-1);
-    --primary-foreground: 0 0% 100%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
-    --muted-foreground: var(--text-sub);
+    --muted-foreground: 215.4 16.3% 46.9%;
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: var(--border-ui);
-    --input: var(--border-ui);
-    --ring: var(--accent-2);
-    --radius: 1rem;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
   }
 
   .dark {
-    --bg-base: 240 10% 4%;    /* #0E0E10 */
-    --bg-elev: 240 6% 10%;    /* slightly lighter than base */
-    --text-main: 210 40% 96%; /* #F3F4F6 */
-    --text-sub: 220 14% 70%;  /* lighter version of cool grey */
-    --border-ui: 217 33% 17%; /* #1F2937 */
-
-    --background: var(--bg-base);
-    --foreground: var(--text-main);
-    --card: var(--bg-elev);
-    --card-foreground: var(--text-main);
-    --popover: var(--bg-elev);
-    --popover-foreground: var(--text-main);
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: var(--text-sub);
-    --border: var(--border-ui);
-    --input: var(--border-ui);
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
 
@@ -59,49 +55,16 @@
     @apply border-border;
   }
 
-  /* Define selection styles directly instead of using the variant */
-  ::selection {
-    background-color: rgba(0, 96, 255, 0.1); /* #0060FF with 10% opacity */
-    color: #0060FF;
-  }
-
-  html {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
-      Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    @apply scroll-smooth;
-  }
-
   body {
-    @apply bg-background text-foreground overflow-x-hidden;
-    background: linear-gradient(135deg, hsl(var(--bg-base)) 0%, hsl(var(--bg-base)) 100%);
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #000000 0%, #FF6B00 100%);
     background-attachment: fixed;
-  }
-
-  h1 {
-    @apply text-3xl sm:text-4xl font-semibold leading-tight;
-  }
-
-  h2 {
-    @apply text-2xl sm:text-3xl font-semibold leading-tight;
-  }
-
-  p {
-    @apply text-base leading-relaxed;
   }
 }
 
 #video-background {
   display: none;
-}
-
-/* Glass morphism utility */
-.glass {
-  @apply backdrop-blur-md bg-white/60 dark:bg-black/30 border border-white/20 dark:border-white/10;
-}
-
-/* Card hover effect */
-.card-hover {
-  @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
 }
 
 /* Performance optimizations */
@@ -113,33 +76,6 @@
 
 .animate-fade-in {
   will-change: opacity, transform;
-  animation: fadeIn 200ms ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-}
-
-.skeleton {
-  background: linear-gradient(to right, #f0f0f0 8%, #e0e0e0 18%, #f0f0f0 33%);
-  background-size: 800px 104px;
-  animation: shimmer 1.5s linear infinite;
 }
 
 img {
@@ -149,11 +85,6 @@ img {
 .fixed {
   will-change: transform;
   transform: translateZ(0);
-}
-
-/* Focus styles for accessibility */
-:focus-visible {
-  @apply outline-none ring-2 ring-accent-2 ring-offset-2;
 }
 
 @media (prefers-reduced-motion: reduce) {

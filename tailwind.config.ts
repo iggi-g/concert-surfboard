@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,7 +24,6 @@ export default {
           black: "#191414",
         },
         accent: "#9B87F5",
-        "accent-2": "#0060FF", // Add the accent-2 color explicitly
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -77,11 +75,4 @@ export default {
     },
   },
   plugins: [require("tailwindcss-animate")],
-  // Add the following to configure selection variant
-  variants: {
-    extend: {
-      backgroundColor: ['selection'],
-      textColor: ['selection'],
-    },
-  },
 } satisfies Config;

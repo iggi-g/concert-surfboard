@@ -1,3 +1,4 @@
+
 import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -23,6 +24,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
 
   // Memoize filtered events
   const filteredEvents = useMemo(() => {
+    console.log('Recalculating filtered events. Current favorites:', favorites);
     return events
       .filter(event => {
         const eventDate = parseISO(event.date);
@@ -51,11 +53,13 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   // Handle favorite toggling
   const handleToggleFavorite = useCallback((artist: string) => {
     const isFavorite = favorites.includes(artist);
+    console.log('Toggling favorite for:', artist, 'Current state:', isFavorite);
     
     setFavorites(currentFavorites => {
       const newFavorites = isFavorite
         ? currentFavorites.filter(a => a !== artist)
         : [...currentFavorites, artist];
+      console.log('New favorites:', newFavorites);
       return newFavorites;
     });
     
@@ -67,7 +71,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 md:gap-8 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
         {Array.from({ length: 8 }).map((_, index) => (
           <div key={index} className="flex justify-center">
             <EventSkeleton />
@@ -78,7 +82,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 md:gap-8 w-full">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
       {visibleEvents.map((event: Event, index: number) => (
         <div key={`${event.title}-${event.date}`} className="flex justify-center">
           <ConcertCard
