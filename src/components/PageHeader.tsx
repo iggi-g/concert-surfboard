@@ -1,4 +1,3 @@
-
 import { Beer, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -19,8 +18,8 @@ export const PageHeader = ({
   const lastScrollY = useRef(0);
 
   const concertCountText = showFavoritesOnly 
-    ? `${filteredEventsCount.toLocaleString('en-US')} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available` 
-    : `${filteredEventsCount.toLocaleString('en-US')} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
+    ? `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available` 
+    : `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
 
   useEffect(() => {
     const handleScroll = () => {
