@@ -18,16 +18,9 @@ export const PageHeader = ({
   const [isLogoVisible, setIsLogoVisible] = useState(true);
   const lastScrollY = useRef(0);
 
-  const formatConcertCount = (count: number) => {
-    if (count >= 1000) {
-      return count.toLocaleString('en-US'); // This will add commas for thousands
-    }
-    return count;
-  };
-
   const concertCountText = showFavoritesOnly 
-    ? `${formatConcertCount(filteredEventsCount)} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available` 
-    : `${formatConcertCount(filteredEventsCount)} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
+    ? `${filteredEventsCount.toLocaleString('en-US')} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available` 
+    : `${filteredEventsCount.toLocaleString('en-US')} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
 
   useEffect(() => {
     const handleScroll = () => {

@@ -1,7 +1,8 @@
+
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { DateRange } from "react-day-picker";
-import { VenueCheckboxFilter } from "./VenueCheckboxFilter";
+import { VenueDropdownFilter } from "./VenueDropdownFilter";
 import { SurpriseButton } from "./SurpriseButton";
 import { SearchInput } from "./filters/SearchInput";
 import { FavoritesToggle } from "./filters/FavoritesToggle";
@@ -54,7 +55,7 @@ export const FilterControls = ({
     return (
       <div className="w-full max-w-6xl mx-auto space-y-4">
         <div className="flex flex-col gap-2">
-          <VenueCheckboxFilter
+          <VenueDropdownFilter
             venues={availableVenues}
             selectedVenues={selectedVenues}
             onVenueChange={setSelectedVenues}
@@ -122,7 +123,7 @@ export const FilterControls = ({
 
         <SurpriseButton filteredEvents={filteredEvents} />
 
-        <VenueCheckboxFilter
+        <VenueDropdownFilter
           venues={availableVenues}
           selectedVenues={selectedVenues}
           onVenueChange={setSelectedVenues}
