@@ -27,7 +27,13 @@ export interface Event {
   location?: string;
 }
 
-export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
+export interface EventsResponse {
+  events: Event[];
+  hasMore: boolean;
+  total: number;
+}
+
+export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<EventsResponse> => {
   try {
     // Use startOfDay to ensure we get the start of the current day in the local timezone
     const today = startOfDay(new Date()).toISOString().split('T')[0];
@@ -41,9 +47,10 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
     
     if (countError) {
       console.error('Error getting event count:', countError);
-    } else {
-      console.log('Total events available in database:', count);
+      throw countError;
     }
+    
+    console.log('Total events available in database:', count);
     
     const { data, error } = await supabase
       .from('events')
@@ -63,7 +70,14 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
 
     console.log('Fetched events count:', data?.length);
     console.log('Expected vs actual:', { expected: count, actual: data?.length });
-    return data as Event[];
+    
+    const hasMore = (count || 0) > (data?.length || 0);
+    
+    return {
+      events: data as Event[],
+      hasMore,
+      total: count || 0
+    };
   } catch (error) {
     console.error('Failed to fetch events:', error);
     throw error;

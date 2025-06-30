@@ -27,15 +27,21 @@ const Index = () => {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [favorites] = useLocalStorage<string[]>("favorites", []);
 
-  const { data: events = [], isLoading } = useQuery({
+  const { data: eventsResponse, isLoading } = useQuery({
     queryKey: ['events', sortOrder, sortBy],
     queryFn: () => fetchEvents(sortOrder),
     staleTime: 0, // Set staleTime to 0 to always get fresh data
     refetchOnWindowFocus: true,
   });
 
+  const events = eventsResponse?.events || [];
+  const hasMoreEvents = eventsResponse?.hasMore || false;
+  const totalEvents = eventsResponse?.total || 0;
+
   // Add debugging to see what's happening
   console.log('Index - Total events from database:', events.length);
+  console.log('Index - Has more events:', hasMoreEvents);
+  console.log('Index - Total in database:', totalEvents);
 
   const handleScroll = useCallback(() => {
     setShowScrollToTop(window.scrollY > 300);
@@ -134,6 +140,8 @@ const Index = () => {
         <PageHeader 
           filteredEventsCount={filteredEvents.length}
           showFavoritesOnly={showFavoritesOnly}
+          hasMoreEvents={hasMoreEvents}
+          totalEvents={totalEvents}
         />
 
         <DesktopFilters

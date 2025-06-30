@@ -1,25 +1,35 @@
 import { Beer, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { isAfter, startOfDay, parseISO } from "date-fns";
-import { Event } from "@/lib/supabase-client";
 
 interface PageHeaderProps {
   filteredEventsCount: number;
   showFavoritesOnly: boolean;
+  hasMoreEvents?: boolean;
+  totalEvents?: number;
 }
 
 export const PageHeader = ({
   filteredEventsCount,
-  showFavoritesOnly
+  showFavoritesOnly,
+  hasMoreEvents = false,
+  totalEvents = 0
 }: PageHeaderProps) => {
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [isLogoVisible, setIsLogoVisible] = useState(true);
   const lastScrollY = useRef(0);
 
-  const concertCountText = showFavoritesOnly 
-    ? `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available` 
-    : `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
+  const getConcertCountText = () => {
+    if (showFavoritesOnly) {
+      return `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
+    }
+    
+    if (hasMoreEvents && totalEvents > 1000) {
+      return `More than 1000 concerts available`;
+    }
+    
+    return `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,7 +65,7 @@ export const PageHeader = ({
         Concerts in Copenhagen
       </h1>
       <p className="text-xl font-bold text-orange-500 animate-fade-in">
-        {concertCountText}
+        {getConcertCountText()}
       </p>
 
       <nav className={`fixed top-4 right-4 z-50 flex items-center gap-4 transition-all duration-300 ${isNavVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`} aria-label="Additional Navigation">
