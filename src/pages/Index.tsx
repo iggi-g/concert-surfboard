@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchEvents } from "@/lib/supabase-client";
@@ -34,6 +33,9 @@ const Index = () => {
     staleTime: 0, // Set staleTime to 0 to always get fresh data
     refetchOnWindowFocus: true,
   });
+
+  // Add debugging to see what's happening
+  console.log('Index - Total events from database:', events.length);
 
   const handleScroll = useCallback(() => {
     setShowScrollToTop(window.scrollY > 300);
@@ -118,6 +120,12 @@ const Index = () => {
       ? new Date(a.date).getTime() - new Date(b.date).getTime()
       : new Date(b.date).getTime() - new Date(a.date).getTime();
   });
+
+  console.log('Index - Filtered events count:', filteredEvents.length);
+  console.log('Index - Search query:', searchQuery);
+  console.log('Index - Selected venues:', selectedVenues);
+  console.log('Index - Date range:', dateRange);
+  console.log('Index - Show favorites only:', showFavoritesOnly);
 
   return (
     <PageContainer>

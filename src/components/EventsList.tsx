@@ -22,20 +22,30 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   const { toast } = useToast();
   const today = startOfDay(new Date());
 
+  // Add debugging to see what's happening with the events
+  console.log('EventsList - Total events received:', events.length);
+  console.log('EventsList - showFavoritesOnly:', showFavoritesOnly);
+  console.log('EventsList - favorites:', favorites);
+
   // Memoize filtered events
   const filteredEvents = useMemo(() => {
     console.log('Recalculating filtered events. Current favorites:', favorites);
-    return events
+    const filtered = events
       .filter(event => {
         const eventDate = parseISO(event.date);
         return isAfter(eventDate, today) || isSameDay(eventDate, today);
       })
       .filter(event => !showFavoritesOnly || favorites.includes(event.title));
+    
+    console.log('EventsList - Filtered events count:', filtered.length);
+    return filtered;
   }, [events, showFavoritesOnly, favorites, today]);
 
   // Memoize visible events
   const visibleEvents = useMemo(() => {
-    return filteredEvents.slice(0, page * eventsPerPage);
+    const visible = filteredEvents.slice(0, page * eventsPerPage);
+    console.log('EventsList - Visible events count:', visible.length);
+    return visible;
   }, [filteredEvents, page]);
 
   // Handle infinite scroll
