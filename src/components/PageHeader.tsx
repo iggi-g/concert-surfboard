@@ -1,3 +1,4 @@
+
 import { Beer, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -7,13 +8,15 @@ interface PageHeaderProps {
   showFavoritesOnly: boolean;
   hasMoreEvents?: boolean;
   totalEvents?: number;
+  hasActiveFilters?: boolean;
 }
 
 export const PageHeader = ({
   filteredEventsCount,
   showFavoritesOnly,
   hasMoreEvents = false,
-  totalEvents = 0
+  totalEvents = 0,
+  hasActiveFilters = false
 }: PageHeaderProps) => {
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [isLogoVisible, setIsLogoVisible] = useState(true);
@@ -24,6 +27,12 @@ export const PageHeader = ({
       return `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
     }
     
+    // If user has active filters, show the filtered count
+    if (hasActiveFilters) {
+      return `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
+    }
+    
+    // Only show "More than 1000" when no filters are applied and we hit the database limit
     if (hasMoreEvents && totalEvents > 1000) {
       return `More than 1000 concerts available`;
     }

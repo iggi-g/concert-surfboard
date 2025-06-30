@@ -142,6 +142,7 @@ const Index = () => {
           showFavoritesOnly={showFavoritesOnly}
           hasMoreEvents={hasMoreEvents}
           totalEvents={totalEvents}
+          hasActiveFilters={hasActiveFilters}
         />
 
         <DesktopFilters
