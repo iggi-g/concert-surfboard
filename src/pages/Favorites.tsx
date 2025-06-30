@@ -8,12 +8,14 @@ import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
 const Favorites = () => {
-  const { data: events = [], isLoading } = useQuery({
+  const { data: eventsResponse, isLoading } = useQuery({
     queryKey: ['events'],
     queryFn: () => fetchEvents(),
     staleTime: 0, // Set staleTime to 0 to always get fresh data
     refetchOnWindowFocus: true,
   });
+
+  const events = eventsResponse?.events || [];
 
   return (
     <PageContainer>
