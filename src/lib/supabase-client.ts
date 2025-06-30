@@ -33,6 +33,18 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
     const today = startOfDay(new Date()).toISOString().split('T')[0];
     console.log('Fetching events from date:', today);
     
+    // First, let's get a count of all events to see what we're working with
+    const { count, error: countError } = await supabase
+      .from('events')
+      .select('*', { count: 'exact', head: true })
+      .gte('date', today);
+    
+    if (countError) {
+      console.error('Error getting event count:', countError);
+    } else {
+      console.log('Total events available in database:', count);
+    }
+    
     const { data, error } = await supabase
       .from('events')
       .select('*')
@@ -50,6 +62,7 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc") => {
     }
 
     console.log('Fetched events count:', data?.length);
+    console.log('Expected vs actual:', { expected: count, actual: data?.length });
     return data as Event[];
   } catch (error) {
     console.error('Failed to fetch events:', error);
