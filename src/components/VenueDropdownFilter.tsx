@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface VenueDropdownFilterProps {
   venues: string[];
@@ -49,22 +50,18 @@ export const VenueDropdownFilter = ({
         </SelectTrigger>
         <SelectContent className="bg-black/95 border-white/10 text-white max-h-[300px]">
           {venues.map((venue) => (
-            <SelectItem
+            <div
               key={venue}
-              value={venue}
-              className="text-white hover:bg-white/10 focus:bg-white/20 cursor-pointer"
-              onSelect={() => handleVenueSelect(venue)}
+              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-white/10 cursor-pointer"
+              onClick={() => handleVenueSelect(venue)}
             >
-              <div className="flex items-center space-x-2 w-full">
-                <input
-                  type="checkbox"
-                  checked={selectedVenues.includes(venue)}
-                  onChange={() => handleVenueSelect(venue)}
-                  className="rounded border-white/50 bg-transparent"
-                />
-                <span>{venue}</span>
-              </div>
-            </SelectItem>
+              <Checkbox
+                checked={selectedVenues.includes(venue)}
+                onChange={() => handleVenueSelect(venue)}
+                className="border-white/50 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+              />
+              <span className="text-white">{venue}</span>
+            </div>
           ))}
         </SelectContent>
       </Select>
