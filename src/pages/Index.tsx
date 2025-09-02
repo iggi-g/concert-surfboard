@@ -14,6 +14,9 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { MobileFilters } from "@/components/filters/MobileFilters";
 import { DesktopFilters } from "@/components/filters/DesktopFilters";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { generateEventListStructuredData } from "@/components/seo/EventStructuredData";
+import { LocalBusinessStructuredData } from "@/components/seo/LocalBusinessStructuredData";
 
 const Index = () => {
   const { toast } = useToast();
@@ -38,48 +41,17 @@ const Index = () => {
   const hasMoreEvents = eventsResponse?.hasMore || false;
   const totalEvents = eventsResponse?.total || 0;
 
-  // Add debugging to see what's happening
   console.log('Index - Total events from database:', events.length);
   console.log('Index - Has more events:', hasMoreEvents);
   console.log('Index - Total in database:', totalEvents);
 
-  const handleScroll = useCallback(() => {
-    setShowScrollToTop(window.scrollY > 300);
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Generate dynamic SEO content based on filters
+  const getPageTitle = () => {
+    if (showFavoritesOnly) return "Your Favorite Concerts in Copenhagen | CPH Concerts";
+    if (searchQuery) return `${searchQuery} Concerts in Copenhagen | Live Music Events`;
+    if (selectedVenues.length === 1) return `Concerts at ${selectedVenues[0]} Copenhagen | Live Music Events`;
+    return "Copenhagen Concerts 2024 | Live Music Events Tonight | ConcertsCPH";
   };
-
-  const availableVenues = Array.from(new Set(events.map(event => event.venue))).sort();
-
-  const clearFilters = () => {
-    setSearchQuery("");
-    setSelectedVenues([]);
-    setDateRange(undefined);
-    setSortOrder("asc");
-    setSortBy("date");
-    setShowFavoritesOnly(false);
-    toast({
-      title: "Filters Cleared",
-      description: "All filters have been reset to default values",
-    });
-  };
-
-  const hasActiveFilters = Boolean(
-    searchQuery || 
-    selectedVenues.length > 0 || 
-    dateRange?.from || 
-    dateRange?.to || 
-    sortOrder !== "asc" || 
-    sortBy !== "date" || 
-    showFavoritesOnly
-  );
 
   const filteredEvents = events.filter((event) => {
     if (searchQuery) {
@@ -127,6 +99,62 @@ const Index = () => {
       : new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
+  const getPageDescription = () => {
+    const count = filteredEvents.length;
+    if (showFavoritesOnly) return `Your ${count} favorite concert${count === 1 ? '' : 's'} in Copenhagen. Never miss your preferred artists and venues.`;
+    if (searchQuery) return `Find ${count} concert${count === 1 ? '' : 's'} matching "${searchQuery}" in Copenhagen. Live music events tonight, tomorrow & beyond.`;
+    if (selectedVenues.length === 1) return `${count} upcoming concert${count === 1 ? '' : 's'} at ${selectedVenues[0]} in Copenhagen. Book tickets for live music events.`;
+    return `Find the best live concerts in Copenhagen tonight, this weekend & beyond. ${hasMoreEvents ? 'More than 1000' : totalEvents}+ events from Vega, KB Hallen, DR Koncerthuset & more venues.`;
+  };
+
+  const getPageKeywords = () => {
+    let keywords = "concerts Copenhagen, live music Copenhagen tonight, Copenhagen concerts today, music events Copenhagen";
+    if (searchQuery) keywords += `, ${searchQuery} concerts Copenhagen, ${searchQuery} live music`;
+    if (selectedVenues.length > 0) keywords += `, ${selectedVenues.join(' concerts, ')} concerts`;
+    return keywords + ", concert tickets Copenhagen, Danish concerts, live entertainment Copenhagen";
+  };
+
+  const structuredData = filteredEvents.length > 0 ? generateEventListStructuredData(filteredEvents) : null;
+
+  const handleScroll = useCallback(() => {
+    setShowScrollToTop(window.scrollY > 300);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const availableVenues = Array.from(new Set(events.map(event => event.venue))).sort();
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedVenues([]);
+    setDateRange(undefined);
+    setSortOrder("asc");
+    setSortBy("date");
+    setShowFavoritesOnly(false);
+    toast({
+      title: "Filters Cleared",
+      description: "All filters have been reset to default values",
+    });
+  };
+
+  const hasActiveFilters = Boolean(
+    searchQuery || 
+    selectedVenues.length > 0 || 
+    dateRange?.from || 
+    dateRange?.to || 
+    sortOrder !== "asc" || 
+    sortBy !== "date" || 
+    showFavoritesOnly
+  );
+
+
   console.log('Index - Filtered events count:', filteredEvents.length);
   console.log('Index - Search query:', searchQuery);
   console.log('Index - Selected venues:', selectedVenues);
@@ -135,6 +163,18 @@ const Index = () => {
 
   return (
     <PageContainer>
+      <SEOHead
+        title={getPageTitle()}
+        description={getPageDescription()}
+        keywords={getPageKeywords()}
+        structuredData={structuredData}
+      />
+      <LocalBusinessStructuredData />
+      {/* Add SEO content for better search ranking */}
+      <div className="sr-only">
+        <h1>Copenhagen Concerts 2024 - Live Music Events Tonight</h1>
+        <p>Find the best concerts in Copenhagen today, tonight, and this weekend. Over 1000 live music events from top venues like Vega, KB Hallen, and DR Koncerthuset.</p>
+      </div>
       <VideoBackground />
       <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
         <PageHeader 

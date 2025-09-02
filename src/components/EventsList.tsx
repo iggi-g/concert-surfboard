@@ -100,9 +100,9 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
             date={event.date}
             venue={event.venue}
             location={event.location || ""}
-            imageUrl={event.image}
-            ticketUrl={event.link}
-            venueLink={getVenueLink(event.venue)}
+            image={event.image}
+            link={event.link}
+            venue_link={getVenueLink(event.venue)}
             isFavorite={favorites.includes(event.title)}
             onToggleFavorite={handleToggleFavorite}
             isInFavoritesView={showFavoritesOnly}
