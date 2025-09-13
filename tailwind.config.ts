@@ -72,9 +72,6 @@ export default {
           border: "#2A2A2C",
         },
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(circle at top, #111111 0%, transparent 50%)',
-      },
       boxShadow: {
         elevated: "var(--shadow-elevated)",
         card: "var(--shadow-card)",

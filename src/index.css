@@ -33,7 +33,6 @@
     --text-secondary: 220 2% 66%;
     --gradient-dark: linear-gradient(135deg, #0F0F10 0%, #1F1F21 100%);
     --gradient-hero-bottom: linear-gradient(to bottom, transparent 0%, #111111 100%);
-    --gradient-radial: radial-gradient(circle at top, #111111 0%, transparent 50%);
     --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.35);
     --shadow-card: 0 4px 16px -4px rgba(0, 0, 0, 0.35);
     --shadow-glow: 0 0 0 1px hsl(15 97% 62% / 0.2);
@@ -107,17 +106,5 @@ img {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  
-  /* Disable scroll animations on mobile when reduced motion is preferred */
-  @media (max-width: 768px) {
-    .transform,
-    .opacity-85,
-    .opacity-100,
-    .-translate-y-4,
-    .-translate-y-3 {
-      transform: none !important;
-      opacity: 1 !important;
-    }
   }
 }

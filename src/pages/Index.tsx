@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
 import { ContactButton } from "@/components/ContactButton";
-import { ArrowUp, ChevronDown } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -25,7 +25,6 @@ const Index = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
   const [favorites] = useLocalStorage<string[]>("favorites", []);
 
   const { data: eventsResponse, isLoading } = useQuery({
@@ -46,10 +45,7 @@ const Index = () => {
 
   const handleScroll = useCallback(() => {
     setShowScrollToTop(window.scrollY > 300);
-    if (!hasScrolled && window.scrollY > 10) {
-      setHasScrolled(true);
-    }
-  }, [hasScrolled]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -142,7 +138,7 @@ const Index = () => {
       <VideoBackground />
       
       {/* Mobile Hero Section */}
-      <div className="min-h-[65vh] md:min-h-[48vh] lg:min-h-[56vh] flex flex-col relative bg-gradient-radial from-[#111111] via-transparent to-transparent md:bg-none">
+      <div className="min-h-[65vh] md:min-h-[48vh] lg:min-h-[56vh] flex flex-col relative">
         <PageHeader 
           filteredEventsCount={filteredEvents.length}
           showFavoritesOnly={showFavoritesOnly}
@@ -153,8 +149,8 @@ const Index = () => {
         
         {/* Hero Content - Centered */}
         <div className="flex-1 flex flex-col items-center justify-center px-6 pt-6 md:pt-12">
-          <div className={`text-center space-y-2 mb-6 md:mb-12 transition-all duration-250 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${hasScrolled ? 'md:transform-none transform -translate-y-4 opacity-85' : ''}`}>
-            <h1 className="text-text-primary font-extrabold text-[34px] md:text-[44px] lg:text-[48px] leading-[1.1] tracking-[-0.2px] uppercase animate-fade-in">
+          <div className="text-center space-y-2 mb-6 md:mb-12">
+            <h1 className="text-text-primary font-black text-[34px] md:text-[44px] lg:text-[48px] leading-[1.1] tracking-[-0.2px] uppercase animate-fade-in">
               Concerts in Copenhagen
             </h1>
             <p className="text-[15px] md:text-lg leading-[1.4] font-semibold text-primary animate-fade-in">
@@ -174,14 +170,6 @@ const Index = () => {
                 return `${filteredEvents.length} ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
               })()}
             </p>
-          </div>
-          
-          {/* Scroll Cue - Mobile Only */}
-          <div className={`md:hidden text-center space-y-2 transition-opacity duration-200 ease-out ${hasScrolled ? 'opacity-0' : 'opacity-100'}`}>
-            <p className="text-[12px] text-text-secondary font-medium">
-              Scroll to see all concerts
-            </p>
-            <ChevronDown className="mx-auto h-3.5 w-3.5 text-text-secondary animate-pulse" />
           </div>
         </div>
         
@@ -210,7 +198,7 @@ const Index = () => {
         </div>
         
         {/* Bottom gradient overlay */}
-        <div className={`md:block absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#111111] to-transparent pointer-events-none transition-opacity duration-200 ${hasScrolled ? 'opacity-0' : 'opacity-100'}`} />
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#111111] to-transparent pointer-events-none" />
       </div>
 
       {/* Desktop Filters */}
@@ -236,7 +224,7 @@ const Index = () => {
       </div>
 
       {/* Events List - With peek effect on mobile */}
-      <div className={`relative transition-all duration-300 ${hasScrolled ? 'md:transform-none transform -translate-y-3 opacity-100' : 'opacity-85'}`} style={{ marginTop: '-16px' }}>
+      <div className="relative" style={{ marginTop: '-16px' }}>
         <EventsList 
           events={filteredEvents} 
           isLoading={isLoading}
