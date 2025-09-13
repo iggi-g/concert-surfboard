@@ -35,12 +35,12 @@ export const SurpriseButton = ({ className, filteredEvents }: SurpriseButtonProp
       onMouseLeave={() => setIsHovered(false)}
       variant="outline"
       className={cn(
-        "w-full md:w-auto bg-white/10 border-white/10 text-white hover:bg-white/20",
+        "w-full md:w-auto bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 shadow-card font-medium",
         className
       )}
     >
       <span className="relative z-10 flex items-center gap-2">
-        <Star className={`w-4 h-4 ${isHovered ? 'text-orange-500 fill-orange-500' : 'text-white'}`} />
+        <Star className={`w-4 h-4 ${isHovered ? 'text-primary fill-current' : 'text-text-primary'}`} />
         Surprise Me
       </span>
     </Button>

@@ -1,8 +1,5 @@
 import { FilterControls } from "@/components/FilterControls";
 import { DateRange } from "react-day-picker";
-import { SearchInput } from "./SearchInput";
-import { FavoritesToggle } from "./FavoritesToggle";
-import { SurpriseButton } from "@/components/SurpriseButton";
 
 interface MobileFiltersProps {
   searchQuery: string;
@@ -47,20 +44,26 @@ export const MobileFilters = ({
 }: MobileFiltersProps) => {
   return (
     <div className="md:hidden w-full space-y-2">
-      {/* Search Input */}
-      <SearchInput 
+      {/* Search and Basic Controls */}
+      <FilterControls
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        selectedVenues={selectedVenues}
+        setSelectedVenues={setSelectedVenues}
+        availableVenues={availableVenues}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        hasActiveFilters={hasActiveFilters}
+        clearFilters={clearFilters}
+        showFavoritesOnly={showFavoritesOnly}
+        setShowFavoritesOnly={setShowFavoritesOnly}
+        filteredEvents={filteredEvents}
+        isMobile={true}
       />
-      
-      {/* Button Row */}
-      <div className="flex gap-2">
-        <FavoritesToggle
-          showFavoritesOnly={showFavoritesOnly}
-          setShowFavoritesOnly={setShowFavoritesOnly}
-        />
-        <SurpriseButton filteredEvents={filteredEvents} />
-      </div>
       
       {/* Show Filters Button */}
       <button 

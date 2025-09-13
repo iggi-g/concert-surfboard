@@ -75,7 +75,7 @@ export const FilterControls = ({
             <Button
               variant="outline"
               onClick={clearFilters}
-              className="bg-white/10 border-white/10 text-white hover:bg-white/20"
+              className="bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 shadow-card font-medium"
             >
               <X className="w-4 h-4 mr-2" />
               Clear Filters
@@ -88,21 +88,19 @@ export const FilterControls = ({
 
   if (isMobile) {
     return (
-      <div className="w-full max-w-6xl mx-auto space-y-4">
-        <div className="flex flex-col gap-2">
-          <SearchInput 
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+      <div className="w-full space-y-2">
+        <SearchInput 
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+
+        <div className="flex gap-2">
+          <FavoritesToggle
+            showFavoritesOnly={showFavoritesOnly}
+            setShowFavoritesOnly={setShowFavoritesOnly}
           />
 
-          <div className="flex gap-2">
-            <FavoritesToggle
-              showFavoritesOnly={showFavoritesOnly}
-              setShowFavoritesOnly={setShowFavoritesOnly}
-            />
-
-            <SurpriseButton filteredEvents={filteredEvents} />
-          </div>
+          <SurpriseButton filteredEvents={filteredEvents} />
         </div>
       </div>
     );
@@ -143,7 +141,7 @@ export const FilterControls = ({
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="bg-white/10 border-white/10 text-white hover:bg-white/20"
+            className="bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 shadow-card font-medium"
           >
             <X className="w-4 h-4 mr-2" />
             Clear Filters
