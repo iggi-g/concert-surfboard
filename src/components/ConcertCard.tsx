@@ -102,7 +102,7 @@ export const ConcertCard = ({
 
   return (
     <Card 
-      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-transform hover:scale-105 animate-fade-in cursor-pointer bg-black/20 backdrop-blur-sm border-white/10 relative"
+      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-all duration-300 hover:scale-[1.02] hover:shadow-elevated animate-fade-in cursor-pointer bg-surface-elevated/80 backdrop-blur-sm border-border/50 relative"
       onClick={handleClick}
     >
       <div className="relative aspect-[16/9] w-full">
@@ -120,8 +120,8 @@ export const ConcertCard = ({
           height="225"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="absolute top-2 inset-x-0 flex justify-between items-start px-4">
-          <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+        <div className="absolute top-3 inset-x-0 flex justify-between items-start px-5">
+          <span className="text-text-secondary text-xs font-light bg-surface-elevated/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
             {date}
           </span>
           {venueLink ? (
@@ -130,35 +130,35 @@ export const ConcertCard = ({
               target="_blank" 
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm hover:bg-black/60"
+              className="text-text-secondary text-xs font-light bg-surface-elevated/70 px-3 py-1.5 rounded-full backdrop-blur-sm hover:bg-surface-elevated/90 transition-colors"
               aria-label={`Visit ${venue} website`}
             >
               {venue}
             </a>
           ) : (
-            <span className="text-white text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+            <span className="text-text-secondary text-xs font-light bg-surface-elevated/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
               {venue}
             </span>
           )}
         </div>
-        <div className="absolute bottom-2 inset-x-0 flex justify-between items-center px-4">
+        <div className="absolute bottom-3 inset-x-0 flex justify-between items-center px-5">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full bg-black/40 hover:bg-black/60 group"
+                  className="rounded-full bg-surface-elevated/70 hover:bg-surface-elevated/90 group backdrop-blur-sm h-10 w-10"
                   onClick={handleCalendarClick}
                   aria-label="Add to calendar"
                 >
-                  <Calendar className="h-5 w-5 text-white group-hover:text-orange-500 transition-colors" />
+                  <Calendar className="h-4 w-4 text-foreground group-hover:text-primary transition-colors" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent 
                 side="top" 
                 sideOffset={5}
-                className="bg-black/90 text-white border-white/10 z-[100] whitespace-nowrap px-3 py-1.5 text-sm font-medium"
+                className="bg-surface-elevated text-foreground border-border z-[100] whitespace-nowrap px-3 py-1.5 text-xs font-medium"
                 align="start"
               >
                 <p>Add to calendar</p>
@@ -172,13 +172,13 @@ export const ConcertCard = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full bg-black/40 hover:bg-black/60 group"
+                  className="rounded-full bg-surface-elevated/70 hover:bg-surface-elevated/90 group backdrop-blur-sm h-10 w-10"
                   onClick={handleFavoriteClick}
                   aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 >
                   <Heart 
-                    className={`h-5 w-5 transition-colors group-hover:text-orange-500 ${
-                      isFavorite ? 'fill-current text-orange-500' : isInFavoritesView ? 'text-orange-500' : 'text-white'
+                    className={`h-4 w-4 transition-colors group-hover:text-primary ${
+                      isFavorite ? 'fill-current text-primary' : isInFavoritesView ? 'text-primary' : 'text-foreground'
                     }`} 
                   />
                 </Button>
@@ -186,7 +186,7 @@ export const ConcertCard = ({
               <TooltipContent 
                 side="top" 
                 sideOffset={5}
-                className="bg-black/90 text-white border-white/10 z-[100] whitespace-nowrap px-3 py-1.5 text-sm font-medium"
+                className="bg-surface-elevated text-foreground border-border z-[100] whitespace-nowrap px-3 py-1.5 text-xs font-medium"
                 align="end"
               >
                 <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
@@ -195,8 +195,8 @@ export const ConcertCard = ({
           </TooltipProvider>
         </div>
       </div>
-      <div className="p-2 md:p-4">
-        <h2 className="text-lg md:text-xl font-bold text-white">{artist}</h2>
+      <div className="p-5 md:p-6">
+        <h2 className="text-lg md:text-xl font-bold text-text-primary uppercase tracking-wide">{artist}</h2>
       </div>
     </Card>
   );

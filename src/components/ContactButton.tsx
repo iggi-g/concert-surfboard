@@ -13,7 +13,7 @@ export const ContactButton = () => {
     <Button
       variant="outline"
       size="icon"
-      className="fixed bottom-4 right-4 rounded-full bg-white/10 border-white/10 text-white hover:bg-white/20"
+      className="fixed bottom-4 right-4 rounded-full bg-surface-elevated/80 border-border/50 text-foreground hover:bg-surface-elevated hover:text-primary backdrop-blur-sm shadow-elevated"
       onClick={handleContact}
     >
       <MessageSquare className="h-4 w-4" />

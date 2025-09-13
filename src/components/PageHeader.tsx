@@ -63,26 +63,28 @@ export const PageHeader = ({
   }, []);
 
   return (
-    <header className="space-y-2 mb-8">
+    <header className="space-y-8 mb-12">
       <div className={`fixed top-4 left-4 z-50 transition-all duration-300 ${isLogoVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`}>
-        <Link to="/" className="text-orange-500 hover:text-orange-400 transition-colors" aria-label="ConcertsCPH Homepage">
-          <span className="font-bold text-lg">ConcertsCPH</span>
+        <Link to="/" className="text-primary hover:text-primary-glow transition-colors" aria-label="ConcertsCPH Homepage">
+          <span className="font-bold text-lg uppercase tracking-wide">ConcertsCPH</span>
         </Link>
       </div>
 
-      <h1 className="font-bold text-white animate-fade-in text-4xl text-center">
-        Concerts in Copenhagen
-      </h1>
-      <p className="text-xl font-bold text-orange-500 animate-fade-in">
-        {getConcertCountText()}
-      </p>
+      <div className="text-center space-y-6">
+        <h1 className="font-bold text-text-primary animate-fade-in text-4xl md:text-5xl uppercase tracking-wider">
+          Concerts in Copenhagen
+        </h1>
+        <p className="text-lg md:text-xl font-medium text-primary animate-fade-in">
+          {getConcertCountText()}
+        </p>
+      </div>
 
       <nav className={`fixed top-4 right-4 z-50 flex items-center gap-4 transition-all duration-300 ${isNavVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`} aria-label="Additional Navigation">
         <Link to="/about" className="group" aria-label="About Page">
-          <Info className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
+          <Info className="h-8 w-8 text-primary transition-all group-hover:scale-110 group-hover:text-primary-glow" />
         </Link>
         <a href="https://buymeacoffee.com/cphconcerts" target="_blank" rel="noopener noreferrer" className="group" aria-label="Buy Me a Coffee">
-          <Beer className="h-8 w-8 text-orange-500 transition-transform group-hover:scale-110" />
+          <Beer className="h-8 w-8 text-primary transition-all group-hover:scale-110 group-hover:text-primary-glow" />
         </a>
       </nav>
     </header>

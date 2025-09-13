@@ -136,7 +136,7 @@ const Index = () => {
   return (
     <PageContainer>
       <VideoBackground />
-      <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
+      <div className="flex-1 flex flex-col items-center justify-center gap-12 w-full">
         <PageHeader 
           filteredEventsCount={filteredEvents.length}
           showFavoritesOnly={showFavoritesOnly}
@@ -198,7 +198,7 @@ const Index = () => {
         <Button
           variant="outline"
           size="icon"
-          className="fixed bottom-20 right-4 rounded-full bg-white/10 border-white/10 text-orange-500 hover:bg-white/20 z-50"
+          className="fixed bottom-20 right-4 rounded-full bg-surface-elevated/80 border-border/50 text-primary hover:bg-surface-elevated hover:text-primary-glow backdrop-blur-sm shadow-elevated z-50"
           onClick={scrollToTop}
         >
           <ArrowUp className="h-4 w-4" />
