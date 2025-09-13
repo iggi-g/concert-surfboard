@@ -136,7 +136,9 @@ const Index = () => {
   return (
     <PageContainer>
       <VideoBackground />
-      <div className="flex-1 flex flex-col items-center justify-center gap-12 w-full">
+      
+      {/* Mobile Hero Section */}
+      <div className="min-h-[65vh] md:min-h-[48vh] lg:min-h-[56vh] flex flex-col relative">
         <PageHeader 
           filteredEventsCount={filteredEvents.length}
           showFavoritesOnly={showFavoritesOnly}
@@ -144,7 +146,63 @@ const Index = () => {
           totalEvents={totalEvents}
           hasActiveFilters={hasActiveFilters}
         />
+        
+        {/* Hero Content - Centered */}
+        <div className="flex-1 flex flex-col items-center justify-center px-6 pt-6 md:pt-12">
+          <div className="text-center space-y-2 mb-6 md:mb-12">
+            <h1 className="text-text-primary font-black text-[34px] md:text-[44px] lg:text-[48px] leading-[1.1] tracking-[-0.2px] uppercase animate-fade-in">
+              Concerts in Copenhagen
+            </h1>
+            <p className="text-[15px] md:text-lg leading-[1.4] font-semibold text-primary animate-fade-in">
+              {(() => {
+                if (showFavoritesOnly) {
+                  return `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
+                }
+                
+                if (hasActiveFilters) {
+                  return `${filteredEvents.length} ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
+                }
+                
+                if (hasMoreEvents && totalEvents > 1000) {
+                  return `More than 1000 concerts available`;
+                }
+                
+                return `${filteredEvents.length} ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
+              })()}
+            </p>
+          </div>
+        </div>
+        
+        {/* Search and Controls - Anchored at bottom of hero */}
+        <div className="px-6 pb-6 space-y-3 relative z-10">
+          <MobileFilters
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedVenues={selectedVenues}
+            setSelectedVenues={setSelectedVenues}
+            availableVenues={availableVenues}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            hasActiveFilters={hasActiveFilters}
+            clearFilters={clearFilters}
+            showFavoritesOnly={showFavoritesOnly}
+            setShowFavoritesOnly={setShowFavoritesOnly}
+            filteredEvents={filteredEvents}
+            showMobileFilters={showMobileFilters}
+            setShowMobileFilters={setShowMobileFilters}
+          />
+        </div>
+        
+        {/* Bottom gradient overlay */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#111111] to-transparent pointer-events-none" />
+      </div>
 
+      {/* Desktop Filters */}
+      <div className="hidden md:block px-6 mb-8">
         <DesktopFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -163,28 +221,10 @@ const Index = () => {
           setShowFavoritesOnly={setShowFavoritesOnly}
           filteredEvents={filteredEvents}
         />
+      </div>
 
-        <MobileFilters
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          selectedVenues={selectedVenues}
-          setSelectedVenues={setSelectedVenues}
-          availableVenues={availableVenues}
-          dateRange={dateRange}
-          setDateRange={setDateRange}
-          sortOrder={sortOrder}
-          setSortOrder={setSortOrder}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          hasActiveFilters={hasActiveFilters}
-          clearFilters={clearFilters}
-          showFavoritesOnly={showFavoritesOnly}
-          setShowFavoritesOnly={setShowFavoritesOnly}
-          filteredEvents={filteredEvents}
-          showMobileFilters={showMobileFilters}
-          setShowMobileFilters={setShowMobileFilters}
-        />
-
+      {/* Events List - With peek effect on mobile */}
+      <div className="relative" style={{ marginTop: '-16px' }}>
         <EventsList 
           events={filteredEvents} 
           isLoading={isLoading}
@@ -198,7 +238,7 @@ const Index = () => {
         <Button
           variant="outline"
           size="icon"
-          className="fixed bottom-20 right-4 rounded-full bg-surface-elevated/80 border-border/50 text-primary hover:bg-surface-elevated hover:text-primary-glow backdrop-blur-sm shadow-elevated z-50"
+          className="fixed bottom-20 right-4 rounded-full bg-ui-surface/80 border-ui-border text-primary hover:bg-ui-surface hover:text-primary-glow hover:border-primary/50 hover:shadow-glow backdrop-blur-sm shadow-elevated z-50"
           onClick={scrollToTop}
         >
           <ArrowUp className="h-4 w-4" />

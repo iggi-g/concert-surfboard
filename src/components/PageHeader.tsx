@@ -22,24 +22,6 @@ export const PageHeader = ({
   const [isLogoVisible, setIsLogoVisible] = useState(true);
   const lastScrollY = useRef(0);
 
-  const getConcertCountText = () => {
-    if (showFavoritesOnly) {
-      return `${filteredEventsCount} favorite ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
-    }
-    
-    // If user has active filters, show the filtered count
-    if (hasActiveFilters) {
-      return `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
-    }
-    
-    // Only show "More than 1000" when no filters are applied and we hit the database limit
-    if (hasMoreEvents && totalEvents > 1000) {
-      return `More than 1000 concerts available`;
-    }
-    
-    return `${filteredEventsCount} ${filteredEventsCount === 1 ? 'concert' : 'concerts'} available`;
-  };
-
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -63,20 +45,11 @@ export const PageHeader = ({
   }, []);
 
   return (
-    <header className="space-y-8 mb-12">
+    <header className="pt-6 px-6 relative z-10">
       <div className={`fixed top-4 left-4 z-50 transition-all duration-300 ${isLogoVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`}>
         <Link to="/" className="text-primary hover:text-primary-glow transition-colors" aria-label="ConcertsCPH Homepage">
           <span className="font-bold text-lg uppercase tracking-wide">ConcertsCPH</span>
         </Link>
-      </div>
-
-      <div className="text-center space-y-8">
-        <h1 className="font-bold text-foreground animate-fade-in text-4xl md:text-5xl uppercase tracking-wider leading-tight">
-          Concerts in Copenhagen
-        </h1>
-        <p className="text-lg md:text-xl font-semibold text-primary animate-fade-in py-4">
-          {getConcertCountText()}
-        </p>
       </div>
 
       <nav className={`fixed top-4 right-4 z-50 flex items-center gap-4 transition-all duration-300 ${isNavVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`} aria-label="Additional Navigation">

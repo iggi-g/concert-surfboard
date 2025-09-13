@@ -102,7 +102,7 @@ export const ConcertCard = ({
 
   return (
     <Card 
-      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-all duration-300 hover:scale-[1.01] hover:shadow-elevated animate-fade-in cursor-pointer bg-card backdrop-blur-sm border-border relative"
+      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-all duration-300 hover:scale-[1.01] hover:shadow-elevated animate-fade-in cursor-pointer bg-ui-surface backdrop-blur-sm border-ui-border relative shadow-card"
       onClick={handleClick}
     >
       <div className="relative aspect-[16/9] w-full">
@@ -119,9 +119,9 @@ export const ConcertCard = ({
           width="400"
           height="225"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
         <div className="absolute top-3 inset-x-0 flex justify-between items-start px-5">
-          <span className="text-text-secondary text-xs font-light bg-surface-elevated/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
+          <span className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card">
             {date}
           </span>
           {venueLink ? (
@@ -130,13 +130,13 @@ export const ConcertCard = ({
               target="_blank" 
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-text-secondary text-xs font-light bg-surface-elevated/70 px-3 py-1.5 rounded-full backdrop-blur-sm hover:bg-surface-elevated/90 transition-colors"
+              className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm hover:bg-ui-surface border border-ui-border shadow-card transition-colors"
               aria-label={`Visit ${venue} website`}
             >
               {venue}
             </a>
           ) : (
-            <span className="text-text-secondary text-xs font-light bg-surface-elevated/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
+            <span className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card">
               {venue}
             </span>
           )}
@@ -148,17 +148,17 @@ export const ConcertCard = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full bg-surface-elevated/70 hover:bg-surface-elevated/90 group backdrop-blur-sm h-10 w-10"
+                  className="rounded-xl bg-ui-surface/80 hover:bg-ui-surface group backdrop-blur-sm h-10 w-10 border border-ui-border shadow-card hover:border-primary/50"
                   onClick={handleCalendarClick}
                   aria-label="Add to calendar"
                 >
-                  <Calendar className="h-4 w-4 text-foreground group-hover:text-primary transition-colors" />
+                  <Calendar className="h-4 w-4 text-text-primary group-hover:text-primary transition-colors" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent 
                 side="top" 
                 sideOffset={5}
-                className="bg-surface-elevated text-foreground border-border z-[100] whitespace-nowrap px-3 py-1.5 text-xs font-medium"
+                className="bg-ui-surface text-text-primary border-ui-border z-[100] whitespace-nowrap px-3 py-1.5 text-xs font-medium shadow-card"
                 align="start"
               >
                 <p>Add to calendar</p>
@@ -172,13 +172,13 @@ export const ConcertCard = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full bg-surface-elevated/70 hover:bg-surface-elevated/90 group backdrop-blur-sm h-10 w-10"
+                  className="rounded-xl bg-ui-surface/80 hover:bg-ui-surface group backdrop-blur-sm h-10 w-10 border border-ui-border shadow-card hover:border-primary/50"
                   onClick={handleFavoriteClick}
                   aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 >
                   <Heart 
                     className={`h-4 w-4 transition-colors group-hover:text-primary ${
-                      isFavorite ? 'fill-current text-primary' : isInFavoritesView ? 'text-primary' : 'text-foreground'
+                      isFavorite ? 'fill-current text-primary' : isInFavoritesView ? 'text-primary' : 'text-text-primary'
                     }`} 
                   />
                 </Button>
@@ -186,7 +186,7 @@ export const ConcertCard = ({
               <TooltipContent 
                 side="top" 
                 sideOffset={5}
-                className="bg-surface-elevated text-foreground border-border z-[100] whitespace-nowrap px-3 py-1.5 text-xs font-medium"
+                className="bg-ui-surface text-text-primary border-ui-border z-[100] whitespace-nowrap px-3 py-1.5 text-xs font-medium shadow-card"
                 align="end"
               >
                 <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
@@ -195,8 +195,8 @@ export const ConcertCard = ({
           </TooltipProvider>
         </div>
       </div>
-      <div className="p-6 md:p-7">
-        <h2 className="text-lg md:text-xl font-bold text-foreground uppercase tracking-wide leading-tight">{artist}</h2>
+      <div className="p-8">
+        <h2 className="text-lg md:text-xl font-bold text-text-primary uppercase tracking-wide leading-tight">{artist}</h2>
       </div>
     </Card>
   );

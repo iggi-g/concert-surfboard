@@ -67,6 +67,10 @@ export default {
           primary: "hsl(var(--text-primary))",
           secondary: "hsl(var(--text-secondary))",
         },
+        ui: {
+          surface: "#1F1F21",
+          border: "#2A2A2C",
+        },
       },
       boxShadow: {
         elevated: "var(--shadow-elevated)",

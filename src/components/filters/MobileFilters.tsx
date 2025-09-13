@@ -1,5 +1,8 @@
 import { FilterControls } from "@/components/FilterControls";
 import { DateRange } from "react-day-picker";
+import { SearchInput } from "./SearchInput";
+import { FavoritesToggle } from "./FavoritesToggle";
+import { SurpriseButton } from "@/components/SurpriseButton";
 
 interface MobileFiltersProps {
   searchQuery: string;
@@ -43,62 +46,54 @@ export const MobileFilters = ({
   setShowMobileFilters
 }: MobileFiltersProps) => {
   return (
-    <div className="md:hidden w-full space-y-4">
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <div className="relative flex-grow">
-            <FilterControls
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              selectedVenues={selectedVenues}
-              setSelectedVenues={setSelectedVenues}
-              availableVenues={availableVenues}
-              dateRange={dateRange}
-              setDateRange={setDateRange}
-              sortOrder={sortOrder}
-              setSortOrder={setSortOrder}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-              hasActiveFilters={hasActiveFilters}
-              clearFilters={clearFilters}
-              showFavoritesOnly={showFavoritesOnly}
-              setShowFavoritesOnly={setShowFavoritesOnly}
-              filteredEvents={filteredEvents}
-              isMobile={true}
-            />
-          </div>
-        </div>
-        <button 
-          onClick={() => setShowMobileFilters(!showMobileFilters)}
-          className="w-full bg-white/10 border-white/10 text-white px-4 py-2 rounded hover:bg-white/20 transition-colors"
-        >
-          {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
-        </button>
-        
-        {showMobileFilters && (
-          <div className="animate-fade-in">
-            <FilterControls
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              selectedVenues={selectedVenues}
-              setSelectedVenues={setSelectedVenues}
-              availableVenues={availableVenues}
-              dateRange={dateRange}
-              setDateRange={setDateRange}
-              sortOrder={sortOrder}
-              setSortOrder={setSortOrder}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-              hasActiveFilters={hasActiveFilters}
-              clearFilters={clearFilters}
-              showFavoritesOnly={showFavoritesOnly}
-              setShowFavoritesOnly={setShowFavoritesOnly}
-              filteredEvents={filteredEvents}
-              showOnlyAdvancedFilters={true}
-            />
-          </div>
-        )}
+    <div className="md:hidden w-full space-y-2">
+      {/* Search Input */}
+      <SearchInput 
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
+      
+      {/* Button Row */}
+      <div className="flex gap-2">
+        <FavoritesToggle
+          showFavoritesOnly={showFavoritesOnly}
+          setShowFavoritesOnly={setShowFavoritesOnly}
+        />
+        <SurpriseButton filteredEvents={filteredEvents} />
       </div>
+      
+      {/* Show Filters Button */}
+      <button 
+        onClick={() => setShowMobileFilters(!showMobileFilters)}
+        className="w-full bg-ui-surface border border-ui-border text-text-primary px-3 py-2.5 rounded-xl hover:bg-ui-surface/80 hover:border-primary/50 transition-all shadow-card font-medium"
+      >
+        {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
+      </button>
+      
+      {/* Advanced Filters */}
+      {showMobileFilters && (
+        <div className="animate-fade-in">
+          <FilterControls
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedVenues={selectedVenues}
+            setSelectedVenues={setSelectedVenues}
+            availableVenues={availableVenues}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            hasActiveFilters={hasActiveFilters}
+            clearFilters={clearFilters}
+            showFavoritesOnly={showFavoritesOnly}
+            setShowFavoritesOnly={setShowFavoritesOnly}
+            filteredEvents={filteredEvents}
+            showOnlyAdvancedFilters={true}
+          />
+        </div>
+      )}
     </div>
   );
 };
