@@ -102,7 +102,7 @@ export const ConcertCard = ({
 
   return (
     <Card 
-      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-all duration-300 hover:scale-[1.02] hover:shadow-elevated animate-fade-in cursor-pointer bg-surface-elevated/80 backdrop-blur-sm border-border/50 relative"
+      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-all duration-300 hover:scale-[1.01] hover:shadow-elevated animate-fade-in cursor-pointer bg-card backdrop-blur-sm border-border relative"
       onClick={handleClick}
     >
       <div className="relative aspect-[16/9] w-full">
@@ -119,7 +119,7 @@ export const ConcertCard = ({
           width="400"
           height="225"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
         <div className="absolute top-3 inset-x-0 flex justify-between items-start px-5">
           <span className="text-text-secondary text-xs font-light bg-surface-elevated/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
             {date}
@@ -195,8 +195,8 @@ export const ConcertCard = ({
           </TooltipProvider>
         </div>
       </div>
-      <div className="p-5 md:p-6">
-        <h2 className="text-lg md:text-xl font-bold text-text-primary uppercase tracking-wide">{artist}</h2>
+      <div className="p-6 md:p-7">
+        <h2 className="text-lg md:text-xl font-bold text-foreground uppercase tracking-wide leading-tight">{artist}</h2>
       </div>
     </Card>
   );

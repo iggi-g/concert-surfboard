@@ -70,11 +70,11 @@ export const PageHeader = ({
         </Link>
       </div>
 
-      <div className="text-center space-y-6">
-        <h1 className="font-bold text-text-primary animate-fade-in text-4xl md:text-5xl uppercase tracking-wider">
+      <div className="text-center space-y-8">
+        <h1 className="font-bold text-foreground animate-fade-in text-4xl md:text-5xl uppercase tracking-wider leading-tight">
           Concerts in Copenhagen
         </h1>
-        <p className="text-lg md:text-xl font-medium text-primary animate-fade-in">
+        <p className="text-lg md:text-xl font-semibold text-primary animate-fade-in py-4">
           {getConcertCountText()}
         </p>
       </div>

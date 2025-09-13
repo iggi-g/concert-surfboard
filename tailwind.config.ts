@@ -70,6 +70,8 @@ export default {
       },
       boxShadow: {
         elevated: "var(--shadow-elevated)",
+        card: "var(--shadow-card)",
+        glow: "var(--shadow-glow)",
       },
       borderRadius: {
         "2xl": "1rem",
