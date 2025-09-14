@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchEvents } from "@/lib/supabase-client";
 import { DateRange } from "react-day-picker";
-import { isWithinInterval, parseISO } from "date-fns";
+import { isWithinInterval, parseISO, format, isToday, isSameDay } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
@@ -133,6 +133,42 @@ const Index = () => {
   console.log('Index - Date range:', dateRange);
   console.log('Index - Show favorites only:', showFavoritesOnly);
 
+  // Generate dynamic hero text based on selected venues and dates
+  const generateHeroText = () => {
+    let locationText = "Copenhagen";
+    let dateText = "";
+
+    // Handle venues
+    if (selectedVenues.length > 0) {
+      if (selectedVenues.length === 1) {
+        locationText = selectedVenues[0];
+      } else if (selectedVenues.length === 2) {
+        locationText = `${selectedVenues[0]} and ${selectedVenues[1]}`;
+      } else {
+        const lastVenue = selectedVenues[selectedVenues.length - 1];
+        const otherVenues = selectedVenues.slice(0, -1);
+        locationText = `${otherVenues.join(", ")} and ${lastVenue}`;
+      }
+    }
+
+    // Handle dates
+    if (dateRange?.from && dateRange?.to) {
+      if (isSameDay(dateRange.from, dateRange.to)) {
+        // Single date selected
+        if (isToday(dateRange.from)) {
+          dateText = " today";
+        } else {
+          dateText = ` on ${format(dateRange.from, "MMMM d")}`;
+        }
+      } else {
+        // Date range selected
+        dateText = ` from ${format(dateRange.from, "MMMM d")} to ${format(dateRange.to, "MMMM d")}`;
+      }
+    }
+
+    return `Concerts in ${locationText}${dateText}`;
+  };
+
   return (
     <PageContainer>
       <VideoBackground />
@@ -151,7 +187,7 @@ const Index = () => {
         <div className="flex-1 flex flex-col items-center justify-center px-1 pt-1 md:pt-2">
           <div className="text-center space-y-1">
             <h1 className="text-text-primary font-black text-[34px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
-              Concerts in Copenhagen
+              {generateHeroText()}
             </h1>
             <p className="text-[15px] md:text-lg leading-[1.2] tracking-[-0.3px] font-semibold text-primary animate-fade-in">
               {(() => {
