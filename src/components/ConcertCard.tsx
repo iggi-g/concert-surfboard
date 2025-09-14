@@ -19,6 +19,7 @@ interface ConcertCardProps {
   isInFavoritesView?: boolean;
 }
 
+// Concert card component for displaying event information
 export const ConcertCard = ({
   artist,
   date,
