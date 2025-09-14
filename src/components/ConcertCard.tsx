@@ -4,16 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 interface ConcertCardProps {
   artist: string;
@@ -43,7 +33,6 @@ export const ConcertCard = ({
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [isIntersecting, setIsIntersecting] = useState(false);
-  const [showCalendarDialog, setShowCalendarDialog] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
@@ -94,10 +83,6 @@ export const ConcertCard = ({
 
   const handleCalendarClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setShowCalendarDialog(true);
-  };
-
-  const addToCalendar = () => {
     const eventDate = new Date(date);
     // Format date as YYYYMMDD for all-day event
     const dateString = eventDate.toISOString().slice(0, 10).replace(/-/g, '');
@@ -111,7 +96,6 @@ export const ConcertCard = ({
     });
 
     window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
-    setShowCalendarDialog(false);
   };
 
   const placeholderImage = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=75";
@@ -214,31 +198,6 @@ export const ConcertCard = ({
       <div className="p-8">
         <h2 className="text-lg md:text-xl font-bold text-text-primary uppercase tracking-wide leading-tight">{artist}</h2>
       </div>
-
-      <AlertDialog open={showCalendarDialog} onOpenChange={setShowCalendarDialog}>
-        <AlertDialogContent className="bg-ui-surface border-ui-border">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-text-primary">Add to Calendar</AlertDialogTitle>
-            <AlertDialogDescription className="text-text-secondary">
-              Add "{artist}" to your calendar on {date}?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel 
-              onClick={() => setShowCalendarDialog(false)}
-              className="bg-ui-surface border-ui-border text-text-primary hover:bg-ui-muted"
-            >
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={addToCalendar}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              Yes, Add Event
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </Card>
   );
 };
