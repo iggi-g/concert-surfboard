@@ -149,7 +149,7 @@ const Index = () => {
         
         {/* Hero Content - Centered */}
         <div className="flex-1 flex flex-col items-center justify-center px-3 pt-2 md:pt-4">
-          <div className="text-center space-y-2 mb-3 md:mb-6">
+          <div className="text-center space-y-2 mb-1 md:mb-2">
             <h1 className="text-text-primary font-black text-[34px] md:text-[44px] lg:text-[48px] leading-[1.1] tracking-[-0.2px] uppercase animate-fade-in">
               Concerts in Copenhagen
             </h1>
