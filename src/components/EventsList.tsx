@@ -26,27 +26,27 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
   console.log('EventsList - Total events received:', events.length);
   console.log('EventsList - showFavoritesOnly:', showFavoritesOnly);
   console.log('EventsList - favorites:', favorites);
+  console.log('EventsList - Current page:', page);
+  console.log('EventsList - Events per page:', eventsPerPage);
 
   // Memoize filtered events
   const filteredEvents = useMemo(() => {
     console.log('Recalculating filtered events. Current favorites:', favorites);
-    const filtered = events
-      .filter(event => {
-        const eventDate = parseISO(event.date);
-        return isAfter(eventDate, today) || isSameDay(eventDate, today);
-      })
-      .filter(event => !showFavoritesOnly || favorites.includes(event.title));
+    // Only filter by favorites since date filtering is already done in Index.tsx
+    const filtered = events.filter(event => !showFavoritesOnly || favorites.includes(event.title));
     
     console.log('EventsList - Filtered events count:', filtered.length);
     return filtered;
-  }, [events, showFavoritesOnly, favorites, today]);
+  }, [events, showFavoritesOnly, favorites]);
 
   // Memoize visible events
   const visibleEvents = useMemo(() => {
     const visible = filteredEvents.slice(0, page * eventsPerPage);
     console.log('EventsList - Visible events count:', visible.length);
+    console.log('EventsList - Should show up to:', page * eventsPerPage, 'events');
+    console.log('EventsList - Filtered events available:', filteredEvents.length);
     return visible;
-  }, [filteredEvents, page]);
+  }, [filteredEvents, page, eventsPerPage]);
 
   // Handle infinite scroll
   const handleScroll = useCallback(() => {
