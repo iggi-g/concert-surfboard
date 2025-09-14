@@ -202,7 +202,7 @@ const Index = () => {
       </div>
 
       {/* Desktop Filters */}
-      <div className="hidden md:block px-6 mb-4">
+      <div className="hidden md:block px-6 mb-8">
         <DesktopFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
