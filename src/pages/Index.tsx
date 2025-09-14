@@ -148,12 +148,12 @@ const Index = () => {
         />
         
         {/* Hero Content - Centered */}
-        <div className="flex-1 flex flex-col items-center justify-center px-3 pt-2 md:pt-4">
-          <div className="text-center space-y-2">
-            <h1 className="text-text-primary font-black text-[34px] md:text-[44px] lg:text-[48px] leading-[1.1] tracking-[-0.2px] uppercase animate-fade-in">
+        <div className="flex-1 flex flex-col items-center justify-center px-1 pt-1 md:pt-2">
+          <div className="text-center space-y-1">
+            <h1 className="text-text-primary font-black text-[34px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
               Concerts in Copenhagen
             </h1>
-            <p className="text-[15px] md:text-lg leading-[1.4] font-semibold text-primary animate-fade-in">
+            <p className="text-[15px] md:text-lg leading-[1.2] tracking-[-0.3px] font-semibold text-primary animate-fade-in">
               {(() => {
                 if (showFavoritesOnly) {
                   return `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
