@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchEvents } from "@/lib/supabase-client";
 import { DateRange } from "react-day-picker";
-import { isWithinInterval, parseISO, format, isToday, isSameDay } from "date-fns";
+import { isWithinInterval, parseISO, format, isToday, isSameDay, isAfter, startOfDay } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
@@ -82,6 +82,13 @@ const Index = () => {
   );
 
   const filteredEvents = events.filter((event) => {
+    // Filter out past events (same logic as EventsList)
+    const eventDate = parseISO(event.date);
+    const today = startOfDay(new Date());
+    if (!isAfter(eventDate, today) && !isSameDay(eventDate, today)) {
+      return false;
+    }
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       if (!event.title.toLowerCase().includes(query) &&
@@ -97,7 +104,6 @@ const Index = () => {
     }
 
     if (dateRange?.from && dateRange?.to) {
-      const eventDate = parseISO(event.date);
       if (!isWithinInterval(eventDate, {
         start: dateRange.from,
         end: dateRange.to,
