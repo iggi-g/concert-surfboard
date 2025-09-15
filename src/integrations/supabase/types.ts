@@ -43,22 +43,23 @@ export type Database = {
       }
     }
     Views: {
-      random_concert: {
-        Row: {
-          date: string | null
-          image: string | null
-          link: string | null
-          title: string | null
-          venue: string | null
-          venue_link: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       delete_rows_before_today: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      get_random_concert: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          date: string
+          image: string
+          link: string
+          title: string
+          venue: string
+          venue_link: string
+        }[]
       }
     }
     Enums: {
