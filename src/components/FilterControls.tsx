@@ -53,8 +53,8 @@ export const FilterControls = ({
 }: FilterControlsProps) => {
   if (showOnlyAdvancedFilters) {
     return (
-      <div className="w-full max-w-6xl mx-auto space-y-4">
-        <div className="flex flex-col gap-2">
+      <div className="w-full max-w-6xl mx-auto space-y-xs">
+        <div className="flex flex-col gap-xs">
           <VenueDropdownFilter
             venues={availableVenues}
             selectedVenues={selectedVenues}
@@ -88,13 +88,13 @@ export const FilterControls = ({
 
   if (isMobile) {
     return (
-      <div className="w-full space-y-2">
+      <div className="w-full space-y-xs">
         <SearchInput 
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
 
-        <div className="flex gap-2">
+        <div className="flex gap-xs">
           <FavoritesToggle
             showFavoritesOnly={showFavoritesOnly}
             setShowFavoritesOnly={setShowFavoritesOnly}
@@ -107,8 +107,8 @@ export const FilterControls = ({
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6">
-      <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
+    <div className="w-full max-w-6xl mx-auto space-y-md">
+      <div className="flex flex-wrap items-center justify-end gap-xs sm:gap-4">
         <SearchInput 
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}

@@ -34,15 +34,10 @@ export const SurpriseButton = ({ className, filteredEvents }: SurpriseButtonProp
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       variant="outline"
-      className={cn(
-        "w-full md:w-auto h-[46px] px-4 py-3 bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 shadow-card font-semibold text-sm rounded-xl flex items-center justify-center",
-        className
-      )}
+      className={cn("w-full md:w-auto", className)}
     >
-      <span className="relative z-10 flex items-center gap-2">
-        <Star className={`w-4 h-4 flex-shrink-0 ${isHovered ? 'text-primary fill-current' : 'text-text-primary'}`} />
-        <span className="leading-none">Surprise Me</span>
-      </span>
+      <Star className={`w-4 h-4 mr-2 flex-shrink-0 ${isHovered ? 'text-primary fill-current' : 'text-text-primary'}`} />
+      <span>Surprise Me</span>
     </Button>
   );
 };

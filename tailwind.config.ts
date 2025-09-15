@@ -21,6 +21,22 @@ export default {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
       },
+      spacing: {
+        '1.5': '0.375rem', /* 6px */
+        '2.5': '0.625rem', /* 10px */
+        '3.5': '0.875rem', /* 14px */
+        '4.5': '1.125rem', /* 18px */
+        '5.5': '1.375rem', /* 22px */
+        'xs': 'var(--spacing-xs)',     /* 8px */
+        'sm': 'var(--spacing-sm)',     /* 12px */
+        'md': 'var(--spacing-md)',     /* 16px */
+        'lg': 'var(--spacing-lg)',     /* 24px */
+        'xl': 'var(--spacing-xl)',     /* 32px */
+      },
+      height: {
+        'input': 'var(--input-height)',
+        'button': 'var(--button-height)',
+      },
       colors: {
         spotify: {
           green: "#1DB954",
@@ -80,6 +96,15 @@ export default {
       borderRadius: {
         "2xl": "1rem",
         "3xl": "1.5rem",
+        "sm": "var(--radius-sm)",   /* 10px */
+        "md": "var(--radius-md)",   /* 12px */
+      },
+      fontSize: {
+        'xs': ['var(--text-xs)', '1.3'],
+        'sm': ['var(--text-sm)', '1.3'],
+        'base': ['var(--text-base)', '1.4'],
+        'lg': ['var(--text-lg)', '1.3'],
+        'xl': ['var(--text-xl)', '1.2'],
       },
       keyframes: {
         "fade-in": {

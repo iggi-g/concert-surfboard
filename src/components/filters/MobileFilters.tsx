@@ -1,4 +1,5 @@
 import { FilterControls } from "@/components/FilterControls";
+import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
 
 interface MobileFiltersProps {
@@ -43,7 +44,7 @@ export const MobileFilters = ({
   setShowMobileFilters
 }: MobileFiltersProps) => {
   return (
-    <div className="md:hidden w-full space-y-2">
+    <div className="md:hidden w-full space-y-xs">
       {/* Search and Basic Controls */}
       <FilterControls
         searchQuery={searchQuery}
@@ -66,12 +67,13 @@ export const MobileFilters = ({
       />
       
       {/* Show Filters Button */}
-      <button 
+      <Button
+        variant="outline"
         onClick={() => setShowMobileFilters(!showMobileFilters)}
-        className="w-full h-[46px] px-4 py-3 bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 transition-all shadow-card font-semibold text-sm rounded-xl flex items-center justify-center"
+        className="w-full"
       >
-        <span className="leading-none">{showMobileFilters ? 'Hide Filters' : 'Show Filters'}</span>
-      </button>
+        {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
+      </Button>
       
       {/* Advanced Filters */}
       {showMobileFilters && (

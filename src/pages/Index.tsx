@@ -190,12 +190,12 @@ const Index = () => {
         />
         
         {/* Hero Content - Centered */}
-        <div className="flex-1 flex flex-col items-center justify-center px-1 pt-1 md:pt-2">
-          <div className="text-center space-y-1">
-            <h1 className="text-text-primary font-black text-[34px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
+        <div className="flex-1 flex flex-col items-center justify-center px-1 pt-lg md:pt-lg">
+          <div className="text-center space-y-xs">
+            <h1 className="text-text-primary text-heading text-[34px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
               {generateHeroText()}
             </h1>
-            <p className="text-[15px] md:text-lg leading-[1.2] tracking-[-0.3px] font-semibold text-primary animate-fade-in">
+            <p className="text-[15px] md:text-lg text-body-semibold tracking-[-0.3px] text-primary animate-fade-in">
               {(() => {
                 if (showFavoritesOnly) {
                   return `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
@@ -216,7 +216,7 @@ const Index = () => {
         </div>
         
         {/* Search and Controls - Anchored at bottom of hero */}
-        <div className="px-6 pb-6 mt-3 md:mt-2 space-y-2 md:space-y-3 relative z-10">
+        <div className="px-6 pb-6 mt-sm md:mt-sm space-y-xs relative z-10">
           <MobileFilters
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -244,7 +244,7 @@ const Index = () => {
       </div>
 
       {/* Desktop Filters */}
-      <div className="hidden md:block px-6 mb-8">
+      <div className="hidden md:block px-6 mb-md">
         <DesktopFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -266,7 +266,7 @@ const Index = () => {
       </div>
 
       {/* Events List - With peek effect on mobile */}
-      <div className="relative" style={{ marginTop: '-16px' }}>
+      <div className="relative" style={{ marginTop: 'var(--spacing-sm)' }}>
         <EventsList 
           events={filteredEvents} 
           isLoading={isLoading}
