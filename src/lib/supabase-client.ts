@@ -1,8 +1,8 @@
+
 import { createClient } from '@supabase/supabase-js';
 import { startOfDay } from 'date-fns';
 
-const supabaseUrl =
-  import.meta.env.VITE_SUPABASE_URL?.trim().replace(/\/$/, '').replace(/:$/, '') || '';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim().replace(/\/$/, '').replace(/:$/, '') || '';
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
@@ -11,7 +11,10 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
-  auth: { autoRefreshToken: true, persistSession: true }
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true
+  }
 });
 
 export interface Event {
@@ -30,84 +33,50 @@ export interface EventsResponse {
   total: number;
 }
 
-/**
- * Fetch all events in deterministic date order, paginating to overcome the API row limit.
- * Set `onlyUpcoming` to true if you want to exclude past events (kept optional here).
- */
-export const fetchEvents = async (
-  sortOrder: 'asc' | 'desc' = 'asc',
-  { onlyUpcoming = false }: { onlyUpcoming?: boolean } = {}
-): Promise<EventsResponse> => {
+export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<EventsResponse> => {
   try {
-    console.log('Fetching events with pagination…');
-
-    // Optional filter for upcoming events only
-    const todayISO = startOfDay(new Date()).toISOString();
-
-    // First, get an exact count to know how many pages to fetch
-    const baseSelect = supabase
+    // Use startOfDay to ensure we get the start of the current day in the local timezone
+    const today = startOfDay(new Date()).toISOString().split('T')[0];
+    console.log('Fetching events from date:', today);
+    
+    // First, let's get a count of all events to see what we're working with
+    const { count, error: countError } = await supabase
       .from('events')
-      .select('title,date,link,image,venue,venue_link,location', { count: 'exact', head: true });
-
-    const { count, error: countError } = onlyUpcoming
-      ? await baseSelect.gte('date', todayISO)
-      : await baseSelect;
-
+      .select('*', { count: 'exact', head: true })
+      .gte('date', today);
+    
     if (countError) {
       console.error('Error getting event count:', countError);
       throw countError;
     }
-
-    const total = count ?? 0;
-    console.log('Total events available in database:', total);
-
-    // Page through results to bypass the per-request row cap
-    const pageSize = 1000; // safe for PostgREST default limits
-    const pages = Math.ceil(total / pageSize) || 1;
-
-    const all: Event[] = [];
-
-    for (let i = 0; i < pages; i++) {
-      const from = i * pageSize;
-      const to = from + pageSize - 1;
-
-      let query = supabase
-        .from('events')
-        .select('title,date,link,image,venue,venue_link,location')
-        .order('date', { ascending: sortOrder === 'asc' })
-        .range(from, to);
-
-      if (onlyUpcoming) query = query.gte('date', todayISO);
-
-      const { data, error } = await query;
-
-      if (error) {
-        console.error(`Error fetching page ${i + 1}/${pages}:`, error);
-        throw error;
-      }
-
-      if (data && data.length) {
-        all.push(...(data as Event[]));
-      }
-
-      // Defensive: break if API returns fewer rows than requested early
-      if (!data || data.length < pageSize) {
-        break;
-      }
+    
+    console.log('Total events available in database:', count);
+    
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .gte('date', today)
+      .order('date', { ascending: sortOrder === 'asc' });
+    
+    if (error) {
+      console.error('Error fetching events:', error);
+      throw error;
     }
 
-    // Final sanity logs
-    if (all.length) {
-      console.log('First few events:', all.slice(0, 3).map(e => ({ title: e.title, date: e.date })));
+    // Log the first few events to verify the date filtering
+    if (data && data.length > 0) {
+      console.log('First few events:', data.slice(0, 3).map(e => ({ title: e.title, date: e.date })));
     }
-    console.log('Fetched events count:', all.length);
-    console.log('Expected vs actual:', { expected: total, actual: all.length });
 
-    // Since we fetched all pages, there’s no "hasMore"
+    console.log('Fetched events count:', data?.length);
+    console.log('Expected vs actual:', { expected: count, actual: data?.length });
+    
+    const hasMore = (count || 0) > (data?.length || 0);
+    
     return {
-      events: all,
-      hasMore: false,
-      total: total
+      events: data as Event[],
+      hasMore,
+      total: count || 0
     };
   } catch (error) {
     console.error('Failed to fetch events:', error);
