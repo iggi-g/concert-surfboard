@@ -49,10 +49,11 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<Ev
     
     console.log('Total events available in database:', count);
     
+    // Use range to fetch all records without limit
     const { data, error } = await supabase
       .from('events')
       .select('*')
-      .limit(2000) // Set high limit to ensure all events are fetched
+      .range(0, 2999) // Use range instead of limit to fetch all events
       .order('date', { ascending: sortOrder === 'asc' });
     
     if (error) {
