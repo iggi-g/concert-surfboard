@@ -190,30 +190,27 @@ const Index = () => {
         />
         
         {/* Hero Content - Centered */}
-        <div className="flex-1 flex flex-col items-center justify-center px-1 pt-lg md:pt-lg">
-          <div className="text-center space-y-xs">
-            <h1 className="text-text-primary text-heading text-[34px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
-              {generateHeroText()}
-            </h1>
-            <p className="text-[15px] md:text-lg text-body-semibold tracking-[-0.3px] text-primary animate-fade-in">
-              {(() => {
-                if (showFavoritesOnly) {
-                  return `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
-                }
-                
-                if (hasActiveFilters) {
-                  return `${filteredEvents.length} ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
-                }
-                
-                if (hasMoreEvents && totalEvents > 1000) {
-                  return `More than 1000 concerts available`;
-                }
-                
-                return `${filteredEvents.length} ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
-              })()}
-            </p>
-          </div>
-        </div>
+<div className="flex flex-col items-center px-2 pt-4 md:pt-6">
+  <div className="text-center space-y-2">
+    <h1 className="text-text-primary text-heading text-[34px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
+      {generateHeroText()}
+    </h1>
+    <p className="text-[15px] md:text-lg text-body-semibold tracking-[-0.3px] text-primary animate-fade-in">
+      {(() => {
+        if (showFavoritesOnly) {
+          return `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
+        }
+
+        if (hasActiveFilters) {
+          return `${filteredEvents.length} ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
+        }
+
+        return `${filteredEvents.length} ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
+      })()}
+    </p>
+  </div>
+</div>
+
         
         {/* Search and Controls - Anchored at bottom of hero */}
         <div className="px-6 pb-6 mt-sm md:mt-sm space-y-xs relative z-10">
