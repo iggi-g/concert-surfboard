@@ -159,7 +159,7 @@ const Index = () => {
         <PageHeader filteredEventsCount={filteredEvents.length} showFavoritesOnly={showFavoritesOnly} hasMoreEvents={hasMoreEvents} totalEvents={totalEvents} hasActiveFilters={hasActiveFilters} />
         
         {/* Hero Content - Centered */}
-      <div className="flex flex-col items-center px-2 pt-4 md:pt-6">
+      <div className="flex items-center flex-col-reverse px-2 pt-10 md:pt-6">
   <div className="text-center space-y-2">
     <h1 className="text-text-primary text-heading text-[34px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
       {generateHeroText()}
