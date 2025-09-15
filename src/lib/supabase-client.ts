@@ -52,6 +52,7 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<Ev
     const { data, error } = await supabase
       .from('events')
       .select('*')
+      .limit(2000) // Set high limit to ensure all events are fetched
       .order('date', { ascending: sortOrder === 'asc' });
     
     if (error) {
