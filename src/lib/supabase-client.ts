@@ -35,15 +35,12 @@ export interface EventsResponse {
 
 export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<EventsResponse> => {
   try {
-    // Use startOfDay to ensure we get the start of the current day in the local timezone
-    const today = startOfDay(new Date()).toISOString().split('T')[0];
-    console.log('Fetching events from date:', today);
+    console.log('Fetching all events from database');
     
-    // First, let's get a count of all events to see what we're working with
+    // First, let's get a count of all events
     const { count, error: countError } = await supabase
       .from('events')
-      .select('*', { count: 'exact', head: true })
-      .gte('date', today);
+      .select('*', { count: 'exact', head: true });
     
     if (countError) {
       console.error('Error getting event count:', countError);
@@ -55,7 +52,6 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<Ev
     const { data, error } = await supabase
       .from('events')
       .select('*')
-      .gte('date', today)
       .order('date', { ascending: sortOrder === 'asc' });
     
     if (error) {
@@ -71,7 +67,7 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<Ev
     console.log('Fetched events count:', data?.length);
     console.log('Expected vs actual:', { expected: count, actual: data?.length });
     
-    const hasMore = (count || 0) > (data?.length || 0);
+    const hasMore = false; // Since we're fetching all events, there are no more to load
     
     return {
       events: data as Event[],
