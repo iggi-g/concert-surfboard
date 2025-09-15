@@ -216,7 +216,7 @@ const Index = () => {
         </div>
         
         {/* Search and Controls - Anchored at bottom of hero */}
-        <div className="px-6 pb-6 mt-2 space-y-3 relative z-10">
+        <div className="px-6 pb-6 mt-3 md:mt-2 space-y-2 md:space-y-3 relative z-10">
           <MobileFilters
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}

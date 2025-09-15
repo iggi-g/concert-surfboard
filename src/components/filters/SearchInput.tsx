@@ -13,7 +13,7 @@ export const SearchInput = ({ searchQuery, setSearchQuery }: SearchInputProps) =
         placeholder="Search events..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="h-[46px] bg-ui-surface border border-ui-border text-text-primary placeholder:text-text-secondary rounded-xl pr-10 shadow-card hover:border-primary/50 focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary/20"
+        className="h-[46px] bg-ui-surface border border-ui-border text-text-primary placeholder:text-text-secondary rounded-xl pr-10 shadow-card hover:border-primary/50 focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary/20 md:h-[46px] text-sm md:text-base font-semibold"
       />
       <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary h-4 w-4" />
     </div>

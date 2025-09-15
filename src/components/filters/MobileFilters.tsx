@@ -68,9 +68,9 @@ export const MobileFilters = ({
       {/* Show Filters Button */}
       <button 
         onClick={() => setShowMobileFilters(!showMobileFilters)}
-        className="w-full bg-ui-surface border border-ui-border text-text-primary px-3 py-2.5 rounded-xl hover:bg-ui-surface/80 hover:border-primary/50 transition-all shadow-card font-medium"
+        className="w-full h-[46px] px-4 py-3 bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 transition-all shadow-card font-semibold text-sm rounded-xl flex items-center justify-center"
       >
-        {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
+        <span className="leading-none">{showMobileFilters ? 'Hide Filters' : 'Show Filters'}</span>
       </button>
       
       {/* Advanced Filters */}
