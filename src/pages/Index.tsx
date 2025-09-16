@@ -164,7 +164,7 @@ const Index = () => {
     <h1 className="text-text-primary text-heading text-[34px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
       {generateHeroText()}
     </h1>
-    <p className="text-[15px] md:text-lg text-body-semibold tracking-[-0.3px] text-primary animate-fade-in">
+    <p className="text-[15px] md:text-lg text-body-semibold tracking-[-0.3px] text-primary animate-fade-in my-[9px]">
       {(() => {
               if (showFavoritesOnly) {
                 return `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
