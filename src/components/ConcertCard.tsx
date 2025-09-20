@@ -87,12 +87,16 @@ export const ConcertCard = ({
     const eventDate = new Date(date);
     // Format date as YYYYMMDD for all-day event
     const dateString = eventDate.toISOString().slice(0, 10).replace(/-/g, '');
+    // For all-day events, we need to add one day to the end date
+    const nextDay = new Date(eventDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    const endDateString = nextDay.toISOString().slice(0, 10).replace(/-/g, '');
     
     const params = new URLSearchParams({
       action: 'TEMPLATE',
       text: artist,
       details: `Concert at ${venue}. Get tickets: ${ticketUrl}`,
-      dates: `${dateString}/${dateString}`, // Same date for start and end makes it all-day
+      dates: `${dateString}/${endDateString}`, // All-day event: start date to next day
       location: venue
     });
 
