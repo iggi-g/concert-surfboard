@@ -77,6 +77,24 @@ export type Database = {
         }
         Relationships: []
       }
+      date_filter_analytics: {
+        Row: {
+          date: string
+          filtered_at: string
+          id: string
+        }
+        Insert: {
+          date: string
+          filtered_at?: string
+          id?: string
+        }
+        Update: {
+          date?: string
+          filtered_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           date: string

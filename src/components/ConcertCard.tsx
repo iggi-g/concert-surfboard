@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { supabase } from "@/integrations/supabase/client";
 interface ConcertCardProps {
   artist: string;
   date: string;
@@ -93,15 +94,35 @@ export const ConcertCard = ({
     window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
   };
 
-  const handleVenueClick = (e: React.MouseEvent) => {
+  const handleVenueClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    
+    // Track venue filter click
+    try {
+      await supabase.from('venue_filter_analytics').insert({
+        venue: venue
+      });
+    } catch (error) {
+      console.error('Error tracking venue filter click:', error);
+    }
+    
     if (onVenueClick) {
       onVenueClick(venue);
     }
   };
 
-  const handleDateClick = (e: React.MouseEvent) => {
+  const handleDateClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    
+    // Track date filter click
+    try {
+      await supabase.from('date_filter_analytics').insert({
+        date: date
+      });
+    } catch (error) {
+      console.error('Error tracking date filter click:', error);
+    }
+    
     if (onDateClick) {
       onDateClick(date);
     }
