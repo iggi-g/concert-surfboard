@@ -1,6 +1,7 @@
 import { FilterControls } from "@/components/FilterControls";
 import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
+import { X } from "lucide-react";
 
 interface MobileFiltersProps {
   searchQuery: string;
@@ -66,6 +67,18 @@ export const MobileFilters = ({
         isMobile={true}
       />
       
+      {/* Clear Filters Button - Always visible when filters are active */}
+      {hasActiveFilters && (
+        <Button
+          variant="outline"
+          onClick={clearFilters}
+          className="w-full bg-primary/10 border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50"
+        >
+          <X className="h-4 w-4 mr-2" />
+          Clear Filters
+        </Button>
+      )}
+
       {/* Show Filters Button */}
       <Button
         variant="outline"
