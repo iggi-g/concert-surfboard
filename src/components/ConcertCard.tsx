@@ -79,8 +79,21 @@ export const ConcertCard = ({
     
     window.open(ticketUrl, '_blank');
   };
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    
+    // Track favorite button click
+    try {
+      await supabase.from('favorite_analytics').insert({
+        concert_title: artist,
+        concert_date: date,
+        venue: venue,
+        action: isFavorite ? 'remove' : 'add'
+      });
+    } catch (error) {
+      console.error('Error tracking favorite click:', error);
+    }
+    
     if (onToggleFavorite) {
       onToggleFavorite(artist);
     }

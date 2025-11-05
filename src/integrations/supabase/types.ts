@@ -122,6 +122,33 @@ export type Database = {
         }
         Relationships: []
       }
+      favorite_analytics: {
+        Row: {
+          action: string
+          clicked_at: string
+          concert_date: string
+          concert_title: string
+          id: string
+          venue: string
+        }
+        Insert: {
+          action: string
+          clicked_at?: string
+          concert_date: string
+          concert_title: string
+          id?: string
+          venue: string
+        }
+        Update: {
+          action?: string
+          clicked_at?: string
+          concert_date?: string
+          concert_title?: string
+          id?: string
+          venue?: string
+        }
+        Relationships: []
+      }
       ShowStop: {
         Row: {
           created_at: string
