@@ -65,7 +65,18 @@ export const ConcertCard = ({
       setLoaded(true);
     };
   }, [imageUrl, isIntersecting, loaded]);
-  const handleClick = () => {
+  const handleClick = async () => {
+    // Track concert card click
+    try {
+      await supabase.from('concert_analytics').insert({
+        concert_title: artist,
+        concert_date: date,
+        venue: venue
+      });
+    } catch (error) {
+      console.error('Error tracking concert click:', error);
+    }
+    
     window.open(ticketUrl, '_blank');
   };
   const handleFavoriteClick = (e: React.MouseEvent) => {
