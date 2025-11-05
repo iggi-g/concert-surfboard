@@ -170,9 +170,9 @@ const Index = () => {
                 return `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
               }
               if (hasActiveFilters) {
-                return `${filteredEvents.length} ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
+                return `${filteredEvents.length} of ${totalEvents} ${totalEvents === 1 ? 'concert' : 'concerts'} available`;
               }
-              return `${filteredEvents.length} ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
+              return `${totalEvents} ${totalEvents === 1 ? 'concert' : 'concerts'} available`;
             })()}
     </p>
   </div>
