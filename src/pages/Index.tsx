@@ -60,6 +60,17 @@ const Index = () => {
       behavior: 'smooth'
     });
   };
+
+  const handleVenueClick = (venue: string) => {
+    setSelectedVenues([venue]);
+    scrollToTop();
+  };
+
+  const handleDateClick = (date: string) => {
+    const eventDate = parseISO(date);
+    setDateRange({ from: eventDate, to: eventDate });
+    scrollToTop();
+  };
   const availableVenues = Array.from(new Set(events.map(event => event.venue))).sort();
   const clearFilters = () => {
     setSearchQuery("");
@@ -197,7 +208,13 @@ const Index = () => {
       <div className="relative" style={{
       marginTop: 'var(--spacing-sm)'
     }}>
-        <EventsList events={filteredEvents} isLoading={isLoading} showFavoritesOnly={showFavoritesOnly} />
+        <EventsList 
+          events={filteredEvents} 
+          isLoading={isLoading} 
+          showFavoritesOnly={showFavoritesOnly}
+          onVenueClick={handleVenueClick}
+          onDateClick={handleDateClick}
+        />
       </div>
 
       <ContactButton />

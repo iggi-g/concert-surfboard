@@ -12,9 +12,11 @@ interface EventsListProps {
   events: Event[];
   isLoading: boolean;
   showFavoritesOnly?: boolean;
+  onVenueClick?: (venue: string) => void;
+  onDateClick?: (date: string) => void;
 }
 
-export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: EventsListProps) => {
+export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVenueClick, onDateClick }: EventsListProps) => {
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
   const [page, setPage] = useState(1);
   const eventsPerPage = 12;
@@ -106,6 +108,8 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false }: Eve
             isFavorite={favorites.includes(event.title)}
             onToggleFavorite={handleToggleFavorite}
             isInFavoritesView={showFavoritesOnly}
+            onVenueClick={onVenueClick}
+            onDateClick={onDateClick}
           />
         </div>
       ))}

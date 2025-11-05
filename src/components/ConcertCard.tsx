@@ -15,6 +15,8 @@ interface ConcertCardProps {
   isFavorite?: boolean;
   onToggleFavorite?: (artist: string) => void;
   isInFavoritesView?: boolean;
+  onVenueClick?: (venue: string) => void;
+  onDateClick?: (date: string) => void;
 }
 
 // Concert card component for displaying event information
@@ -27,7 +29,9 @@ export const ConcertCard = ({
   venueLink,
   isFavorite = false,
   onToggleFavorite,
-  isInFavoritesView = false
+  isInFavoritesView = false,
+  onVenueClick,
+  onDateClick
 }: ConcertCardProps) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -88,6 +92,20 @@ export const ConcertCard = ({
     });
     window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
   };
+
+  const handleVenueClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onVenueClick) {
+      onVenueClick(venue);
+    }
+  };
+
+  const handleDateClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onDateClick) {
+      onDateClick(date);
+    }
+  };
   const placeholderImage = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=75";
   return <Card className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-all duration-300 hover:scale-[1.01] hover:shadow-elevated animate-fade-in cursor-pointer bg-ui-surface backdrop-blur-sm border-ui-border relative shadow-card" onClick={handleClick}>
       <div className="relative aspect-[16/9] w-full">
@@ -95,14 +113,20 @@ export const ConcertCard = ({
         <img ref={imageRef} src={error ? placeholderImage : isIntersecting ? imageUrl : placeholderImage} alt={`${artist} concert at ${venue} in Copenhagen`} className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`} loading="lazy" decoding="async" width="400" height="225" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
         <div className="absolute top-3 inset-x-0 flex justify-between items-start px-5">
-          <span className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card">
+          <button
+            onClick={handleDateClick}
+            className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card hover:bg-ui-surface hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+            aria-label={`Filter by date ${date}`}
+          >
             {date}
-          </span>
-          {venueLink ? <a href={venueLink} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm hover:bg-ui-surface border border-ui-border shadow-card transition-colors" aria-label={`Visit ${venue} website`}>
-              {venue}
-            </a> : <span className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card">
-              {venue}
-            </span>}
+          </button>
+          <button
+            onClick={handleVenueClick}
+            className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card hover:bg-ui-surface hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+            aria-label={`Filter by venue ${venue}`}
+          >
+            {venue}
+          </button>
         </div>
         <div className="absolute bottom-3 inset-x-0 flex justify-between items-center px-5">
           <TooltipProvider>
