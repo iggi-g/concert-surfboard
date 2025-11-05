@@ -14,6 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
+      campaigns: {
+        Row: {
+          created_at: string
+          id: string
+          image: string | null
+          original_price: number | null
+          price: number | null
+          quantity_available: number
+          quantity_sold: number
+          rich_text: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image?: string | null
+          original_price?: number | null
+          price?: number | null
+          quantity_available?: number
+          quantity_sold?: number
+          rich_text?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image?: string | null
+          original_price?: number | null
+          price?: number | null
+          quantity_available?: number
+          quantity_sold?: number
+          rich_text?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      concert_analytics: {
+        Row: {
+          clicked_at: string
+          concert_date: string
+          concert_title: string
+          id: string
+          venue: string
+        }
+        Insert: {
+          clicked_at?: string
+          concert_date: string
+          concert_title: string
+          id?: string
+          venue: string
+        }
+        Update: {
+          clicked_at?: string
+          concert_date?: string
+          concert_title?: string
+          id?: string
+          venue?: string
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           date: string
@@ -41,17 +104,50 @@ export type Database = {
         }
         Relationships: []
       }
+      ShowStop: {
+        Row: {
+          created_at: string
+          email: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      venue_filter_analytics: {
+        Row: {
+          filtered_at: string
+          id: string
+          venue: string
+        }
+        Insert: {
+          filtered_at?: string
+          id?: string
+          venue: string
+        }
+        Update: {
+          filtered_at?: string
+          id?: string
+          venue?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      delete_rows_before_today: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      delete_rows_before_today: { Args: never; Returns: undefined }
       get_random_concert: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           date: string
           image: string
