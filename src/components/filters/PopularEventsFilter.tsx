@@ -94,7 +94,7 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
               <button
                 key={`${event.concert_title}-${event.concert_date}-${index}`}
                 onClick={() => onEventClick?.(event.concert_title, event.concert_date, event.venue)}
-                className="w-full p-2.5 text-left hover:bg-ui-surface/50 transition-colors border-b border-ui-border last:border-0"
+                className="w-full p-2.5 text-left hover:bg-ui-surface/50 transition-colors border-b border-ui-border last:border-0 group"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
@@ -104,13 +104,13 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
                         {event.click_count} {event.click_count === 1 ? 'click' : 'clicks'}
                       </Badge>
                     </div>
-                    <p className="font-medium text-sm text-text-primary truncate">
+                    <p className="font-medium text-sm text-text-primary group-hover:text-primary truncate transition-colors">
                       {event.concert_title}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-muted-foreground group-hover:text-primary/80 transition-colors">
                       {event.venue}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
+                    <p className="text-xs text-muted-foreground group-hover:text-primary/60 transition-colors mt-0.5">
                       {new Date(event.concert_date).toLocaleDateString()}
                     </p>
                   </div>
