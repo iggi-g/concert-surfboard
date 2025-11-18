@@ -8,6 +8,7 @@ import { SearchInput } from "./filters/SearchInput";
 import { FavoritesToggle } from "./filters/FavoritesToggle";
 import { DateRangeSelector } from "./filters/DateRangeSelector";
 import { SortDropdown } from "./filters/SortDropdown";
+import { PopularEventsFilter } from "./filters/PopularEventsFilter";
 import { Event } from "@/lib/supabase-client";
 
 interface FilterControlsProps {
@@ -29,6 +30,7 @@ interface FilterControlsProps {
   filteredEvents: Event[];
   isMobile?: boolean;
   showOnlyAdvancedFilters?: boolean;
+  onPopularEventClick?: (title: string, date: string, venue: string) => void;
 }
 
 export const FilterControls = ({
@@ -50,6 +52,7 @@ export const FilterControls = ({
   filteredEvents,
   isMobile,
   showOnlyAdvancedFilters,
+  onPopularEventClick,
 }: FilterControlsProps) => {
   if (showOnlyAdvancedFilters) {
     return (
@@ -120,6 +123,8 @@ export const FilterControls = ({
         />
 
         <SurpriseButton filteredEvents={filteredEvents} />
+
+        <PopularEventsFilter onEventClick={onPopularEventClick} />
 
         <VenueDropdownFilter
           venues={availableVenues}
