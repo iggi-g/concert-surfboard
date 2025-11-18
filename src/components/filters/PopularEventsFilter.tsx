@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { parseISO, isAfter, startOfDay, isSameDay } from "date-fns";
 
 interface PopularEvent {
   concert_title: string;
@@ -32,6 +33,7 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
 
       // Aggregate click counts
       const eventMap = new Map<string, PopularEvent>();
+      const today = startOfDay(new Date());
       
       data?.forEach(item => {
         const key = `${item.concert_title}-${item.concert_date}-${item.venue}`;
@@ -49,8 +51,12 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
         }
       });
 
-      // Sort by click count and get top 10
+      // Filter to only future events, sort by click count and get top 10
       return Array.from(eventMap.values())
+        .filter(event => {
+          const eventDate = parseISO(event.concert_date);
+          return isAfter(eventDate, today) || isSameDay(eventDate, today);
+        })
         .sort((a, b) => b.click_count - a.click_count)
         .slice(0, 10);
     },
