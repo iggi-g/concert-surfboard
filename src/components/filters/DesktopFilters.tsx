@@ -18,6 +18,7 @@ interface DesktopFiltersProps {
   showFavoritesOnly: boolean;
   setShowFavoritesOnly: (show: boolean) => void;
   filteredEvents: any[];
+  onPopularEventClick?: (title: string, date: string, venue: string) => void;
 }
 
 export const DesktopFilters = ({
@@ -36,7 +37,8 @@ export const DesktopFilters = ({
   clearFilters,
   showFavoritesOnly,
   setShowFavoritesOnly,
-  filteredEvents
+  filteredEvents,
+  onPopularEventClick
 }: DesktopFiltersProps) => {
   return (
     <div className="hidden md:block w-full max-w-[1920px] mx-auto">
@@ -57,6 +59,7 @@ export const DesktopFilters = ({
         showFavoritesOnly={showFavoritesOnly}
         setShowFavoritesOnly={setShowFavoritesOnly}
         filteredEvents={filteredEvents}
+        onPopularEventClick={onPopularEventClick}
       />
     </div>
   );

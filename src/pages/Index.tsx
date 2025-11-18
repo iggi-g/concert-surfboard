@@ -71,6 +71,11 @@ const Index = () => {
     setDateRange({ from: eventDate, to: eventDate });
     scrollToTop();
   };
+
+  const handlePopularEventClick = (title: string, date: string, venue: string) => {
+    setSearchQuery(title);
+    scrollToTop();
+  };
   const availableVenues = Array.from(new Set(events.map(event => event.venue))).sort();
   const clearFilters = () => {
     setSearchQuery("");
@@ -201,7 +206,25 @@ const Index = () => {
 
       {/* Desktop Filters */}
       <div className="hidden md:block px-6 mb-md">
-        <DesktopFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} />
+        <DesktopFilters 
+          searchQuery={searchQuery} 
+          setSearchQuery={setSearchQuery} 
+          selectedVenues={selectedVenues} 
+          setSelectedVenues={setSelectedVenues} 
+          availableVenues={availableVenues} 
+          dateRange={dateRange} 
+          setDateRange={setDateRange} 
+          sortOrder={sortOrder} 
+          setSortOrder={setSortOrder} 
+          sortBy={sortBy} 
+          setSortBy={setSortBy} 
+          hasActiveFilters={hasActiveFilters} 
+          clearFilters={clearFilters} 
+          showFavoritesOnly={showFavoritesOnly} 
+          setShowFavoritesOnly={setShowFavoritesOnly} 
+          filteredEvents={filteredEvents}
+          onPopularEventClick={handlePopularEventClick}
+        />
       </div>
 
       {/* Events List - With peek effect on mobile */}
