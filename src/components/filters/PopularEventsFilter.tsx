@@ -74,10 +74,10 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
           Popular Events
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0" align="end">
-        <div className="p-4 border-b border-ui-border">
-          <h3 className="font-semibold text-text-primary">Most Clicked Events</h3>
-          <p className="text-sm text-muted-foreground">Based on user engagement</p>
+      <PopoverContent className="w-[320px] p-0" align="end">
+        <div className="p-3 border-b border-ui-border">
+          <h3 className="font-semibold text-sm text-text-primary">Most Clicked Events</h3>
+          <p className="text-xs text-muted-foreground">Based on user engagement</p>
         </div>
         
         {isLoading ? (
@@ -85,7 +85,7 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
           </div>
         ) : !popularEvents || popularEvents.length === 0 ? (
-          <div className="p-4 text-center text-muted-foreground">
+          <div className="p-3 text-center text-sm text-muted-foreground">
             No analytics data yet
           </div>
         ) : (
@@ -94,23 +94,23 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
               <button
                 key={`${event.concert_title}-${event.concert_date}-${index}`}
                 onClick={() => onEventClick?.(event.concert_title, event.concert_date, event.venue)}
-                className="w-full p-4 text-left hover:bg-ui-surface/50 transition-colors border-b border-ui-border last:border-0"
+                className="w-full p-2.5 text-left hover:bg-ui-surface/50 transition-colors border-b border-ui-border last:border-0"
               >
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-1.5 mb-0.5">
                       <span className="text-xs font-medium text-muted-foreground">#{index + 1}</span>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs px-1.5 py-0">
                         {event.click_count} {event.click_count === 1 ? 'click' : 'clicks'}
                       </Badge>
                     </div>
-                    <p className="font-medium text-text-primary truncate">
+                    <p className="font-medium text-sm text-text-primary truncate">
                       {event.concert_title}
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs text-muted-foreground">
                       {event.venue}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       {new Date(event.concert_date).toLocaleDateString()}
                     </p>
                   </div>
