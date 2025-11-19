@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Loader2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { parseISO, isAfter, startOfDay, isSameDay } from "date-fns";
 
 interface PopularEvent {
@@ -89,32 +88,16 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
             No analytics data yet
           </div>
         ) : (
-          <div className="max-h-[400px] overflow-y-auto">
+          <div className="max-h-[400px] overflow-y-auto scrollbar-hide">
             {popularEvents.map((event, index) => (
               <button
                 key={`${event.concert_title}-${event.concert_date}-${index}`}
                 onClick={() => onEventClick?.(event.concert_title, event.concert_date, event.venue)}
-                className="w-full p-2.5 text-left hover:bg-ui-surface/50 transition-colors border-b border-ui-border last:border-0 group"
+                className="w-full py-2 px-3 text-center hover:bg-ui-surface/50 transition-colors border-b border-ui-border last:border-0 group"
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 mb-0.5">
-                      <span className="text-xs font-medium text-muted-foreground">#{index + 1}</span>
-                      <Badge variant="secondary" className="text-xs px-1.5 py-0">
-                        {event.click_count} {event.click_count === 1 ? 'click' : 'clicks'}
-                      </Badge>
-                    </div>
-                    <p className="font-medium text-sm text-text-primary group-hover:text-primary truncate transition-colors">
-                      {event.concert_title}
-                    </p>
-                    <p className="text-xs text-muted-foreground group-hover:text-primary/80 transition-colors">
-                      {event.venue}
-                    </p>
-                    <p className="text-xs text-muted-foreground group-hover:text-primary/60 transition-colors mt-0.5">
-                      {new Date(event.concert_date).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
+                <p className="font-medium text-sm text-text-primary group-hover:text-primary truncate transition-colors">
+                  {event.concert_title}
+                </p>
               </button>
             ))}
           </div>
