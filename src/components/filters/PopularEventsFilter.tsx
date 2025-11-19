@@ -76,7 +76,6 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
       <PopoverContent className="w-[320px] p-0" align="end">
         <div className="p-3 border-b border-ui-border">
           <h3 className="font-semibold text-sm text-text-primary">Most Clicked Events</h3>
-          <p className="text-xs text-muted-foreground">Based on user engagement</p>
         </div>
         
         {isLoading ? (
@@ -93,11 +92,16 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
               <button
                 key={`${event.concert_title}-${event.concert_date}-${index}`}
                 onClick={() => onEventClick?.(event.concert_title, event.concert_date, event.venue)}
-                className="w-full py-2 px-3 text-center hover:bg-ui-surface/50 transition-colors border-b border-ui-border last:border-0 group"
+                className="w-full py-2 px-3 text-left hover:bg-ui-surface/50 transition-colors border-b border-ui-border last:border-0 group"
               >
-                <p className="font-medium text-sm text-text-primary group-hover:text-primary truncate transition-colors">
-                  {event.concert_title}
-                </p>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium text-muted-foreground min-w-[20px]">
+                    {index + 1}.
+                  </span>
+                  <p className="font-medium text-sm text-text-primary group-hover:text-primary truncate transition-colors">
+                    {event.concert_title}
+                  </p>
+                </div>
               </button>
             ))}
           </div>
