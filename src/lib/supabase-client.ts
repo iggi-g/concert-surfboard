@@ -2,13 +2,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { startOfDay } from 'date-fns';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim().replace(/\/$/, '').replace(/:$/, '') || '';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  console.error('Missing Supabase environment variables:', { supabaseUrl, supabaseKey });
-  throw new Error('Missing Supabase environment variables. Please check your .env file.');
-}
+const supabaseUrl = 'https://cmnsnmhlbsnegwdbwzxj.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtbnNubWhsYnNuZWd3ZGJ3enhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE5MzU3NjAsImV4cCI6MjA0NzUxMTc2MH0.UHu7DKYCaUYNDGCOUJouYYNcLnLtdjJsnVlaaZiZMBk';
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {
