@@ -2,8 +2,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
+import { generateEventSlug } from "@/lib/utils";
 interface ConcertCardProps {
   artist: string;
   date: string;
@@ -38,6 +40,10 @@ export const ConcertCard = ({
   const [error, setError] = useState(false);
   const [isIntersecting, setIsIntersecting] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
+  const navigate = useNavigate();
+  
+  const eventSlug = generateEventSlug(artist, venue, date);
+  
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       setIsIntersecting(entry.isIntersecting);
@@ -77,7 +83,8 @@ export const ConcertCard = ({
       console.error('Error tracking concert click:', error);
     }
     
-    window.open(ticketUrl, '_blank');
+    // Navigate to event page
+    navigate(`/event/${eventSlug}`);
   };
   const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
