@@ -7,6 +7,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase-client";
+import { SEO } from "@/components/SEO";
 
 const About = () => {
   const location = useLocation();
@@ -58,6 +59,11 @@ const About = () => {
 
   return (
     <PageContainer>
+      <SEO 
+        title="About CPH Concerts"
+        description="Learn about CPH Concerts - your guide to live music in Copenhagen. Contact us to suggest venues or provide feedback about Copenhagen's music scene."
+        canonicalUrl="/about"
+      />
       <div className="max-w-2xl mx-auto text-center space-y-6 px-4 md:px-0">
         <Link
           to="/"

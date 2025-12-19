@@ -14,6 +14,8 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { MobileFilters } from "@/components/filters/MobileFilters";
 import { DesktopFilters } from "@/components/filters/DesktopFilters";
+import { SEO } from "@/components/SEO";
+import { EventsSchema } from "@/components/EventsSchema";
 const Index = () => {
   const {
     toast
@@ -168,6 +170,12 @@ const Index = () => {
     return `Concerts in ${locationText}${dateText}`;
   };
   return <PageContainer>
+      <SEO 
+        title="Copenhagen Concerts - Live Music Events & Shows"
+        description={`Discover ${totalEvents} upcoming live concerts and music events in Copenhagen. Find shows at venues like ${availableVenues.slice(0, 3).join(", ")} and more.`}
+        canonicalUrl="/"
+      />
+      <EventsSchema events={filteredEvents} />
       <VideoBackground />
       
       {/* Mobile Hero Section */}
