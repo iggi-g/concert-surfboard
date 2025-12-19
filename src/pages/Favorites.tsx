@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { EventsList } from "@/components/EventsList";
@@ -6,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchEvents } from "@/lib/supabase-client";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { SEO } from "@/components/SEO";
 
 const Favorites = () => {
   const { data: eventsResponse, isLoading } = useQuery({
@@ -19,6 +19,12 @@ const Favorites = () => {
 
   return (
     <PageContainer>
+      <SEO 
+        title="Your Favorite Concerts"
+        description="Your saved favorite concerts in Copenhagen. Keep track of the shows you don't want to miss."
+        canonicalUrl="/favorites"
+        noIndex={true}
+      />
       <div className="w-full max-w-[1920px] mx-auto px-4 space-y-8">
         <div className="flex items-center justify-between">
           <Link
