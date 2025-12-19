@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Favorites from "@/pages/Favorites";
+import EventPage from "@/pages/EventPage";
 import { useGoogleAnalytics } from "@/hooks/useGoogleAnalytics";
 import "./App.css";
 
@@ -19,6 +20,7 @@ function AppContent() {
         <Route path="/" element={<Index />} />
         <Route path="/about" element={<About />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/event/:slug" element={<EventPage />} />
       </Routes>
       <Toaster />
     </>
