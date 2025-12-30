@@ -39,7 +39,10 @@ export const VenueDropdownFilter = ({
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <Select>
-        <SelectTrigger className="bg-white/10 border-white/10 text-white hover:bg-white/20 min-w-[140px]">
+        <SelectTrigger className={cn(
+          "bg-ui-surface border border-white/10 text-text-primary hover:bg-primary/10 hover:border-primary/50 hover:text-primary transition-all duration-200 min-w-[140px]",
+          selectedVenues.length > 0 && "bg-primary text-background border-primary hover:bg-primary/90"
+        )}>
           <SelectValue placeholder={
             selectedVenues.length === 0 ? (
               "Select Venues"
@@ -48,19 +51,19 @@ export const VenueDropdownFilter = ({
             )
           } />
         </SelectTrigger>
-        <SelectContent className="bg-black/95 border-white/10 text-white max-h-[300px]">
+        <SelectContent className="bg-ui-surface border-white/10 text-text-primary max-h-[300px]">
           {venues.map((venue) => (
             <div
               key={venue}
-              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-white/10 cursor-pointer"
+              className="flex items-center space-x-2 px-3 py-2 text-text-primary hover:bg-primary/10 hover:text-primary cursor-pointer transition-colors duration-200"
               onClick={() => handleVenueSelect(venue)}
             >
               <Checkbox
                 checked={selectedVenues.includes(venue)}
                 onChange={() => handleVenueSelect(venue)}
-                className="border-white/50 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
-              <span className="text-white">{venue}</span>
+              <span>{venue}</span>
             </div>
           ))}
         </SelectContent>
@@ -71,7 +74,7 @@ export const VenueDropdownFilter = ({
           variant="outline"
           size="sm"
           onClick={clearAllVenues}
-          className="bg-white/10 border-white/10 text-white hover:bg-white/20 px-2"
+          className="px-2"
         >
           <X className="w-3 h-3" />
         </Button>
