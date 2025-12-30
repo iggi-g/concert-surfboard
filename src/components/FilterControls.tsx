@@ -78,7 +78,7 @@ export const FilterControls = ({
             <Button
               variant="outline"
               onClick={clearFilters}
-              className="bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 shadow-card font-medium"
+              className="font-medium"
             >
               <X className="w-4 h-4 mr-2" />
               Clear Filters
@@ -146,7 +146,7 @@ export const FilterControls = ({
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 shadow-card font-medium"
+            className="font-medium"
           >
             <X className="w-4 h-4 mr-2" />
             Clear Filters

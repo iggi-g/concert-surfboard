@@ -45,7 +45,7 @@ export const PageHeader = ({
   }, []);
 
   return (
-    <header className="pt-6 px-6 relative z-10">
+    <header className="py-6 px-6 relative z-10">
       <div className={`fixed top-4 left-4 z-50 transition-all duration-300 ${isLogoVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`}>
         <Link to="/" className="text-primary hover:text-primary-glow transition-colors" aria-label="ConcertsCPH Homepage">
           <span className="font-bold text-lg uppercase tracking-wide">ConcertsCPH</span>

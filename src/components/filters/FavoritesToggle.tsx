@@ -22,14 +22,11 @@ export const FavoritesToggle = ({
 
   return (
     <Button
-      variant="outline"
+      variant={showFavoritesOnly ? "active" : "outline"}
       onClick={handleToggle}
-      className={cn(
-        "w-full md:w-auto",
-        showFavoritesOnly && "border-primary/50 text-primary"
-      )}
+      className="w-full md:w-auto"
     >
-      <Heart className="mr-2 h-4 w-4 flex-shrink-0" />
+      <Heart className={cn("mr-2 h-4 w-4 flex-shrink-0", showFavoritesOnly && "fill-current")} />
       <span>Favorites</span>
     </Button>
   );
