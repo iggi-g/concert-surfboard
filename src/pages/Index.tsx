@@ -179,16 +179,16 @@ const Index = () => {
       <VideoBackground />
       
       {/* Mobile Hero Section */}
-      <div className="min-h-[6vh] md:min-h-[4vh] lg:min-h-[5vh] flex flex-col relative">
+      <div className="min-h-[5vh] md:min-h-[4vh] lg:min-h-[5vh] flex flex-col relative">
         <PageHeader filteredEventsCount={filteredEvents.length} showFavoritesOnly={showFavoritesOnly} hasMoreEvents={hasMoreEvents} totalEvents={totalEvents} hasActiveFilters={hasActiveFilters} />
         
         {/* Hero Content - Centered */}
-      <div className="flex items-center flex-col-reverse px-2 pt-10 md:pt-6">
-  <div className="text-center space-y-2">
-    <h1 className="text-text-primary text-heading text-[34px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
+      <div className="flex items-center flex-col-reverse px-2 pt-6 md:pt-6">
+  <div className="text-center space-y-1">
+    <h1 className="text-text-primary text-heading text-[28px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
       {generateHeroText()}
     </h1>
-    <p className="text-[15px] md:text-lg text-body-semibold tracking-[-0.3px] text-primary animate-fade-in my-[9px]">
+    <p className="text-[14px] md:text-lg text-body-semibold tracking-[-0.3px] text-primary animate-fade-in my-[6px]">
       {(() => {
               if (showFavoritesOnly) {
                 return `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
@@ -204,12 +204,12 @@ const Index = () => {
 
         
         {/* Search and Controls - Anchored at bottom of hero */}
-        <div className="px-6 pb-6 mt-sm md:mt-sm space-y-xs relative z-10">
+        <div className="px-4 pb-4 mt-2 md:mt-sm space-y-xs relative z-10">
           <MobileFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} showMobileFilters={showMobileFilters} setShowMobileFilters={setShowMobileFilters} />
         </div>
         
         {/* Bottom gradient overlay */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#111111] to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#111111] to-transparent pointer-events-none" />
       </div>
 
       {/* Desktop Filters */}

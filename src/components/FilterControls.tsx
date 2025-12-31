@@ -1,16 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { X, Filter } from "lucide-react";
+import { X } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { VenueDropdownFilter } from "./VenueDropdownFilter";
-import { SurpriseButton } from "./SurpriseButton";
-import { SearchInput } from "./filters/SearchInput";
-import { FavoritesToggle } from "./filters/FavoritesToggle";
 import { DateRangeSelector } from "./filters/DateRangeSelector";
 import { SortDropdown } from "./filters/SortDropdown";
 import { TimeFilterTabs } from "./filters/TimeFilterTabs";
 import { UtilityTools } from "./filters/UtilityTools";
+import { MobileFilterBar } from "./filters/MobileFilterBar";
 import { Event } from "@/lib/supabase-client";
-import { useState } from "react";
 
 interface FilterControlsProps {
   searchQuery: string;
@@ -53,10 +50,7 @@ export const FilterControls = ({
   filteredEvents,
   isMobile,
   showOnlyAdvancedFilters,
-  onPopularEventClick,
 }: FilterControlsProps) => {
-  const [showMobileTools, setShowMobileTools] = useState(false);
-
   if (showOnlyAdvancedFilters) {
     return (
       <div className="w-full max-w-6xl mx-auto space-y-xs">
@@ -92,75 +86,34 @@ export const FilterControls = ({
     );
   }
 
-  // Mobile Layout
+  // Mobile Layout - Compact
   if (isMobile) {
     return (
-      <div className="w-full space-y-3">
+      <div className="w-full space-y-2">
         {/* Time Filter Tabs - Scrollable */}
-        <div className="overflow-x-auto scrollbar-hide -mx-4 px-4">
+        <div className="overflow-x-auto scrollbar-hide -mx-2 px-2">
           <TimeFilterTabs dateRange={dateRange} setDateRange={setDateRange} />
         </div>
 
-        {/* Search Input */}
-        <SearchInput 
+        {/* Search + Filter Button Row */}
+        <MobileFilterBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          selectedVenues={selectedVenues}
+          setSelectedVenues={setSelectedVenues}
+          availableVenues={availableVenues}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          showFavoritesOnly={showFavoritesOnly}
+          setShowFavoritesOnly={setShowFavoritesOnly}
+          filteredEvents={filteredEvents}
+          hasActiveFilters={hasActiveFilters}
+          clearFilters={clearFilters}
         />
-
-        {/* Filter Toggle Button */}
-        <Button
-          variant="outline"
-          onClick={() => setShowMobileTools(!showMobileTools)}
-          className="w-full h-9 text-sm text-muted-foreground border-muted-foreground/20"
-        >
-          <Filter className="h-4 w-4 mr-2" />
-          {showMobileTools ? "Hide Filters" : "More Filters"}
-          {hasActiveFilters && (
-            <span className="ml-2 px-1.5 py-0.5 text-xs bg-primary text-primary-foreground rounded-full">
-              Active
-            </span>
-          )}
-        </Button>
-
-        {/* Collapsible Tools */}
-        {showMobileTools && (
-          <div className="flex flex-col gap-2 animate-fade-in">
-            <div className="flex gap-2">
-              <FavoritesToggle
-                showFavoritesOnly={showFavoritesOnly}
-                setShowFavoritesOnly={setShowFavoritesOnly}
-              />
-              <SurpriseButton filteredEvents={filteredEvents} className="flex-1" />
-            </div>
-            
-            <VenueDropdownFilter
-              venues={availableVenues}
-              selectedVenues={selectedVenues}
-              onVenueChange={setSelectedVenues}
-            />
-            
-            <DateRangeSelector
-              dateRange={dateRange}
-              setDateRange={setDateRange}
-            />
-
-            <SortDropdown
-              setSortOrder={setSortOrder}
-              setSortBy={setSortBy}
-            />
-
-            {hasActiveFilters && (
-              <Button
-                variant="outline"
-                onClick={clearFilters}
-                className="w-full h-9 text-sm text-destructive border-destructive/30 hover:bg-destructive/10"
-              >
-                <X className="w-4 h-4 mr-2" />
-                Clear All Filters
-              </Button>
-            )}
-          </div>
-        )}
       </div>
     );
   }
