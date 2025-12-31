@@ -16,6 +16,7 @@ interface VenueDropdownFilterProps {
   selectedVenues: string[];
   onVenueChange: (venues: string[]) => void;
   className?: string;
+  compact?: boolean;
 }
 
 export const VenueDropdownFilter = ({
@@ -23,6 +24,7 @@ export const VenueDropdownFilter = ({
   selectedVenues,
   onVenueChange,
   className,
+  compact,
 }: VenueDropdownFilterProps) => {
   const handleVenueSelect = (venue: string) => {
     if (selectedVenues.includes(venue)) {
@@ -39,28 +41,31 @@ export const VenueDropdownFilter = ({
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <Select>
-        <SelectTrigger className="bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 shadow-card font-medium min-w-[140px]">
+        <SelectTrigger className={cn(
+          "bg-muted/50 border-muted-foreground/20 text-foreground hover:border-primary/50",
+          compact ? "h-9 text-sm min-w-[120px]" : "min-w-[140px]"
+        )}>
           <SelectValue placeholder={
             selectedVenues.length === 0 ? (
-              "Select Venues"
+              compact ? "Venues" : "Select Venues"
             ) : (
-              `${selectedVenues.length} venue${selectedVenues.length === 1 ? "" : "s"} selected`
+              `${selectedVenues.length} venue${selectedVenues.length === 1 ? "" : "s"}`
             )
           } />
         </SelectTrigger>
-        <SelectContent className="bg-black/95 border-white/10 text-white max-h-[300px]">
+        <SelectContent className="bg-popover border-border text-foreground max-h-[300px]">
           {venues.map((venue) => (
             <div
               key={venue}
-              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-white/10 cursor-pointer"
+              className="flex items-center space-x-2 px-3 py-2 text-foreground hover:bg-muted cursor-pointer"
               onClick={() => handleVenueSelect(venue)}
             >
               <Checkbox
                 checked={selectedVenues.includes(venue)}
                 onChange={() => handleVenueSelect(venue)}
-                className="border-white/50 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                className="border-muted-foreground data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
-              <span className="text-white">{venue}</span>
+              <span>{venue}</span>
             </div>
           ))}
         </SelectContent>
@@ -68,10 +73,10 @@ export const VenueDropdownFilter = ({
       
       {selectedVenues.length > 0 && (
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={clearAllVenues}
-          className="bg-white/10 border-white/10 text-white hover:bg-white/20 px-2"
+          className="h-9 px-2 text-muted-foreground hover:text-foreground"
         >
           <X className="w-3 h-3" />
         </Button>
