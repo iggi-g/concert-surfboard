@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { DateRange } from "react-day-picker";
@@ -9,6 +8,7 @@ import { FavoritesToggle } from "./filters/FavoritesToggle";
 import { DateRangeSelector } from "./filters/DateRangeSelector";
 import { SortDropdown } from "./filters/SortDropdown";
 import { PopularEventsFilter } from "./filters/PopularEventsFilter";
+import { QuickDateFilters } from "./filters/QuickDateFilters";
 import { Event } from "@/lib/supabase-client";
 
 interface FilterControlsProps {
@@ -123,6 +123,8 @@ export const FilterControls = ({
         />
 
         <SurpriseButton filteredEvents={filteredEvents} />
+
+        <QuickDateFilters dateRange={dateRange} setDateRange={setDateRange} />
 
         <PopularEventsFilter onEventClick={onPopularEventClick} />
 
