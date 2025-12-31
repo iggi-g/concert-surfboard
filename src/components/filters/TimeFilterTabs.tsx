@@ -59,7 +59,7 @@ export const TimeFilterTabs = ({ dateRange, setDateRange }: TimeFilterTabsProps)
   };
 
   return (
-    <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide pb-1">
+    <div className="flex items-center gap-1.5 min-w-max">
       {timeFilters.map((filter) => {
         const isActive = activeFilter === filter.key;
         return (
@@ -67,7 +67,7 @@ export const TimeFilterTabs = ({ dateRange, setDateRange }: TimeFilterTabsProps)
             key={filter.key}
             onClick={() => handleClick(filter)}
             className={cn(
-              "px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200",
+              "px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200",
               isActive
                 ? "bg-primary text-primary-foreground shadow-md"
                 : "bg-transparent border border-muted-foreground/30 text-muted-foreground hover:border-primary/50 hover:text-foreground"
