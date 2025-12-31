@@ -70,7 +70,7 @@ export const PopularEventsFilter = ({ onEventClick }: PopularEventsFilterProps) 
           className="bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 shadow-card font-medium"
         >
           <TrendingUp className="w-4 h-4 mr-2" />
-          Popular Events
+          <span className="font-medium">Popular Events</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[320px] p-0" align="end">

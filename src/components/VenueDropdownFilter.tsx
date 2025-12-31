@@ -39,7 +39,7 @@ export const VenueDropdownFilter = ({
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <Select>
-        <SelectTrigger className="bg-white/10 border-white/10 text-white hover:bg-white/20 min-w-[140px]">
+        <SelectTrigger className="bg-ui-surface border border-ui-border text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 shadow-card font-medium min-w-[140px]">
           <SelectValue placeholder={
             selectedVenues.length === 0 ? (
               "Select Venues"
