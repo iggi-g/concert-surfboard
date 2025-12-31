@@ -4,7 +4,6 @@ import { Heart, Calendar } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
-import { toTitleCase } from "@/lib/titleCase";
 interface ConcertCardProps {
   artist: string;
   date: string;
@@ -155,22 +154,22 @@ export const ConcertCard = ({
     }
   };
   const placeholderImage = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=75";
-  return <Card className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-[0_8px_30px_rgba(255,107,0,0.15)] animate-fade-in cursor-pointer bg-ui-surface backdrop-blur-sm border-ui-border relative shadow-[0_4px_20px_rgba(0,0,0,0.3)] group" onClick={handleClick}>
-      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-2xl">
+  return <Card className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-all duration-300 hover:scale-[1.01] hover:shadow-elevated animate-fade-in cursor-pointer bg-ui-surface backdrop-blur-sm border-ui-border relative shadow-card" onClick={handleClick}>
+      <div className="relative aspect-[16/9] w-full">
         {!loaded && <div className="absolute inset-0 bg-white/10 animate-pulse" />}
-        <img ref={imageRef} src={error ? placeholderImage : isIntersecting ? imageUrl : placeholderImage} alt={`${artist} concert at ${venue} in Copenhagen`} className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ${loaded ? 'opacity-100' : 'opacity-0'} group-hover:scale-105`} loading="lazy" decoding="async" width="400" height="225" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <img ref={imageRef} src={error ? placeholderImage : isIntersecting ? imageUrl : placeholderImage} alt={`${artist} concert at ${venue} in Copenhagen`} className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`} loading="lazy" decoding="async" width="400" height="225" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
         <div className="absolute top-3 inset-x-0 flex justify-between items-start px-5">
           <button
             onClick={handleDateClick}
-            className="text-white/90 text-xs font-medium bg-black/40 px-3 py-1.5 rounded-lg backdrop-blur-md border border-white/10 hover:bg-black/60 hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+            className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card hover:bg-ui-surface hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
             aria-label={`Filter by date ${date}`}
           >
             {date}
           </button>
           <button
             onClick={handleVenueClick}
-            className="text-white/90 text-xs font-medium bg-black/40 px-3 py-1.5 rounded-lg backdrop-blur-md border border-white/10 hover:bg-black/60 hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+            className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card hover:bg-ui-surface hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
             aria-label={`Filter by venue ${venue}`}
           >
             {venue}
@@ -204,8 +203,8 @@ export const ConcertCard = ({
           </TooltipProvider>
         </div>
       </div>
-      <div className="p-5">
-        <h2 className="text-lg md:text-lg font-semibold text-text-primary tracking-wide leading-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{toTitleCase(artist)}</h2>
+      <div className="p-8">
+        <h2 className="text-lg md:text-lg font-bold text-text-primary uppercase tracking-wide leading-tight">{artist}</h2>
       </div>
     </Card>;
 };

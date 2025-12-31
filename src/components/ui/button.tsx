@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-sm text-sm font-semibold ring-offset-background transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-sm text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -13,12 +13,11 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-card",
         outline:
-          "border border-white/10 bg-ui-surface text-text-primary hover:bg-primary/10 hover:border-primary/50 hover:text-primary backdrop-blur-sm shadow-card",
+          "border border-ui-border bg-ui-surface text-text-primary hover:bg-ui-surface/80 hover:border-primary/50 hover:shadow-glow backdrop-blur-sm shadow-card",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-card",
         ghost: "hover:bg-ui-surface/50 hover:text-text-primary hover:shadow-glow",
         link: "text-primary underline-offset-4 hover:underline",
-        active: "bg-primary text-background border border-primary hover:bg-primary/90 shadow-card",
       },
       size: {
         default: "h-button px-3.5 py-2.5",
