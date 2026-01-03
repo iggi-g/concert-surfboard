@@ -1,9 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo, useCallback } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
+
 interface ConcertCardProps {
   artist: string;
   date: string;
@@ -20,8 +21,8 @@ interface ConcertCardProps {
   onDateClick?: (date: string) => void;
 }
 
-// Concert card component for displaying event information
-export const ConcertCard = ({
+// Concert card component for displaying event information - memoized for performance
+export const ConcertCard = memo(({
   artist,
   date,
   venue,
@@ -36,37 +37,37 @@ export const ConcertCard = ({
 }: ConcertCardProps) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const imageRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   
+  // Lazy load image when card enters viewport
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      setIsIntersecting(entry.isIntersecting);
-    }, {
-      rootMargin: '50px',
-      threshold: 0.1
-    });
-    if (imageRef.current) {
-      observer.observe(imageRef.current);
-    }
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-  useEffect(() => {
-    if (!isIntersecting || loaded) return;
-    const img = new Image();
-    img.src = imageUrl;
-    img.onload = () => {
-      setLoaded(true);
-      setError(false);
-    };
-    img.onerror = () => {
-      setError(true);
-      setLoaded(true);
-    };
-  }, [imageUrl, isIntersecting, loaded]);
-  const handleClick = async () => {
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !loaded) {
+          const img = new window.Image();
+          img.src = imageUrl;
+          img.onload = () => {
+            setLoaded(true);
+            setError(false);
+          };
+          img.onerror = () => {
+            setError(true);
+            setLoaded(true);
+          };
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px', threshold: 0 }
+    );
+    
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [imageUrl, loaded]);
+
+  const handleClick = useCallback(async () => {
     // Track concert card click
     try {
       await supabase.from('concert_analytics').insert({
@@ -80,8 +81,9 @@ export const ConcertCard = ({
     
     // Open ticket URL directly
     window.open(ticketUrl, '_blank');
-  };
-  const handleFavoriteClick = async (e: React.MouseEvent) => {
+  }, [artist, date, venue, ticketUrl]);
+
+  const handleFavoriteClick = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
     
     // Track favorite button click
@@ -99,8 +101,9 @@ export const ConcertCard = ({
     if (onToggleFavorite) {
       onToggleFavorite(artist);
     }
-  };
-  const handleCalendarClick = (e: React.MouseEvent) => {
+  }, [artist, date, venue, isFavorite, onToggleFavorite]);
+
+  const handleCalendarClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     const eventDate = new Date(date);
     // Format date as YYYYMMDD for all-day event
@@ -118,9 +121,9 @@ export const ConcertCard = ({
       location: venue
     });
     window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
-  };
+  }, [artist, date, venue, ticketUrl]);
 
-  const handleVenueClick = async (e: React.MouseEvent) => {
+  const handleVenueClick = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
     
     // Track venue filter click
@@ -135,9 +138,9 @@ export const ConcertCard = ({
     if (onVenueClick) {
       onVenueClick(venue);
     }
-  };
+  }, [venue, onVenueClick]);
 
-  const handleDateClick = async (e: React.MouseEvent) => {
+  const handleDateClick = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
     
     // Track date filter click
@@ -152,12 +155,27 @@ export const ConcertCard = ({
     if (onDateClick) {
       onDateClick(date);
     }
-  };
+  }, [date, onDateClick]);
+
   const placeholderImage = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=75";
-  return <Card className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-all duration-300 hover:scale-[1.01] hover:shadow-elevated animate-fade-in cursor-pointer bg-ui-surface backdrop-blur-sm border-ui-border relative shadow-card" onClick={handleClick}>
-      <div className="relative aspect-[16/9] w-full">
-        {!loaded && <div className="absolute inset-0 bg-white/10 animate-pulse" />}
-        <img ref={imageRef} src={error ? placeholderImage : isIntersecting ? imageUrl : placeholderImage} alt={`${artist} concert at ${venue} in Copenhagen`} className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`} loading="lazy" decoding="async" width="400" height="225" />
+  const displayImage = error ? placeholderImage : (loaded ? imageUrl : placeholderImage);
+
+  return (
+    <Card 
+      ref={containerRef}
+      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-transform duration-200 hover:scale-[1.01] cursor-pointer bg-ui-surface backdrop-blur-sm border-ui-border relative shadow-card" 
+      onClick={handleClick}
+    >
+      <div className="relative aspect-[16/9] w-full bg-muted">
+        <img 
+          src={displayImage} 
+          alt={`${artist} concert at ${venue} in Copenhagen`} 
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${loaded ? 'opacity-100' : 'opacity-0'}`} 
+          loading="lazy" 
+          decoding="async" 
+          width="400" 
+          height="225" 
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
         <div className="absolute top-3 inset-x-0 flex justify-between items-start px-5">
           <button
@@ -206,5 +224,8 @@ export const ConcertCard = ({
       <div className="p-8">
         <h2 className="text-lg md:text-lg font-bold text-text-primary uppercase tracking-wide leading-tight">{artist}</h2>
       </div>
-    </Card>;
-};
+    </Card>
+  );
+});
+
+ConcertCard.displayName = 'ConcertCard';

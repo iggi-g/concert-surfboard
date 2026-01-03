@@ -1,11 +1,8 @@
-
 import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { isAfter, startOfDay, parseISO, isSameDay } from "date-fns";
 import { EventSkeleton } from "./EventSkeleton";
-import { useEffect, useState, useMemo, useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface EventsListProps {
@@ -20,47 +17,40 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
   const [page, setPage] = useState(1);
   const eventsPerPage = 12;
-  const queryClient = useQueryClient();
   const { toast } = useToast();
-  const today = startOfDay(new Date());
-
-  // Add debugging to see what's happening with the events
-  console.log('EventsList - Total events received:', events.length);
-  console.log('EventsList - showFavoritesOnly:', showFavoritesOnly);
-  console.log('EventsList - favorites:', favorites);
-  console.log('EventsList - Current page:', page);
-  console.log('EventsList - Events per page:', eventsPerPage);
+  const scrollTimeoutRef = useRef<number | null>(null);
 
   // Memoize filtered events
   const filteredEvents = useMemo(() => {
-    console.log('Recalculating filtered events. Current favorites:', favorites);
-    // Only filter by favorites since date filtering is already done in Index.tsx
-    const filtered = events.filter(event => !showFavoritesOnly || favorites.includes(event.title));
-    
-    console.log('EventsList - Filtered events count:', filtered.length);
-    return filtered;
+    return events.filter(event => !showFavoritesOnly || favorites.includes(event.title));
   }, [events, showFavoritesOnly, favorites]);
 
   // Memoize visible events
   const visibleEvents = useMemo(() => {
-    const visible = filteredEvents.slice(0, page * eventsPerPage);
-    console.log('EventsList - Visible events count:', visible.length);
-    console.log('EventsList - Should show up to:', page * eventsPerPage, 'events');
-    console.log('EventsList - Filtered events available:', filteredEvents.length);
-    return visible;
+    return filteredEvents.slice(0, page * eventsPerPage);
   }, [filteredEvents, page, eventsPerPage]);
 
-  // Handle infinite scroll
-  const handleScroll = useCallback(() => {
-    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1000) {
-      setPage(prev => prev + 1);
-    }
-  }, []);
-
+  // Throttled scroll handler for infinite scroll
   useEffect(() => {
+    const handleScroll = () => {
+      if (scrollTimeoutRef.current) return;
+      
+      scrollTimeoutRef.current = window.setTimeout(() => {
+        scrollTimeoutRef.current = null;
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1500) {
+          setPage(prev => prev + 1);
+        }
+      }, 100);
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Handle favorite toggling
   const handleToggleFavorite = useCallback((artist: string) => {
