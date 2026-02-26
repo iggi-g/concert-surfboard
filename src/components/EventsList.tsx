@@ -2,8 +2,9 @@ import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { EventSkeleton } from "./EventSkeleton";
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback, CSSProperties, ReactElement } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { List } from "react-window";
 
 interface EventsListProps {
   events: Event[];
@@ -13,63 +14,95 @@ interface EventsListProps {
   onDateClick?: (date: string) => void;
 }
 
+const getColumnCount = (width: number): number => {
+  if (width >= 1536) return 5;
+  if (width >= 1280) return 4;
+  if (width >= 1024) return 3;
+  if (width >= 768) return 2;
+  return 1;
+};
+
+const ROW_HEIGHT = 340;
+
+interface RowProps {
+  filteredEvents: Event[];
+  columnCount: number;
+  favorites: string[];
+  onToggleFavorite: (artist: string) => void;
+  showFavoritesOnly: boolean;
+  onVenueClick?: (venue: string) => void;
+  onDateClick?: (date: string) => void;
+}
+
+const RowComponent = ({
+  index,
+  style,
+  filteredEvents,
+  columnCount,
+  favorites,
+  onToggleFavorite,
+  showFavoritesOnly,
+  onVenueClick,
+  onDateClick,
+}: {
+  ariaAttributes: { "aria-posinset": number; "aria-setsize": number; role: "listitem" };
+  index: number;
+  style: CSSProperties;
+} & RowProps): ReactElement | null => {
+  const startIndex = index * columnCount;
+  const rowEvents = filteredEvents.slice(startIndex, startIndex + columnCount);
+
+  return (
+    <div style={style} className="flex gap-4 md:gap-6 justify-center px-0">
+      {rowEvents.map((event: Event) => (
+        <div key={`${event.title}-${event.date}`} className="flex justify-center" style={{ width: `${100 / columnCount}%`, maxWidth: 350 }}>
+          <ConcertCard
+            artist={event.title}
+            date={event.date}
+            venue={event.venue}
+            location={event.location || ""}
+            imageUrl={event.image}
+            ticketUrl={event.link}
+            venueLink={getVenueLink(event.venue)}
+            isFavorite={favorites.includes(event.title)}
+            onToggleFavorite={onToggleFavorite}
+            isInFavoritesView={showFavoritesOnly}
+            onVenueClick={onVenueClick}
+            onDateClick={onDateClick}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVenueClick, onDateClick }: EventsListProps) => {
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
-  const [page, setPage] = useState(1);
-  const eventsPerPage = 12;
   const { toast } = useToast();
-  const scrollTimeoutRef = useRef<number | null>(null);
+  const [columnCount, setColumnCount] = useState(() => getColumnCount(window.innerWidth));
 
-  // Memoize filtered events
   const filteredEvents = useMemo(() => {
     return events.filter(event => !showFavoritesOnly || favorites.includes(event.title));
   }, [events, showFavoritesOnly, favorites]);
 
-  // Memoize visible events
-  const visibleEvents = useMemo(() => {
-    return filteredEvents.slice(0, page * eventsPerPage);
-  }, [filteredEvents, page, eventsPerPage]);
+  const rowCount = Math.ceil(filteredEvents.length / columnCount);
 
-  // Throttled scroll handler for infinite scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollTimeoutRef.current) return;
-      
-      scrollTimeoutRef.current = window.setTimeout(() => {
-        scrollTimeoutRef.current = null;
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1500) {
-          setPage(prev => prev + 1);
-        }
-      }, 100);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  // Handle favorite toggling
   const handleToggleFavorite = useCallback((artist: string) => {
     const isFavorite = favorites.includes(artist);
-    console.log('Toggling favorite for:', artist, 'Current state:', isFavorite);
-    
     setFavorites(currentFavorites => {
-      const newFavorites = isFavorite
+      return isFavorite
         ? currentFavorites.filter(a => a !== artist)
         : [...currentFavorites, artist];
-      console.log('New favorites:', newFavorites);
-      return newFavorites;
     });
-    
     toast({
       title: isFavorite ? "Removed from favorites" : "Added to favorites",
       description: `${artist} has been ${isFavorite ? "removed from" : "added to"} your favorites`,
     });
   }, [favorites, setFavorites, toast]);
+
+  const handleResize = useCallback(() => {
+    setColumnCount(getColumnCount(window.innerWidth));
+  }, []);
 
   if (isLoading) {
     return (
@@ -84,25 +117,23 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
-      {visibleEvents.map((event: Event, index: number) => (
-        <div key={`${event.title}-${event.date}`} className="flex justify-center">
-          <ConcertCard
-            artist={event.title}
-            date={event.date}
-            venue={event.venue}
-            location={event.location || ""}
-            imageUrl={event.image}
-            ticketUrl={event.link}
-            venueLink={getVenueLink(event.venue)}
-            isFavorite={favorites.includes(event.title)}
-            onToggleFavorite={handleToggleFavorite}
-            isInFavoritesView={showFavoritesOnly}
-            onVenueClick={onVenueClick}
-            onDateClick={onDateClick}
-          />
-        </div>
-      ))}
+    <div className="w-full max-w-[1920px] mx-auto">
+      <List
+        rowCount={rowCount}
+        rowHeight={ROW_HEIGHT}
+        overscanCount={5}
+        onResize={handleResize}
+        rowComponent={RowComponent}
+        rowProps={{
+          filteredEvents,
+          columnCount,
+          favorites,
+          onToggleFavorite: handleToggleFavorite,
+          showFavoritesOnly,
+          onVenueClick,
+          onDateClick,
+        }}
+      />
     </div>
   );
 };
@@ -126,6 +157,5 @@ const getVenueLink = (venue: string): string => {
     'Loppen': 'https://loppen.dk/en',
     'Bremen Teater': 'https://www.brementeater.dk/'
   };
-  
   return venueLinks[venue] || '';
 };
