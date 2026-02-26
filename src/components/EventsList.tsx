@@ -22,7 +22,7 @@ const getColumnCount = (width: number): number => {
   return 1;
 };
 
-const ROW_HEIGHT = 340;
+const ROW_HEIGHT = 370;
 
 interface RowProps {
   filteredEvents: Event[];
@@ -53,7 +53,7 @@ const RowComponent = ({
   const rowEvents = filteredEvents.slice(startIndex, startIndex + columnCount);
 
   return (
-    <div style={style} className="flex gap-4 md:gap-6 justify-center px-0">
+    <div style={style} className="flex gap-4 md:gap-6 justify-center px-0 pb-4 md:pb-6">
       {rowEvents.map((event: Event) => (
         <div key={`${event.title}-${event.date}`} className="flex justify-center" style={{ width: `${100 / columnCount}%`, maxWidth: 350 }}>
           <ConcertCard
