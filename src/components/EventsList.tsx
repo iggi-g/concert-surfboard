@@ -4,7 +4,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { EventSkeleton } from "./EventSkeleton";
 import { useState, useMemo, useCallback, CSSProperties, ReactElement } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { List } from "react-window";
+import { List, useDynamicRowHeight } from "react-window";
 
 interface EventsListProps {
   events: Event[];
@@ -22,7 +22,7 @@ const getColumnCount = (width: number): number => {
   return 1;
 };
 
-const ROW_HEIGHT = 370;
+const DESKTOP_ROW_HEIGHT = 370;
 
 interface RowProps {
   filteredEvents: Event[];
@@ -81,6 +81,9 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
   const { toast } = useToast();
   const [columnCount, setColumnCount] = useState(() => getColumnCount(window.innerWidth));
 
+  const isMobile = columnCount === 1;
+  const dynamicRowHeight = useDynamicRowHeight({ defaultRowHeight: 320 });
+
   const filteredEvents = useMemo(() => {
     return events.filter(event => !showFavoritesOnly || favorites.includes(event.title));
   }, [events, showFavoritesOnly, favorites]);
@@ -120,7 +123,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
     <div className="w-full max-w-[1920px] mx-auto">
       <List
         rowCount={rowCount}
-        rowHeight={ROW_HEIGHT}
+        rowHeight={isMobile ? dynamicRowHeight : DESKTOP_ROW_HEIGHT}
         overscanCount={3}
         onResize={handleResize}
         rowComponent={RowComponent}
@@ -138,7 +141,6 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
     </div>
   );
 };
-
 const getVenueLink = (venue: string): string => {
   const venueLinks: { [key: string]: string } = {
     'VEGA': 'https://vega.dk/',
