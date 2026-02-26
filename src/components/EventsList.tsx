@@ -121,7 +121,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
       <List
         rowCount={rowCount}
         rowHeight={ROW_HEIGHT}
-        overscanCount={5}
+        overscanCount={3}
         onResize={handleResize}
         rowComponent={RowComponent}
         rowProps={{
@@ -133,6 +133,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
           onVenueClick,
           onDateClick,
         }}
+        style={{ height: 'calc(100vh - 200px)' }}
       />
     </div>
   );
