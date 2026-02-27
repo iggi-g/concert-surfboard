@@ -250,9 +250,16 @@ const Index = () => {
 
       <ContactButton />
       
-      {showScrollToTop && <Button variant="outline" size="icon" className="fixed bottom-20 right-4 rounded-full bg-ui-surface/80 border-ui-border text-primary hover:bg-ui-surface hover:text-primary-glow hover:border-primary/50 hover:shadow-glow backdrop-blur-sm shadow-elevated z-50" onClick={scrollToTop}>
+      {showScrollToTop && (
+        <Button 
+          variant="outline" 
+          className="fixed bottom-20 right-4 rounded-full bg-primary/90 border-primary text-primary-foreground hover:bg-primary hover:shadow-glow backdrop-blur-sm shadow-elevated z-50 px-4 h-10 gap-2 animate-fade-in"
+          onClick={scrollToTop}
+        >
           <ArrowUp className="h-4 w-4" />
-        </Button>}
+          <span className="text-sm font-medium">Top</span>
+        </Button>
+      )}
     </PageContainer>;
 };
 export default Index;
