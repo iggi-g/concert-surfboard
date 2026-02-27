@@ -16,7 +16,7 @@ const About = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    message: "",
+    message: ""
   });
 
   useEffect(() => {
@@ -34,14 +34,14 @@ const About = () => {
 
     try {
       const { error } = await supabase.functions.invoke("send-contact-email", {
-        body: formData,
+        body: formData
       });
 
       if (error) throw error;
 
       toast({
         title: "Message sent!",
-        description: "We'll get back to you as soon as possible.",
+        description: "We'll get back to you as soon as possible."
       });
 
       setFormData({ name: "", email: "", message: "" });
@@ -50,7 +50,7 @@ const About = () => {
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsLoading(false);
@@ -59,16 +59,16 @@ const About = () => {
 
   return (
     <PageContainer>
-      <SEO 
+      <SEO
         title="About CPH Concerts"
         description="Learn about CPH Concerts - your guide to live music in Copenhagen. Contact us to suggest venues or provide feedback about Copenhagen's music scene."
-        canonicalUrl="/about"
-      />
+        canonicalUrl="/about" />
+
       <div className="max-w-2xl mx-auto text-center space-y-6 px-4 md:px-0">
         <Link
           to="/"
-          className="text-white hover:text-orange-500 transition-colors inline-flex items-center gap-2 text-lg"
-        >
+          className="text-white hover:text-orange-500 transition-colors inline-flex items-center gap-2 text-lg">
+
           <ArrowLeft className="h-5 w-5" />
           Back to Concerts
         </Link>
@@ -78,14 +78,14 @@ const About = () => {
         </h1>
 
         <div className="space-y-4 text-white/90">
-          <p className="text-lg leading-relaxed">
-            Hi! I am Igor, and I made this website because I wanted to have a full overview of all the fantastic live music and concerts in Copenhagen.
-            ConcertCPH is a non-profit website, made for everyone to enjoy. 
+          <p className="text-lg leading-relaxed text-justify">Hi, I am Igor! I made ConcertCPH  to help anyone discover new music in Copenhagen. 
+
+
           </p>
         </div>
 
         <div id="contact-form" className="mt-8">
-          <p className="text-lg text-white mb-2">
+          <p className="text-lg text-white mb-2 text-justify">
             Am I missing a venue that you want me to add? Or do you have any feedback? Write me here below!
           </p>
           <h2 className="text-2xl font-semibold text-white mb-4">Contact</h2>
@@ -95,11 +95,11 @@ const About = () => {
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, name: e.target.value })
                 }
                 required
-                className="bg-white/10 border-white/10 text-white placeholder:text-white/50"
-              />
+                className="bg-white/10 border-white/10 text-white placeholder:text-white/50" />
+
             </div>
             <div>
               <Input
@@ -107,42 +107,42 @@ const About = () => {
                 placeholder="Your Email"
                 value={formData.email}
                 onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
+                setFormData({ ...formData, email: e.target.value })
                 }
                 required
-                className="bg-white/10 border-white/10 text-white placeholder:text-white/50"
-              />
+                className="bg-white/10 border-white/10 text-white placeholder:text-white/50" />
+
             </div>
             <div>
               <Textarea
                 placeholder="Your Message"
                 value={formData.message}
                 onChange={(e) =>
-                  setFormData({ ...formData, message: e.target.value })
+                setFormData({ ...formData, message: e.target.value })
                 }
                 required
-                className="bg-white/10 border-white/10 text-white placeholder:text-white/50 min-h-[120px]"
-              />
+                className="bg-white/10 border-white/10 text-white placeholder:text-white/50 min-h-[120px]" />
+
             </div>
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white"
-            >
-              {isLoading ? (
-                <>
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white">
+
+              {isLoading ?
+              <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Sending...
-                </>
-              ) : (
-                "Send Message"
-              )}
+                </> :
+
+              "Send Message"
+              }
             </Button>
           </form>
         </div>
       </div>
-    </PageContainer>
-  );
+    </PageContainer>);
+
 };
 
 export default About;
