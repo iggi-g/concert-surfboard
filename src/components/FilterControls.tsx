@@ -114,6 +114,7 @@ export const FilterControls = ({
           filteredEvents={filteredEvents}
           hasActiveFilters={hasActiveFilters}
           clearFilters={clearFilters}
+          onPopularEventClick={onPopularEventClick}
         />
       </div>
     );
