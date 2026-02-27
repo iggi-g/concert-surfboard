@@ -133,7 +133,13 @@ export const TimeFilterTabs = ({ dateRange, setDateRange }: TimeFilterTabsProps)
                 mode="range"
                 defaultMonth={dateRange?.from}
                 selected={dateRange}
-                onSelect={setDateRange}
+                onSelect={(range) => {
+                  if (range?.from && !range.to) {
+                    setDateRange({ from: range.from, to: range.from });
+                  } else {
+                    setDateRange(range);
+                  }
+                }}
                 numberOfMonths={1}
                 className="w-full"
                 classNames={{
