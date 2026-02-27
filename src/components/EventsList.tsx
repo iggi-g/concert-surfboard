@@ -22,7 +22,7 @@ const getColumnCount = (width: number): number => {
   return 1;
 };
 
-const DESKTOP_ROW_HEIGHT = 370;
+const DESKTOP_ROW_HEIGHT = 310;
 
 interface RowProps {
   filteredEvents: Event[];

@@ -179,16 +179,16 @@ const Index = () => {
       <VideoBackground />
       
       {/* Mobile Hero Section */}
-      <div className="min-h-[5vh] md:min-h-[4vh] lg:min-h-[5vh] flex flex-col relative">
+      <div className="min-h-0 flex flex-col relative">
         <PageHeader filteredEventsCount={filteredEvents.length} showFavoritesOnly={showFavoritesOnly} hasMoreEvents={hasMoreEvents} totalEvents={totalEvents} hasActiveFilters={hasActiveFilters} />
         
-        {/* Hero Content - Centered */}
-      <div className="flex items-center flex-col-reverse px-2 pt-6 md:pt-6">
-  <div className="text-center space-y-1">
-    <h1 className="text-text-primary text-heading text-[28px] md:text-[44px] lg:text-[48px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
+        {/* Hero Content - Compact */}
+      <div className="flex items-center flex-col-reverse px-2 pt-2 md:pt-3">
+  <div className="text-center space-y-0.5">
+    <h1 className="text-text-primary text-heading text-[24px] md:text-[40px] lg:text-[44px] leading-[1.0] tracking-[-0.8px] uppercase animate-fade-in">
       {generateHeroText()}
     </h1>
-    <p className="text-[14px] md:text-lg text-body-semibold tracking-[-0.3px] text-primary animate-fade-in my-[6px]">
+    <p className="text-[13px] md:text-base text-body-semibold tracking-[-0.3px] text-primary animate-fade-in my-[4px]">
       {(() => {
               if (showFavoritesOnly) {
                 return `${filteredEvents.length} favorite ${filteredEvents.length === 1 ? 'concert' : 'concerts'} available`;
@@ -204,7 +204,7 @@ const Index = () => {
 
         
         {/* Search and Controls - Anchored at bottom of hero */}
-        <div className="px-4 pb-4 mt-2 md:mt-sm space-y-xs relative z-10">
+        <div className="px-4 pb-3 mt-1 md:mt-2 space-y-xs relative z-10">
           <MobileFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} showMobileFilters={showMobileFilters} setShowMobileFilters={setShowMobileFilters} />
         </div>
         

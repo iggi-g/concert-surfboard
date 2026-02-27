@@ -221,8 +221,8 @@ export const ConcertCard = memo(({
           </TooltipProvider>
         </div>
       </div>
-      <div className="p-8">
-        <h2 className="text-lg md:text-lg font-bold text-text-primary uppercase tracking-wide leading-tight">{artist}</h2>
+      <div className="px-4 py-3">
+        <h2 className="text-sm md:text-base font-bold text-text-primary uppercase tracking-wide leading-tight">{artist}</h2>
       </div>
     </Card>
   );
