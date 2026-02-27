@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Search, Heart, Sparkles, SlidersHorizontal } from "lucide-react";
+import { Search, Heart, Dice5, SlidersHorizontal } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { Event } from "@/lib/supabase-client";
 import { cn } from "@/lib/utils";
@@ -223,8 +223,8 @@ export const MobileFilterBar = ({
                 disabled={filteredEvents.length === 0}
                 className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md border bg-muted/30 border-muted-foreground/20 text-muted-foreground hover:border-muted-foreground/40 text-sm font-medium transition-all disabled:opacity-50"
               >
-                <Sparkles className="h-4 w-4" />
-                Surprise
+                <Dice5 className="h-4 w-4" />
+                Random Concert
               </button>
             </div>
 
