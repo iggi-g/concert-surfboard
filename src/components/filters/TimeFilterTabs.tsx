@@ -156,7 +156,7 @@ export const TimeFilterTabs = ({ dateRange, setDateRange }: TimeFilterTabsProps)
                   cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-primary/10",
                   day: "h-9 w-9 p-0 font-normal text-foreground hover:bg-muted rounded-md text-sm aria-selected:bg-primary/20",
                   day_selected: "bg-primary text-primary-foreground hover:bg-primary/90",
-                  day_today: "bg-muted text-foreground",
+                  day_today: "bg-primary/20 text-primary ring-1 ring-primary rounded-full",
                   day_outside: "text-muted-foreground opacity-50",
                   day_disabled: "text-muted-foreground opacity-50",
                   day_range_middle: "rounded-none bg-primary/10",
