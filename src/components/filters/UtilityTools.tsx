@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Search, Heart, Sparkles, X } from "lucide-react";
+import { Search, Heart, Dice5, X } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { VenueDropdownFilter } from "../VenueDropdownFilter";
 import { DateRangeSelector } from "./DateRangeSelector";
@@ -108,7 +108,7 @@ export const UtilityTools = ({
           </TooltipContent>
         </Tooltip>
 
-        {/* Surprise Me */}
+        {/* Random Concert */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -118,12 +118,12 @@ export const UtilityTools = ({
               className="h-9 px-3 text-muted-foreground hover:text-foreground hover:text-primary"
               disabled={filteredEvents.length === 0}
             >
-              <Sparkles className="h-4 w-4" />
-              <span className="ml-1.5 hidden sm:inline text-sm">Surprise</span>
+              <Dice5 className="h-4 w-4" />
+              <span className="ml-1.5 hidden sm:inline text-sm">Random Concert</span>
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Random event</p>
+            <p>Open a random concert</p>
           </TooltipContent>
         </Tooltip>
 
