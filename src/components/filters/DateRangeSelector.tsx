@@ -6,8 +6,8 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  PopoverClose
-} from "@/components/ui/popover";
+  PopoverClose } from
+"@/components/ui/popover";
 import { Calendar as CalendarIcon, X } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, addWeeks, startOfMonth, endOfMonth } from "date-fns";
@@ -23,7 +23,7 @@ export const DateRangeSelector = ({
   dateRange,
   setDateRange,
   compact,
-  mobile,
+  mobile
 }: DateRangeSelectorProps) => {
   const handleQuickSelect = (range: DateRange) => {
     setDateRange(range);
@@ -32,28 +32,28 @@ export const DateRangeSelector = ({
   const today = new Date();
 
   const quickSelections = [
-    {
-      label: "Today",
-      range: {
-        from: startOfDay(today),
-        to: endOfDay(today)
-      }
-    },
-    {
-      label: "This Week",
-      range: {
-        from: startOfWeek(today, { weekStartsOn: 1 }),
-        to: endOfWeek(today, { weekStartsOn: 1 })
-      }
-    },
-    {
-      label: "Next Week",
-      range: {
-        from: startOfWeek(addWeeks(today, 1), { weekStartsOn: 1 }),
-        to: endOfWeek(addWeeks(today, 1), { weekStartsOn: 1 })
-      }
+  {
+    label: "Today",
+    range: {
+      from: startOfDay(today),
+      to: endOfDay(today)
     }
-  ];
+  },
+  {
+    label: "This Week",
+    range: {
+      from: startOfWeek(today, { weekStartsOn: 1 }),
+      to: endOfWeek(today, { weekStartsOn: 1 })
+    }
+  },
+  {
+    label: "Next Week",
+    range: {
+      from: startOfWeek(addWeeks(today, 1), { weekStartsOn: 1 }),
+      to: endOfWeek(addWeeks(today, 1), { weekStartsOn: 1 })
+    }
+  }];
+
 
   // Mobile style - full width button
   if (mobile) {
@@ -62,31 +62,31 @@ export const DateRangeSelector = ({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="w-full justify-between bg-muted/50 border-muted-foreground/20 text-foreground hover:bg-muted/70"
-          >
+            className="w-full justify-between bg-muted/50 border-muted-foreground/20 text-foreground hover:bg-muted/70">
+
             <span className="flex items-center gap-2">
               <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-              {dateRange?.from ? (
-                dateRange.to ? (
-                  <>
+              {dateRange?.from ?
+              dateRange.to ?
+              <>
                     {format(dateRange.from, "MMM d")} - {format(dateRange.to, "MMM d")}
-                  </>
-                ) : (
-                  format(dateRange.from, "MMM d")
-                )
-              ) : (
-                <span className="text-muted-foreground">Pick dates</span>
-              )}
+                  </> :
+
+              format(dateRange.from, "MMM d") :
+
+
+              <span className="text-muted-foreground">Pick dates</span>
+              }
             </span>
-            {dateRange?.from && (
-              <X
-                className="h-4 w-4 text-muted-foreground hover:text-foreground"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDateRange(undefined);
-                }}
-              />
-            )}
+            {dateRange?.from &&
+            <X
+              className="h-4 w-4 text-muted-foreground hover:text-foreground"
+              onClick={(e) => {
+                e.stopPropagation();
+                setDateRange(undefined);
+              }} />
+
+            }
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full max-w-md p-0 bg-popover border-border rounded-md shadow-lg">
@@ -125,28 +125,28 @@ export const DateRangeSelector = ({
                   day_outside: "text-muted-foreground opacity-50",
                   day_disabled: "text-muted-foreground opacity-50",
                   day_range_middle: "rounded-none bg-primary/10",
-                  day_hidden: "invisible",
-                }}
-              />
+                  day_hidden: "invisible"
+                }} />
+
             </div>
 
-            <div className="p-4 border-t border-border flex flex-wrap gap-2">
-              {quickSelections.map((selection, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  className="bg-muted border-border text-foreground hover:bg-muted/80 text-xs"
-                  onClick={() => handleQuickSelect(selection.range)}
-                >
-                  {selection.label}
-                </Button>
-              ))}
-            </div>
+            
+
+
+
+
+
+
+
+
+
+
+
+
           </div>
         </PopoverContent>
-      </Popover>
-    );
+      </Popover>);
+
   }
 
   return (
@@ -159,29 +159,29 @@ export const DateRangeSelector = ({
             "text-muted-foreground hover:text-foreground",
             compact ? "h-9 px-3" : "",
             dateRange?.from && "text-foreground"
-          )}
-        >
+          )}>
+
           <CalendarIcon className={cn("h-4 w-4", compact ? "" : "mr-2")} />
           {!compact && (
-            dateRange?.from ? (
-              dateRange.to ? (
-                <>
+          dateRange?.from ?
+          dateRange.to ?
+          <>
                   {format(dateRange.from, "LLL dd")} -{" "}
                   {format(dateRange.to, "LLL dd")}
-                </>
-              ) : (
-                format(dateRange.from, "LLL dd")
-              )
-            ) : (
-              "Pick dates"
-            )
-          )}
-          {compact && dateRange?.from && (
-            <span className="ml-1.5 text-sm">
+                </> :
+
+          format(dateRange.from, "LLL dd") :
+
+
+          "Pick dates")
+
+          }
+          {compact && dateRange?.from &&
+          <span className="ml-1.5 text-sm">
               {format(dateRange.from, "MMM d")}
               {dateRange.to && ` - ${format(dateRange.to, "MMM d")}`}
             </span>
-          )}
+          }
           {compact && !dateRange?.from && <span className="ml-1.5 text-sm">Dates</span>}
         </Button>
       </PopoverTrigger>
@@ -221,26 +221,26 @@ export const DateRangeSelector = ({
                 day_outside: "text-muted-foreground opacity-50",
                 day_disabled: "text-muted-foreground opacity-50",
                 day_range_middle: "rounded-none bg-primary/10",
-                day_hidden: "invisible",
-              }}
-            />
+                day_hidden: "invisible"
+              }} />
+
           </div>
 
           <div className="p-4 border-t border-border flex flex-wrap gap-2">
-            {quickSelections.map((selection, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                size="sm"
-                className="bg-muted border-border text-foreground hover:bg-muted/80 text-xs"
-                onClick={() => handleQuickSelect(selection.range)}
-              >
+            {quickSelections.map((selection, index) =>
+            <Button
+              key={index}
+              variant="outline"
+              size="sm"
+              className="bg-muted border-border text-foreground hover:bg-muted/80 text-xs"
+              onClick={() => handleQuickSelect(selection.range)}>
+
                 {selection.label}
               </Button>
-            ))}
+            )}
           </div>
         </div>
       </PopoverContent>
-    </Popover>
-  );
+    </Popover>);
+
 };
