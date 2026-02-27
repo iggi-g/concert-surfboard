@@ -152,38 +152,38 @@ export const DateRangeSelector = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          size={compact ? "sm" : "default"}
-          className={cn(
-            "text-muted-foreground hover:text-foreground",
-            compact ? "h-9 px-3" : "",
-            dateRange?.from && "text-foreground"
-          )}>
-
-          <CalendarIcon className={cn("h-4 w-4", compact ? "" : "mr-2")} />
-          {!compact && (
-          dateRange?.from ?
-          dateRange.to ?
-          <>
-                  {format(dateRange.from, "LLL dd")} -{" "}
-                  {format(dateRange.to, "LLL dd")}
-                </> :
-
-          format(dateRange.from, "LLL dd") :
+        
 
 
-          "Pick dates")
 
-          }
-          {compact && dateRange?.from &&
-          <span className="ml-1.5 text-sm">
-              {format(dateRange.from, "MMM d")}
-              {dateRange.to && ` - ${format(dateRange.to, "MMM d")}`}
-            </span>
-          }
-          {compact && !dateRange?.from && <span className="ml-1.5 text-sm">Dates</span>}
-        </Button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-md p-0 bg-popover border-border rounded-md shadow-lg">
         <div className="flex flex-col h-full">
