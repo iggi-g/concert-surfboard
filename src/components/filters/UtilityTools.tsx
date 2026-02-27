@@ -4,6 +4,7 @@ import { DateRange } from "react-day-picker";
 import { VenueDropdownFilter } from "../VenueDropdownFilter";
 import { DateRangeSelector } from "./DateRangeSelector";
 import { SortDropdown } from "./SortDropdown";
+import { PopularConcerts } from "./PopularConcerts";
 import { Event } from "@/lib/supabase-client";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -26,6 +27,7 @@ interface UtilityToolsProps {
   filteredEvents: Event[];
   hasActiveFilters: boolean;
   clearFilters: () => void;
+  onPopularEventClick?: (title: string, date: string, venue: string) => void;
 }
 
 export const UtilityTools = ({
@@ -43,6 +45,7 @@ export const UtilityTools = ({
   filteredEvents,
   hasActiveFilters,
   clearFilters,
+  onPopularEventClick,
 }: UtilityToolsProps) => {
   const handleSurprise = () => {
     if (filteredEvents.length === 0) return;
@@ -86,6 +89,9 @@ export const UtilityTools = ({
           setSortBy={setSortBy}
           compact
         />
+
+        {/* Popular Concerts */}
+        <PopularConcerts onEventClick={onPopularEventClick} />
 
         {/* Favorites */}
         <Tooltip>

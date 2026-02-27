@@ -9,7 +9,7 @@ export const ContactButton = () => {
     navigate('/about', { state: { scrollToContact: true } });
   };
 
-  return;
+  return null;
 
 
 

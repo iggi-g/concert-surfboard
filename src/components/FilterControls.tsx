@@ -50,6 +50,7 @@ export const FilterControls = ({
   filteredEvents,
   isMobile,
   showOnlyAdvancedFilters,
+  onPopularEventClick,
 }: FilterControlsProps) => {
   if (showOnlyAdvancedFilters) {
     return (
@@ -144,6 +145,7 @@ export const FilterControls = ({
         filteredEvents={filteredEvents}
         hasActiveFilters={hasActiveFilters}
         clearFilters={clearFilters}
+        onPopularEventClick={onPopularEventClick}
       />
     </div>
   );
