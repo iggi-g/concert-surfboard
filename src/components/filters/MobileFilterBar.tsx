@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Search, Heart, Dice5, SlidersHorizontal } from "lucide-react";
+import { Search, Heart, Dice5, SlidersHorizontal, TrendingUp } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { Event } from "@/lib/supabase-client";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,9 @@ import {
 } from "@/components/ui/select";
 import { DateRangeSelector } from "./DateRangeSelector";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase-client";
+import { startOfDay } from "date-fns";
 
 interface MobileFilterBarProps {
   searchQuery: string;
@@ -39,6 +42,7 @@ interface MobileFilterBarProps {
   filteredEvents: Event[];
   hasActiveFilters: boolean;
   clearFilters: () => void;
+  onPopularEventClick?: (title: string, date: string, venue: string) => void;
 }
 
 type SortOption = "date-asc" | "date-desc" | "title-asc" | "venue-asc";
@@ -58,8 +62,30 @@ export const MobileFilterBar = ({
   filteredEvents,
   hasActiveFilters,
   clearFilters,
+  onPopularEventClick,
 }: MobileFilterBarProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { data: popularEvents = [] } = useQuery({
+    queryKey: ["popular-concerts-mobile"],
+    queryFn: async () => {
+      const today = startOfDay(new Date()).toISOString().split("T")[0];
+      const { data, error } = await supabase
+        .from("concert_analytics")
+        .select("concert_title, concert_date, venue")
+        .gte("concert_date", today);
+      if (error) throw error;
+      const counts = new Map<string, { concert_title: string; concert_date: string; venue: string; click_count: number }>();
+      for (const row of data || []) {
+        const key = `${row.concert_title}-${row.concert_date}`;
+        const existing = counts.get(key);
+        if (existing) existing.click_count++;
+        else counts.set(key, { ...row, click_count: 1 });
+      }
+      return Array.from(counts.values()).sort((a, b) => b.click_count - a.click_count).slice(0, 10);
+    },
+    staleTime: 5 * 60 * 1000,
+  });
   const [currentSort, setCurrentSort] = useState<SortOption>("date-asc");
 
   const handleSurprise = () => {
@@ -202,6 +228,31 @@ export const MobileFilterBar = ({
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Popular Concerts */}
+            {popularEvents.length > 0 && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                  Popular Concerts
+                </label>
+                <div className="max-h-[120px] overflow-y-auto space-y-0.5 bg-muted/30 rounded-md p-2">
+                  {popularEvents.map((event, i) => (
+                    <button
+                      key={`${event.concert_title}-${event.concert_date}`}
+                      onClick={() => {
+                        onPopularEventClick?.(event.concert_title, event.concert_date, event.venue);
+                        setIsOpen(false);
+                      }}
+                      className="w-full text-left px-2 py-1.5 rounded text-sm text-foreground hover:text-primary hover:bg-muted/50 transition-colors truncate"
+                    >
+                      <span className="text-muted-foreground mr-1.5">{i + 1}.</span>
+                      {event.concert_title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Quick Toggles */}
             <div className="flex gap-3">
