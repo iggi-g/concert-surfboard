@@ -215,7 +215,7 @@ const Index = () => {
         
         {/* Search and Controls - Anchored at bottom of hero */}
         <div className={`px-4 pb-3 mt-1 md:mt-2 space-y-xs relative z-10 transition-all duration-300 ${hideFilters ? 'max-h-0 opacity-0 overflow-hidden pb-0 mt-0' : 'max-h-[500px] opacity-100'}`}>
-          <MobileFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} showMobileFilters={showMobileFilters} setShowMobileFilters={setShowMobileFilters} />
+          <MobileFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} showMobileFilters={showMobileFilters} setShowMobileFilters={setShowMobileFilters} onPopularEventClick={handlePopularEventClick} />
         </div>
         
         {/* Bottom gradient overlay */}

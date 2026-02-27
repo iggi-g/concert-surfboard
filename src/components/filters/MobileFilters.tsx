@@ -20,6 +20,7 @@ interface MobileFiltersProps {
   filteredEvents: any[];
   showMobileFilters: boolean;
   setShowMobileFilters: (show: boolean) => void;
+  onPopularEventClick?: (title: string, date: string, venue: string) => void;
 }
 
 export const MobileFilters = ({
@@ -39,6 +40,7 @@ export const MobileFilters = ({
   showFavoritesOnly,
   setShowFavoritesOnly,
   filteredEvents,
+  onPopularEventClick,
 }: MobileFiltersProps) => {
   return (
     <div className="md:hidden w-full">
@@ -60,6 +62,7 @@ export const MobileFilters = ({
         setShowFavoritesOnly={setShowFavoritesOnly}
         filteredEvents={filteredEvents}
         isMobile={true}
+        onPopularEventClick={onPopularEventClick}
       />
     </div>
   );
