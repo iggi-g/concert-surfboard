@@ -226,19 +226,19 @@ export const DateRangeSelector = ({
 
           </div>
 
-          <div className="p-4 border-t border-border flex flex-wrap gap-2">
-            {quickSelections.map((selection, index) =>
-            <Button
-              key={index}
-              variant="outline"
-              size="sm"
-              className="bg-muted border-border text-foreground hover:bg-muted/80 text-xs"
-              onClick={() => handleQuickSelect(selection.range)}>
+          
 
-                {selection.label}
-              </Button>
-            )}
-          </div>
+
+
+
+
+
+
+
+
+
+
+
         </div>
       </PopoverContent>
     </Popover>);
