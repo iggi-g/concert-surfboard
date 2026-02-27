@@ -9,14 +9,14 @@ export const ContactButton = () => {
     navigate('/about', { state: { scrollToContact: true } });
   };
 
-  return (
-    <Button
-      variant="outline"
-      size="icon"
-      className="fixed bottom-4 right-4 rounded-full bg-surface-elevated/80 border-border/50 text-foreground hover:bg-surface-elevated hover:text-primary backdrop-blur-sm shadow-elevated"
-      onClick={handleContact}>
+  return;
 
-      
-    </Button>);
+
+
+
+
+
+
+
 
 };
