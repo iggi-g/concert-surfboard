@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Search, Heart, Dice5, SlidersHorizontal, TrendingUp } from "lucide-react";
+import { Search, Heart, Dice5, SlidersHorizontal, TrendingUp, ChevronDown, X } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { Event } from "@/lib/supabase-client";
 import { cn } from "@/lib/utils";
@@ -65,7 +65,7 @@ export const MobileFilterBar = ({
   onPopularEventClick,
 }: MobileFilterBarProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [showPopular, setShowPopular] = useState(false);
   const { data: popularEvents = [] } = useQuery({
     queryKey: ["popular-concerts-mobile"],
     queryFn: async () => {
@@ -167,26 +167,46 @@ export const MobileFilterBar = ({
             )}
           </Button>
         </SheetTrigger>
-        <SheetContent side="bottom" className="h-auto max-h-[80vh] rounded-t-xl px-4 pb-8">
-          <SheetHeader className="pb-2 border-b border-border mb-4">
+        <SheetContent side="bottom" className="h-[100dvh] rounded-none px-4 pb-8 flex flex-col">
+          <SheetHeader className="pb-2 border-b border-border mb-4 flex-shrink-0">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-left text-lg">Filters</SheetTitle>
-              {hasActiveFilters && (
-                <button
-                  onClick={clearFilters}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Clear all
+              <div className="flex items-center gap-3">
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearFilters}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    Clear all
+                  </button>
+                )}
+                <button onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground">
+                  <X className="h-5 w-5" />
                 </button>
-              )}
+              </div>
             </div>
           </SheetHeader>
           
-          <div className="space-y-5">
+          <div className="space-y-5 flex-1 overflow-y-auto pb-20">
+            {/* Search */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Search</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Search concerts..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 bg-muted/50 border-muted-foreground/20 text-sm placeholder:text-muted-foreground/60"
+                />
+              </div>
+            </div>
+
             {/* Venues */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">Venues</label>
-              <div className="max-h-[140px] overflow-y-auto space-y-1 bg-muted/30 rounded-md p-2">
+              <div className="max-h-[160px] overflow-y-auto space-y-1 bg-muted/30 rounded-md p-2">
                 {availableVenues.map((venue) => (
                   <div
                     key={venue}
@@ -229,28 +249,36 @@ export const MobileFilterBar = ({
               </Select>
             </div>
 
-            {/* Popular Concerts */}
+            {/* Popular Concerts - Collapsible Button Dropdown */}
             {popularEvents.length > 0 && (
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
-                  <TrendingUp className="h-4 w-4 text-primary" />
-                  Popular Concerts
-                </label>
-                <div className="max-h-[120px] overflow-y-auto space-y-0.5 bg-muted/30 rounded-md p-2">
-                  {popularEvents.map((event, i) => (
-                    <button
-                      key={`${event.concert_title}-${event.concert_date}`}
-                      onClick={() => {
-                        onPopularEventClick?.(event.concert_title, event.concert_date, event.venue);
-                        setIsOpen(false);
-                      }}
-                      className="w-full text-left px-2 py-1.5 rounded text-sm text-foreground hover:text-primary hover:bg-muted/50 transition-colors truncate"
-                    >
-                      <span className="text-muted-foreground mr-1.5">{i + 1}.</span>
-                      {event.concert_title}
-                    </button>
-                  ))}
-                </div>
+                <button
+                  onClick={() => setShowPopular(!showPopular)}
+                  className="flex items-center justify-between w-full py-2.5 px-3 rounded-md border bg-muted/30 border-muted-foreground/20 text-sm font-medium text-foreground transition-all hover:border-muted-foreground/40"
+                >
+                  <span className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-primary" />
+                    Popular Concerts
+                  </span>
+                  <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform", showPopular && "rotate-180")} />
+                </button>
+                {showPopular && (
+                  <div className="max-h-[200px] overflow-y-auto space-y-0.5 bg-muted/30 rounded-md p-2 animate-fade-in">
+                    {popularEvents.map((event, i) => (
+                      <button
+                        key={`${event.concert_title}-${event.concert_date}`}
+                        onClick={() => {
+                          onPopularEventClick?.(event.concert_title, event.concert_date, event.venue);
+                          setIsOpen(false);
+                        }}
+                        className="w-full text-left px-2 py-1.5 rounded text-sm text-foreground hover:text-primary hover:bg-muted/50 transition-colors truncate"
+                      >
+                        <span className="text-muted-foreground mr-1.5">{i + 1}.</span>
+                        {event.concert_title}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
@@ -270,7 +298,7 @@ export const MobileFilterBar = ({
               </button>
               
               <button
-                onClick={handleSurprise}
+                onClick={() => { handleSurprise(); setIsOpen(false); }}
                 disabled={filteredEvents.length === 0}
                 className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md border bg-muted/30 border-muted-foreground/20 text-muted-foreground hover:border-muted-foreground/40 text-sm font-medium transition-all disabled:opacity-50"
               >
@@ -278,11 +306,13 @@ export const MobileFilterBar = ({
                 Random Concert
               </button>
             </div>
+          </div>
 
-            {/* Apply Button */}
+          {/* Fixed Apply Button */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
             <Button
               onClick={handleApply}
-              className="w-full h-11 mt-2"
+              className="w-full h-11"
             >
               Apply Filters
             </Button>
