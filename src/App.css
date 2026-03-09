@@ -15,39 +15,17 @@
 
 /* Improve scrolling performance */
 * {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Add will-change for elements that animate */
-.animate-fade-in {
-  will-change: opacity, transform;
-}
-
-/* Optimize paint operations */
-.fixed {
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-/* Content-visibility optimization for off-screen content */
-.card {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 500px;
 }
 
 /* Reduce paint operations during scroll */
-.grid {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
+.animate-fade-in {
+  will-change: opacity, transform;
 }
 
 /* Responsive design improvements */

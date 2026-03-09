@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
-import { useState, useEffect, useRef, memo, useCallback } from "react";
+import { useState, memo, useCallback } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -37,35 +37,16 @@ export const ConcertCard = memo(({
 }: ConcertCardProps) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Lazy load image when card enters viewport
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !loaded) {
-          const img = new window.Image();
-          img.src = imageUrl;
-          img.onload = () => {
-            setLoaded(true);
-            setError(false);
-          };
-          img.onerror = () => {
-            setError(true);
-            setLoaded(true);
-          };
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '200px', threshold: 0 }
-    );
-    
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, [imageUrl, loaded]);
+
+  const handleImageLoad = useCallback(() => {
+    setLoaded(true);
+    setError(false);
+  }, []);
+
+  const handleImageError = useCallback(() => {
+    setError(true);
+    setLoaded(true);
+  }, []);
 
   const handleClick = useCallback(async () => {
     // Track concert card click
@@ -162,7 +143,6 @@ export const ConcertCard = memo(({
 
   return (
     <Card 
-      ref={containerRef}
       className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-transform duration-200 hover:scale-[1.01] cursor-pointer border-0 bg-transparent shadow-none relative" 
       onClick={handleClick}
     >
@@ -170,11 +150,13 @@ export const ConcertCard = memo(({
         <img 
           src={displayImage} 
           alt={`${artist} concert at ${venue} in Copenhagen`} 
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${loaded ? 'opacity-100' : 'opacity-0'}`} 
+          className="absolute inset-0 w-full h-full object-cover" 
           loading="lazy" 
           decoding="async" 
           width="400" 
-          height="225" 
+          height="225"
+          onLoad={handleImageLoad}
+          onError={handleImageError}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
         <div className="absolute top-3 inset-x-0 flex justify-between items-start px-5">

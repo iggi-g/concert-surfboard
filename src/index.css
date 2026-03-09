@@ -120,22 +120,8 @@
 
 /* Performance optimizations */
 * {
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.animate-fade-in {
-  will-change: opacity, transform;
-}
-
-img {
-  content-visibility: auto;
-}
-
-.fixed {
-  will-change: transform;
-  transform: translateZ(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
