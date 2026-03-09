@@ -37,35 +37,16 @@ export const ConcertCard = memo(({
 }: ConcertCardProps) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Lazy load image when card enters viewport
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !loaded) {
-          const img = new window.Image();
-          img.src = imageUrl;
-          img.onload = () => {
-            setLoaded(true);
-            setError(false);
-          };
-          img.onerror = () => {
-            setError(true);
-            setLoaded(true);
-          };
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '200px', threshold: 0 }
-    );
-    
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, [imageUrl, loaded]);
+
+  const handleImageLoad = useCallback(() => {
+    setLoaded(true);
+    setError(false);
+  }, []);
+
+  const handleImageError = useCallback(() => {
+    setError(true);
+    setLoaded(true);
+  }, []);
 
   const handleClick = useCallback(async () => {
     // Track concert card click
