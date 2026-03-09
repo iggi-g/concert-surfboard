@@ -2,9 +2,8 @@ import { Event } from "@/lib/supabase-client";
 import { ConcertCard } from "./ConcertCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { EventSkeleton } from "./EventSkeleton";
-import { useState, useMemo, useCallback, CSSProperties, ReactElement } from "react";
+import { useMemo, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { List, useDynamicRowHeight } from "react-window";
 
 interface EventsListProps {
   events: Event[];
@@ -14,81 +13,13 @@ interface EventsListProps {
   onDateClick?: (date: string) => void;
 }
 
-const getColumnCount = (width: number): number => {
-  if (width >= 1536) return 5;
-  if (width >= 1280) return 4;
-  if (width >= 1024) return 3;
-  if (width >= 768) return 2;
-  return 1;
-};
-
-const DESKTOP_ROW_HEIGHT = 310;
-
-interface RowProps {
-  filteredEvents: Event[];
-  columnCount: number;
-  favorites: string[];
-  onToggleFavorite: (artist: string) => void;
-  showFavoritesOnly: boolean;
-  onVenueClick?: (venue: string) => void;
-  onDateClick?: (date: string) => void;
-}
-
-const RowComponent = ({
-  index,
-  style,
-  filteredEvents,
-  columnCount,
-  favorites,
-  onToggleFavorite,
-  showFavoritesOnly,
-  onVenueClick,
-  onDateClick,
-}: {
-  ariaAttributes: { "aria-posinset": number; "aria-setsize": number; role: "listitem" };
-  index: number;
-  style: CSSProperties;
-} & RowProps): ReactElement | null => {
-  const startIndex = index * columnCount;
-  const rowEvents = filteredEvents.slice(startIndex, startIndex + columnCount);
-
-  return (
-    <div style={style} className="flex gap-4 md:gap-6 justify-center px-0 pb-4 md:pb-6">
-      {rowEvents.map((event: Event) => (
-        <div key={`${event.title}-${event.date}`} className="flex justify-center" style={{ width: `${100 / columnCount}%`, maxWidth: 350 }}>
-          <ConcertCard
-            artist={event.title}
-            date={event.date}
-            venue={event.venue}
-            location={event.location || ""}
-            imageUrl={event.image}
-            ticketUrl={event.link}
-            venueLink={getVenueLink(event.venue)}
-            isFavorite={favorites.includes(event.title)}
-            onToggleFavorite={onToggleFavorite}
-            isInFavoritesView={showFavoritesOnly}
-            onVenueClick={onVenueClick}
-            onDateClick={onDateClick}
-          />
-        </div>
-      ))}
-    </div>
-  );
-};
-
 export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVenueClick, onDateClick }: EventsListProps) => {
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
   const { toast } = useToast();
-  const [columnCount, setColumnCount] = useState(() => getColumnCount(window.innerWidth));
-
-  const isMobile = columnCount === 1;
-  const dynamicRowHeight = useDynamicRowHeight({ defaultRowHeight: 320 });
 
   const filteredEvents = useMemo(() => {
     return events.filter(event => !showFavoritesOnly || favorites.includes(event.title));
   }, [events, showFavoritesOnly, favorites]);
-
-  const rowCount = Math.ceil(filteredEvents.length / columnCount);
 
   const handleToggleFavorite = useCallback((artist: string) => {
     const isFavorite = favorites.includes(artist);
@@ -103,10 +34,6 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
     });
   }, [favorites, setFavorites, toast]);
 
-  const handleResize = useCallback(() => {
-    setColumnCount(getColumnCount(window.innerWidth));
-  }, []);
-
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
@@ -120,24 +47,25 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
   }
 
   return (
-    <div className="w-full max-w-[1920px] mx-auto">
-      <List
-        rowCount={rowCount}
-        rowHeight={isMobile ? dynamicRowHeight : DESKTOP_ROW_HEIGHT}
-        overscanCount={3}
-        onResize={handleResize}
-        rowComponent={RowComponent}
-        rowProps={{
-          filteredEvents,
-          columnCount,
-          favorites,
-          onToggleFavorite: handleToggleFavorite,
-          showFavoritesOnly,
-          onVenueClick,
-          onDateClick,
-        }}
-        style={{ height: 'calc(100vh - 200px)' }}
-      />
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full max-w-[1920px] mx-auto">
+      {filteredEvents.map((event: Event) => (
+        <div key={`${event.title}-${event.date}`} className="flex justify-center">
+          <ConcertCard
+            artist={event.title}
+            date={event.date}
+            venue={event.venue}
+            location={event.location || ""}
+            imageUrl={event.image}
+            ticketUrl={event.link}
+            venueLink={getVenueLink(event.venue)}
+            isFavorite={favorites.includes(event.title)}
+            onToggleFavorite={handleToggleFavorite}
+            isInFavoritesView={showFavoritesOnly}
+            onVenueClick={onVenueClick}
+            onDateClick={onDateClick}
+          />
+        </div>
+      ))}
     </div>
   );
 };
