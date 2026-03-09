@@ -143,7 +143,6 @@ export const ConcertCard = memo(({
 
   return (
     <Card 
-      ref={containerRef}
       className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-transform duration-200 hover:scale-[1.01] cursor-pointer border-0 bg-transparent shadow-none relative" 
       onClick={handleClick}
     >
@@ -151,11 +150,13 @@ export const ConcertCard = memo(({
         <img 
           src={displayImage} 
           alt={`${artist} concert at ${venue} in Copenhagen`} 
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${loaded ? 'opacity-100' : 'opacity-0'}`} 
+          className="absolute inset-0 w-full h-full object-cover" 
           loading="lazy" 
           decoding="async" 
           width="400" 
-          height="225" 
+          height="225"
+          onLoad={handleImageLoad}
+          onError={handleImageError}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
         <div className="absolute top-3 inset-x-0 flex justify-between items-start px-5">
