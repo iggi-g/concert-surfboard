@@ -143,7 +143,7 @@ export const ConcertCard = memo(({
 
   return (
     <Card 
-      className="overflow-visible w-full max-w-none md:max-w-[350px] transition-transform duration-200 hover:scale-[1.01] cursor-pointer border-0 bg-transparent shadow-none relative rounded-none md:rounded-lg" 
+      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-transform duration-200 hover:scale-[1.01] cursor-pointer border-0 bg-transparent shadow-none relative" 
       onClick={handleClick}
     >
       <div className="relative aspect-[16/9] w-full bg-muted">
