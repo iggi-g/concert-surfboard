@@ -16,6 +16,7 @@ import { MobileFilters } from "@/components/filters/MobileFilters";
 import { DesktopFilters } from "@/components/filters/DesktopFilters";
 import { SEO } from "@/components/SEO";
 import { EventsSchema } from "@/components/EventsSchema";
+import { SEOContent } from "@/components/SEOContent";
 const Index = () => {
   const {
     toast
@@ -177,6 +178,10 @@ const Index = () => {
         dateText = ` from ${format(dateRange.from, "MMMM d")} to ${format(dateRange.to, "MMMM d")}`;
       }
     }
+    // Always include "Copenhagen" for SEO when no venue filter
+    if (selectedVenues.length === 0 && !dateText) {
+      return "Live Concerts in Copenhagen";
+    }
     return `Concerts in ${locationText}${dateText}`;
   };
   return <PageContainer>
@@ -257,6 +262,8 @@ const Index = () => {
           onDateClick={handleDateClick}
         />
       </div>
+
+      <SEOContent />
 
       <ContactButton />
       
