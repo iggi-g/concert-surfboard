@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEO } from "@/components/SEO";
 import { SingleEventSchema } from "@/components/EventsSchema";
+import { BreadcrumbSchema } from "@/components/BreadcrumbSchema";
 import { supabase } from "@/integrations/supabase/client";
 import { generateEventSlug } from "@/lib/utils";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -154,6 +155,18 @@ const EventPage = () => {
           image: event.image || undefined,
         }}
       />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "/" },
+          ...(event.venue
+            ? [{
+                name: event.venue,
+                url: `/venues/${event.venue.toLowerCase().replace(/[æ]/g, "ae").replace(/[ø]/g, "o").replace(/[å]/g, "a").replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "")}`,
+              }]
+            : []),
+          { name: event.title, url: `/event/${slug}` },
+        ]}
+      />
 
       <div className="min-h-screen bg-background">
         <div className="container max-w-4xl mx-auto px-4 py-8">
@@ -188,10 +201,13 @@ const EventPage = () => {
                 <span className="text-lg">{formatDate(event.date)}</span>
               </div>
               {event.venue && (
-                <div className="flex items-center gap-2">
+                <Link
+                  to={`/venues/${event.venue.toLowerCase().replace(/[æ]/g, "ae").replace(/[ø]/g, "o").replace(/[å]/g, "a").replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "")}`}
+                  className="flex items-center gap-2 hover:text-primary transition-colors"
+                >
                   <MapPin className="w-5 h-5 text-primary" />
                   <span className="text-lg">{event.venue}, Copenhagen</span>
-                </div>
+                </Link>
               )}
             </div>
 

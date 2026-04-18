@@ -13,34 +13,6 @@ interface EventsSchemaProps {
 }
 
 export const EventsSchema = ({ events }: EventsSchemaProps) => {
-  // Generate MusicEvent schema for each event
-  const eventSchemas = events.slice(0, 50).map((event, index) => ({
-    "@type": "MusicEvent",
-    "name": event.title,
-    "startDate": event.date,
-    "location": {
-      "@type": "Place",
-      "name": event.venue || "Copenhagen Venue",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Copenhagen",
-        "addressCountry": "DK"
-      }
-    },
-    ...(event.image && { "image": event.image }),
-    ...(event.link && {
-      "offers": {
-        "@type": "Offer",
-        "url": event.link,
-        "availability": "https://schema.org/InStock"
-      }
-    }),
-    "performer": {
-      "@type": "PerformingGroup",
-      "name": event.title.split(" - ")[0] || event.title
-    }
-  }));
-
   // Generate ItemList schema for the event listing
   const itemListSchema = {
     "@context": "https://schema.org",
@@ -55,13 +27,25 @@ export const EventsSchema = ({ events }: EventsSchemaProps) => {
         "@type": "MusicEvent",
         "name": event.title,
         "startDate": event.date,
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
         "location": {
-          "@type": "Place",
-          "name": event.venue || "Copenhagen Venue"
+          "@type": "MusicVenue",
+          "name": event.venue || "Copenhagen Venue",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Copenhagen",
+            "addressCountry": "DK",
+          },
         },
-        ...(event.link && { "url": event.link })
-      }
-    }))
+        ...(event.image && { "image": event.image }),
+        ...(event.link && { "url": event.link }),
+        "performer": {
+          "@type": "PerformingGroup",
+          "name": event.title.split(" - ")[0] || event.title,
+        },
+      },
+    })),
   };
 
   // Main organization/website schema
@@ -70,31 +54,27 @@ export const EventsSchema = ({ events }: EventsSchemaProps) => {
     "@type": "Organization",
     "name": "CPH Concerts",
     "url": "https://cphconcerts.com",
-    "logo": "https://cphconcerts.com/lovable-uploads/052e7cca-6bd9-4ed3-a921-c2466fa924e7.png",
+    "logo": "https://cphconcerts.com/og-image.png",
     "description": "Your guide to live concerts and music events in Copenhagen",
     "areaServed": {
       "@type": "City",
       "name": "Copenhagen",
       "containedInPlace": {
         "@type": "Country",
-        "name": "Denmark"
-      }
-    }
+        "name": "Denmark",
+      },
+    },
   };
 
   return (
     <Helmet>
-      <script type="application/ld+json">
-        {JSON.stringify(itemListSchema)}
-      </script>
-      <script type="application/ld+json">
-        {JSON.stringify(organizationSchema)}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(organizationSchema)}</script>
     </Helmet>
   );
 };
 
-// Single event schema for individual event pages (future use)
+// Single event schema for individual event pages
 export const SingleEventSchema = ({ event }: { event: Event }) => {
   const eventSchema = {
     "@context": "https://schema.org",
@@ -104,14 +84,14 @@ export const SingleEventSchema = ({ event }: { event: Event }) => {
     "eventStatus": "https://schema.org/EventScheduled",
     "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
     "location": {
-      "@type": "Place",
+      "@type": "MusicVenue",
       "name": event.venue || "Copenhagen Venue",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Copenhagen",
         "addressRegion": "Capital Region of Denmark",
-        "addressCountry": "DK"
-      }
+        "addressCountry": "DK",
+      },
     },
     ...(event.image && { "image": [event.image] }),
     ...(event.link && {
@@ -119,25 +99,24 @@ export const SingleEventSchema = ({ event }: { event: Event }) => {
         "@type": "Offer",
         "url": event.link,
         "availability": "https://schema.org/InStock",
-        "validFrom": new Date().toISOString()
-      }
+        "priceCurrency": "DKK",
+        "validFrom": new Date().toISOString(),
+      },
     }),
     "performer": {
-      "@type": "PerformingGroup",
-      "name": event.title.split(" - ")[0] || event.title
+      "@type": "MusicGroup",
+      "name": event.title.split(" - ")[0] || event.title,
     },
     "organizer": {
       "@type": "Organization",
       "name": "CPH Concerts",
-      "url": "https://cphconcerts.com"
-    }
+      "url": "https://cphconcerts.com",
+    },
   };
 
   return (
     <Helmet>
-      <script type="application/ld+json">
-        {JSON.stringify(eventSchema)}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(eventSchema)}</script>
     </Helmet>
   );
 };

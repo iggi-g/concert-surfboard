@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
+Disallow: /favorites
 
+# Preferred host
+Host: https://cphconcerts.com
+
+# Sitemaps
+Sitemap: https://cphconcerts.com/sitemap.xml
 Sitemap: https://cmnsnmhlbsnegwdbwzxj.supabase.co/functions/v1/generate-sitemap
