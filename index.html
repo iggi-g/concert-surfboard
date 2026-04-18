@@ -1,27 +1,58 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Copenhagen Concerts - Live Music Events & Shows | CPH Concerts</title>
-    <meta name="description" content="Discover the best live concerts and music events in Copenhagen. Find upcoming shows, buy tickets, and experience Denmark's vibrant music scene." />
-    <meta name="keywords" content="Concerts Copenhagen, Live music Copenhagen, Music events Copenhagen, Copenhagen live shows, Danish concerts, Live entertainment Copenhagen" />
+    <title>Concerts in Copenhagen 2025 - Live Music & Shows | CPH Concerts</title>
+    <meta name="description" content="Find every concert in Copenhagen. Discover live music events, gigs and shows at Vega, Pumpehuset, DR Koncerthuset, Royal Arena and more. Updated daily." />
+    <meta name="keywords" content="concerts Copenhagen, live music Copenhagen, concerts in Copenhagen, Copenhagen gigs, music events Copenhagen, Vega concerts, Pumpehuset, DR Koncerthuset, Royal Arena, koncerter København, live shows Copenhagen, Copenhagen tonight, what to do Copenhagen" />
     <meta name="author" content="CPH Concerts" />
-    <meta property="og:title" content="Copenhagen Concerts - Live Music Events & Shows" />
-    <meta property="og:description" content="Discover the best live concerts and music events in Copenhagen. Find upcoming shows, buy tickets, and experience Denmark's vibrant music scene." />
-    <meta property="og:image" content="/og-image.svg" />
+    <meta name="theme-color" content="#111111" />
+    <meta name="application-name" content="CPH Concerts" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Concerts in Copenhagen - Live Music & Shows | CPH Concerts" />
+    <meta property="og:description" content="Find every concert in Copenhagen. Live music, gigs and shows at Vega, Pumpehuset, DR Koncerthuset, Royal Arena and more. Updated daily." />
+    <meta property="og:image" content="https://cphconcerts.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_US" />
-    <meta name="robots" content="index, follow" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:locale:alternate" content="da_DK" />
+    <meta property="og:url" content="https://cphconcerts.com" />
+    <meta property="og:site_name" content="CPH Concerts" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Concerts in Copenhagen - Live Music & Shows" />
+    <meta name="twitter:description" content="Find every concert in Copenhagen. Live music, gigs and shows updated daily." />
+    <meta name="twitter:image" content="https://cphconcerts.com/og-image.png" />
+    <meta name="twitter:site" content="@cphconcerts" />
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
     <meta name="geo.region" content="DK-84" />
     <meta name="geo.placename" content="Copenhagen" />
+    <meta name="geo.position" content="55.6761;12.5683" />
+    <meta name="ICBM" content="55.6761, 12.5683" />
+
     <link rel="canonical" href="https://cphconcerts.com" />
-    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="alternate" hreflang="en" href="https://cphconcerts.com" />
+    <link rel="alternate" hreflang="x-default" href="https://cphconcerts.com" />
+    <link rel="sitemap" type="application/xml" href="https://cmnsnmhlbsnegwdbwzxj.supabase.co/functions/v1/generate-sitemap" />
     <link rel="icon" href="/lovable-uploads/052e7cca-6bd9-4ed3-a921-c2466fa924e7.png" type="image/png">
+    <link rel="apple-touch-icon" href="/lovable-uploads/052e7cca-6bd9-4ed3-a921-c2466fa924e7.png">
+
+    <!-- Performance hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cmnsnmhlbsnegwdbwzxj.supabase.co">
+    <link rel="dns-prefetch" href="https://cmnsnmhlbsnegwdbwzxj.supabase.co">
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"></script>
     <script>
@@ -36,13 +67,40 @@
     <div id="root"></div>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "CPH Concerts",
+        "alternateName": "Copenhagen Concerts",
         "url": "https://cphconcerts.com",
-        "description": "Discover live concerts and music events in Copenhagen"
+        "description": "Find every live concert and music event happening in Copenhagen, Denmark.",
+        "inLanguage": "en",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://cphconcerts.com/?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "CPH Concerts",
+        "url": "https://cphconcerts.com",
+        "logo": "https://cphconcerts.com/og-image.png",
+        "description": "The complete guide to live concerts and music events in Copenhagen, Denmark.",
+        "areaServed": {
+          "@type": "City",
+          "name": "Copenhagen",
+          "containedInPlace": { "@type": "Country", "name": "Denmark" }
+        },
+        "sameAs": []
       }
     </script>
   </body>
