@@ -6,8 +6,6 @@ import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Favorites from "@/pages/Favorites";
 import EventPage from "@/pages/EventPage";
-import VenuesIndex from "@/pages/VenuesIndex";
-import VenuePage from "@/pages/VenuePage";
 import { useGoogleAnalytics } from "@/hooks/useGoogleAnalytics";
 import "./App.css";
 
