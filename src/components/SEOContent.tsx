@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { FAQSchema, type FAQItem } from "@/components/FAQSchema";
 
@@ -48,48 +47,6 @@ export const SEOContent = () => {
       <FAQSchema faqs={faqs} />
       <section className="px-4 md:px-6 py-12 md:py-16 max-w-4xl mx-auto text-text-primary">
         <div className="space-y-8">
-          <article>
-            <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-4">
-              Live Concerts in Copenhagen
-            </h2>
-            <p className="text-text-secondary leading-relaxed">
-              Copenhagen is one of Europe's most exciting live music cities. From intimate
-              jazz clubs in Christianshavn to world-class arena tours at Royal Arena,
-              there's a concert happening every night of the week. CPH Concerts brings
-              together every upcoming gig in the city — indie rock at Vega, classical
-              symphonies at DR Koncerthuset, underground electronica at Culture Box,
-              metal at Pumpehuset and everything in between.
-            </p>
-          </article>
-
-          <article>
-            <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-4">
-              Top Music Venues in Copenhagen
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              Browse upcoming shows at Copenhagen's most loved venues. Each venue has its
-              own character — from the legendary Vega complex on Vesterbro to the
-              alternative spirit of Loppen in Christiania.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {popularVenues.map((venue) => (
-                <Link
-                  key={venue}
-                  to={`/venues/${venue.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="text-sm bg-ui-surface hover:bg-primary hover:text-primary-foreground border border-ui-border hover:border-primary px-3 py-1.5 rounded-xl transition-colors"
-                >
-                  Concerts at {venue}
-                </Link>
-              ))}
-              <Link
-                to="/venues"
-                className="text-sm bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-1.5 rounded-xl transition-colors"
-              >
-                See all venues →
-              </Link>
-            </div>
-          </article>
-
           <article>
             <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-4">
               Frequently Asked Questions
