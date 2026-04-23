@@ -21,8 +21,6 @@ function AppContent() {
         <Route path="/about" element={<About />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/event/:slug" element={<EventPage />} />
-        <Route path="/venues" element={<VenuesIndex />} />
-        <Route path="/venues/:venueSlug" element={<VenuePage />} />
       </Routes>
       <Toaster />
     </>
