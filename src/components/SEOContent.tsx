@@ -49,45 +49,24 @@ export const SEOContent = () => {
         <div className="space-y-8">
           <article>
             <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-4">
-              Live Concerts in Copenhagen
+              Frequently Asked Questions
             </h2>
-            <p className="text-text-secondary leading-relaxed">
-              Copenhagen is one of Europe's most exciting live music cities. From intimate
-              jazz clubs in Christianshavn to world-class arena tours at Royal Arena,
-              there's a concert happening every night of the week. CPH Concerts brings
-              together every upcoming gig in the city — indie rock at Vega, classical
-              symphonies at DR Koncerthuset, underground electronica at Culture Box,
-              metal at Pumpehuset and everything in between.
-            </p>
-          </article>
-
-          <article>
-            <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-4">
-              Top Music Venues in Copenhagen
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              Browse upcoming shows at Copenhagen's most loved venues. Each venue has its
-              own character — from the legendary Vega complex on Vesterbro to the
-              alternative spirit of Loppen in Christiania.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {popularVenues.map((venue) => (
-                <Link
-                  key={venue}
-                  to={`/venues/${venue.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="text-sm bg-ui-surface hover:bg-primary hover:text-primary-foreground border border-ui-border hover:border-primary px-3 py-1.5 rounded-xl transition-colors"
-                >
-                  Concerts at {venue}
-                </Link>
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, i) => (
+                <AccordionItem key={i} value={`item-${i}`}>
+                  <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+                  <AccordionContent className="text-text-secondary">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
               ))}
-              <Link
-                to="/venues"
-                className="text-sm bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-1.5 rounded-xl transition-colors"
-              >
-                See all venues →
-              </Link>
-            </div>
+            </Accordion>
           </article>
+        </div>
+      </section>
+    </>
+  );
+};
 
           <article>
             <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-4">
