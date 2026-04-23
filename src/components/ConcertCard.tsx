@@ -35,17 +35,10 @@ export const ConcertCard = memo(({
   onVenueClick,
   onDateClick
 }: ConcertCardProps) => {
-  const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-
-  const handleImageLoad = useCallback(() => {
-    setLoaded(true);
-    setError(false);
-  }, []);
 
   const handleImageError = useCallback(() => {
     setError(true);
-    setLoaded(true);
   }, []);
 
   const handleClick = useCallback(async () => {
@@ -139,7 +132,7 @@ export const ConcertCard = memo(({
   }, [date, onDateClick]);
 
   const placeholderImage = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=75";
-  const displayImage = error ? placeholderImage : (loaded ? imageUrl : placeholderImage);
+  const displayImage = error || !imageUrl ? placeholderImage : imageUrl;
 
   return (
     <Card 
@@ -155,7 +148,6 @@ export const ConcertCard = memo(({
           decoding="async" 
           width="400" 
           height="225"
-          onLoad={handleImageLoad}
           onError={handleImageError}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
