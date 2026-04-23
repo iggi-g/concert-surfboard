@@ -55,7 +55,7 @@ export const SEOContent = () => {
               {faqs.map((faq, i) => (
                 <AccordionItem key={i} value={`item-${i}`}>
                   <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                  <AccordionContent className="text-text-secondary">
+                  <AccordionContent className="text-text-secondary text-left">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
