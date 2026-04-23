@@ -67,24 +67,3 @@ export const SEOContent = () => {
     </>
   );
 };
-
-          <article>
-            <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-4">
-              Frequently Asked Questions
-            </h2>
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.map((faq, i) => (
-                <AccordionItem key={i} value={`item-${i}`}>
-                  <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                  <AccordionContent className="text-text-secondary">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </article>
-        </div>
-      </section>
-    </>
-  );
-};
