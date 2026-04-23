@@ -56,20 +56,9 @@ serve(async (req) => {
     const staticPages = [
       { loc: '/', priority: '1.0', changefreq: 'daily' },
       { loc: '/about', priority: '0.7', changefreq: 'monthly' },
-      { loc: '/venues', priority: '0.9', changefreq: 'daily' },
     ];
 
-    // Unique venues -> per-venue landing pages
-    const venueSet = new Set<string>();
-    (events || []).forEach((e: any) => {
-      if (e.venue) venueSet.add(e.venue);
-    });
-    const venuePages = Array.from(venueSet).map((venue) => ({
-      loc: `/venues/${slugify(venue)}`,
-      priority: '0.8',
-      changefreq: 'daily',
-      lastmod: today,
-    }));
+    const venuePages: any[] = [];
 
     // Event pages with image annotations
     const eventEntries = (events || []).map((event: any) => {
