@@ -35,17 +35,10 @@ export const ConcertCard = memo(({
   onVenueClick,
   onDateClick
 }: ConcertCardProps) => {
-  const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-
-  const handleImageLoad = useCallback(() => {
-    setLoaded(true);
-    setError(false);
-  }, []);
 
   const handleImageError = useCallback(() => {
     setError(true);
-    setLoaded(true);
   }, []);
 
   const handleClick = useCallback(async () => {
