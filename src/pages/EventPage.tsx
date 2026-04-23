@@ -158,12 +158,6 @@ const EventPage = () => {
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "/" },
-          ...(event.venue
-            ? [{
-                name: event.venue,
-                url: `/venues/${event.venue.toLowerCase().replace(/[æ]/g, "ae").replace(/[ø]/g, "o").replace(/[å]/g, "a").replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "")}`,
-              }]
-            : []),
           { name: event.title, url: `/event/${slug}` },
         ]}
       />
