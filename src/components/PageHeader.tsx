@@ -23,24 +23,32 @@ export const PageHeader = ({
   const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false;
+    const THRESHOLD = 8; // ignore tiny scroll jitter
+
+    const update = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY < lastScrollY.current || currentScrollY < 100) {
-        setIsNavVisible(true);
-      } else {
-        setIsNavVisible(false);
+      const delta = currentScrollY - lastScrollY.current;
+
+      if (Math.abs(delta) > THRESHOLD || currentScrollY < 100) {
+        const shouldShow = delta < 0 || currentScrollY < 100;
+        setIsNavVisible((prev) => (prev === shouldShow ? prev : shouldShow));
+        lastScrollY.current = currentScrollY;
       }
-      lastScrollY.current = currentScrollY;
-      if (currentScrollY > 0) {
-        setIsLogoVisible(false);
-      } else {
-        setIsLogoVisible(true);
+
+      const shouldShowLogo = currentScrollY <= 0;
+      setIsLogoVisible((prev) => (prev === shouldShowLogo ? prev : shouldShowLogo));
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", handleScroll, {
-      passive: true
-    });
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
