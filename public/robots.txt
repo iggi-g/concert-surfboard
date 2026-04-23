@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /favorites
+Disallow: /venues
+Disallow: /venues/
 
 # Preferred host
 Host: https://cphconcerts.com
