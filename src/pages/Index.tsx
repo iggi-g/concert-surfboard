@@ -218,34 +218,11 @@ const Index = () => {
       </div>
 
         
-        {/* Search and Controls - Anchored at bottom of hero */}
-        <div className={`px-4 pb-3 mt-1 md:mt-2 space-y-xs relative z-10 transition-all duration-300 ${hideFilters ? 'max-h-0 opacity-0 overflow-hidden pb-0 mt-0' : 'max-h-[500px] opacity-100'}`}>
+        {/* Sticky Pill Filter Bar - shared on all viewports */}
+        <div className={`px-4 pb-3 mt-2 md:mt-3 space-y-xs relative z-10 transition-all duration-300 ${hideFilters ? 'max-h-0 opacity-0 overflow-hidden pb-0 mt-0' : 'max-h-[500px] opacity-100'}`}>
           <MobileFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} showMobileFilters={showMobileFilters} setShowMobileFilters={setShowMobileFilters} onPopularEventClick={handlePopularEventClick} />
         </div>
         
-      </div>
-
-      {/* Desktop Filters */}
-      <div className={`hidden md:block px-6 mb-md transition-all duration-300 ${hideFilters ? 'max-h-0 opacity-0 overflow-hidden mb-0' : 'max-h-[500px] opacity-100'}`}>
-        <DesktopFilters 
-          searchQuery={searchQuery} 
-          setSearchQuery={setSearchQuery} 
-          selectedVenues={selectedVenues} 
-          setSelectedVenues={setSelectedVenues} 
-          availableVenues={availableVenues} 
-          dateRange={dateRange} 
-          setDateRange={setDateRange} 
-          sortOrder={sortOrder} 
-          setSortOrder={setSortOrder} 
-          sortBy={sortBy} 
-          setSortBy={setSortBy} 
-          hasActiveFilters={hasActiveFilters} 
-          clearFilters={clearFilters} 
-          showFavoritesOnly={showFavoritesOnly} 
-          setShowFavoritesOnly={setShowFavoritesOnly} 
-          filteredEvents={filteredEvents}
-          onPopularEventClick={handlePopularEventClick}
-        />
       </div>
 
       {/* Events List - With peek effect on mobile */}
