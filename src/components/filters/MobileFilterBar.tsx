@@ -4,7 +4,7 @@ import { DateRange } from "react-day-picker";
 import { Event } from "@/lib/supabase-client";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Sheet,
   SheetContent,
