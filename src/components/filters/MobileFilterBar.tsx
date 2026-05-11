@@ -299,40 +299,6 @@ const FilterTriggerWrapper = ({ isOpen, setIsOpen, hasActiveFilters, clearFilter
     </Sheet>
   );
 };
-              </div>
-            </SheetHeader>
-            <div className="flex-1 overflow-y-auto pb-20">{body}</div>
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
-              <Button onClick={onApply} className="w-full h-11">Apply Filters</Button>
-            </div>
-          </SheetContent>
-        </Sheet>
-      </div>
-
-      {/* Desktop: compact popover dropdown */}
-      <div className="hidden md:block">
-        <Popover open={isOpen} onOpenChange={setIsOpen}>
-          <PopoverTrigger asChild>
-            <TriggerButton hasActiveFilters={hasActiveFilters} activeFilterCount={activeFilterCount} />
-          </PopoverTrigger>
-          <PopoverContent
-            align="end"
-            sideOffset={8}
-            className="w-[360px] p-4 bg-popover/95 backdrop-blur-md border-border rounded-2xl shadow-elevated max-h-[80vh] overflow-y-auto"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-foreground">Filters</h3>
-              {hasActiveFilters && (
-                <button onClick={clearFilters} className="text-xs text-muted-foreground hover:text-primary transition-colors">Clear all</button>
-              )}
-            </div>
-            {body}
-          </PopoverContent>
-        </Popover>
-      </div>
-    </>
-  );
-};
 
 // ---- Shared filter body ----
 interface FilterBodyProps {
