@@ -13,6 +13,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -162,177 +167,263 @@ export const MobileFilterBar = ({
         <Heart className={cn("h-4 w-4", showFavoritesOnly && "fill-primary")} />
       </Button>
 
-      {/* Filter Sheet Trigger */}
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cn(
-              "h-9 px-3 rounded-full text-muted-foreground relative",
-              hasActiveFilters && "text-primary bg-primary/10"
-            )}
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-            {activeFilterCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[10px] bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
-                {activeFilterCount}
-              </span>
-            )}
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="bottom" className="h-[100dvh] rounded-none px-4 pb-8 flex flex-col">
-          <SheetHeader className="pb-2 border-b border-border mb-4 flex-shrink-0">
-            <div className="flex items-center justify-between">
-              <SheetTitle className="text-left text-lg">Filters</SheetTitle>
-              <div className="flex items-center gap-3">
-                {hasActiveFilters && (
-                  <button
-                    onClick={clearFilters}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    Clear all
-                  </button>
-                )}
-                <button onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground">
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-          </SheetHeader>
-          
-          <div className="space-y-5 flex-1 overflow-y-auto pb-20">
-            {/* Search */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Search</label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Search concerts..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 bg-muted/50 border-muted-foreground/20 text-sm placeholder:text-muted-foreground/60"
-                />
-              </div>
-            </div>
-
-            {/* Venues */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Venues</label>
-              <div className="max-h-[160px] overflow-y-auto space-y-1 bg-muted/30 rounded-md p-2">
-                {availableVenues.map((venue) => (
-                  <div
-                    key={venue}
-                    className="flex items-center space-x-2 py-1.5 px-1 hover:bg-muted/50 rounded cursor-pointer"
-                    onClick={() => handleVenueToggle(venue)}
-                  >
-                    <Checkbox
-                      checked={selectedVenues.includes(venue)}
-                      className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                    />
-                    <span className="text-sm text-foreground">{venue}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Date Range */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Date Range</label>
-              <DateRangeSelector
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-                mobile
-              />
-            </div>
-
-            {/* Sort */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Sort</label>
-              <Select value={currentSort} onValueChange={handleSortChange}>
-                <SelectTrigger className="w-full bg-muted/50 border-muted-foreground/20">
-                  <SelectValue placeholder="Sort by..." />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border-border">
-                  <SelectItem value="date-asc">Date (soonest first)</SelectItem>
-                  <SelectItem value="date-desc">Date (latest first)</SelectItem>
-                  <SelectItem value="title-asc">Name A-Z</SelectItem>
-                  <SelectItem value="venue-asc">Venue A-Z</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Popular Concerts - Collapsible Button Dropdown */}
-            {popularEvents.length > 0 && (
-              <div className="space-y-2">
-                <button
-                  onClick={() => setShowPopular(!showPopular)}
-                  className="flex items-center justify-between w-full py-2.5 px-3 rounded-md border bg-muted/30 border-muted-foreground/20 text-sm font-medium text-foreground transition-all hover:border-muted-foreground/40"
-                >
-                  <span className="flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-primary" />
-                    Popular Concerts
-                  </span>
-                  <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform", showPopular && "rotate-180")} />
-                </button>
-                {showPopular && (
-                  <div className="max-h-[200px] overflow-y-auto space-y-0.5 bg-muted/30 rounded-md p-2 animate-fade-in">
-                    {popularEvents.map((event, i) => (
-                      <button
-                        key={`${event.concert_title}-${event.concert_date}`}
-                        onClick={() => {
-                          onPopularEventClick?.(event.concert_title, event.concert_date, event.venue);
-                          setIsOpen(false);
-                        }}
-                        className="w-full text-left px-2 py-1.5 rounded text-sm text-foreground hover:text-primary hover:bg-muted/50 transition-colors truncate"
-                      >
-                        <span className="text-muted-foreground mr-1.5">{i + 1}.</span>
-                        {event.concert_title}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Quick Toggles */}
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                className={cn(
-                  "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md border text-sm font-medium transition-all",
-                  showFavoritesOnly
-                    ? "bg-primary/10 border-primary text-primary"
-                    : "bg-muted/30 border-muted-foreground/20 text-muted-foreground hover:border-muted-foreground/40"
-                )}
-              >
-                <Heart className={cn("h-4 w-4", showFavoritesOnly && "fill-primary")} />
-                Favorites
-              </button>
-              
-              <button
-                onClick={() => { handleSurprise(); setIsOpen(false); }}
-                disabled={filteredEvents.length === 0}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md border bg-muted/30 border-muted-foreground/20 text-muted-foreground hover:border-muted-foreground/40 text-sm font-medium transition-all disabled:opacity-50"
-              >
-                <Dice5 className="h-4 w-4" />
-                Random Concert
-              </button>
-            </div>
-          </div>
-
-          {/* Fixed Apply Button */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
-            <Button
-              onClick={handleApply}
-              className="w-full h-11"
-            >
-              Apply Filters
-            </Button>
-          </div>
-        </SheetContent>
-      </Sheet>
+      {/* Trigger button (shared) */}
+      <FilterTriggerWrapper
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        hasActiveFilters={hasActiveFilters}
+        clearFilters={clearFilters}
+        activeFilterCount={activeFilterCount}
+        body={
+          <FilterBody
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            availableVenues={availableVenues}
+            selectedVenues={selectedVenues}
+            handleVenueToggle={handleVenueToggle}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            currentSort={currentSort}
+            handleSortChange={handleSortChange}
+            popularEvents={popularEvents}
+            showPopular={showPopular}
+            setShowPopular={setShowPopular}
+            showFavoritesOnly={showFavoritesOnly}
+            setShowFavoritesOnly={setShowFavoritesOnly}
+            handleSurprise={() => { handleSurprise(); setIsOpen(false); }}
+            onPopularEventClick={(t, d, v) => { onPopularEventClick?.(t, d, v); setIsOpen(false); }}
+            filteredEventsLength={filteredEvents.length}
+          />
+        }
+        onApply={handleApply}
+      />
     </div>
   );
 };
+
+// ---- Trigger wrapper: Sheet on mobile, Popover on desktop ----
+interface TriggerWrapperProps {
+  isOpen: boolean;
+  setIsOpen: (v: boolean) => void;
+  hasActiveFilters: boolean;
+  clearFilters: () => void;
+  activeFilterCount: number;
+  body: React.ReactNode;
+  onApply: () => void;
+}
+
+const TriggerButton = ({ hasActiveFilters, activeFilterCount }: { hasActiveFilters: boolean; activeFilterCount: number }) => (
+  <Button
+    variant="ghost"
+    size="sm"
+    className={cn(
+      "h-9 px-3 rounded-full text-muted-foreground relative",
+      hasActiveFilters && "text-primary bg-primary/10"
+    )}
+  >
+    <SlidersHorizontal className="h-4 w-4" />
+    {activeFilterCount > 0 && (
+      <span className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[10px] bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
+        {activeFilterCount}
+      </span>
+    )}
+  </Button>
+);
+
+const FilterTriggerWrapper = ({ isOpen, setIsOpen, hasActiveFilters, clearFilters, activeFilterCount, body, onApply }: TriggerWrapperProps) => {
+  return (
+    <>
+      {/* Mobile: full-screen bottom sheet */}
+      <div className="md:hidden">
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <TriggerButton hasActiveFilters={hasActiveFilters} activeFilterCount={activeFilterCount} />
+          </SheetTrigger>
+          <SheetContent side="bottom" className="h-[100dvh] rounded-none px-4 pb-8 flex flex-col">
+            <SheetHeader className="pb-2 border-b border-border mb-4 flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <SheetTitle className="text-left text-lg">Filters</SheetTitle>
+                <div className="flex items-center gap-3">
+                  {hasActiveFilters && (
+                    <button onClick={clearFilters} className="text-sm text-muted-foreground hover:text-primary transition-colors">Clear all</button>
+                  )}
+                  <button onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground">
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            </SheetHeader>
+            <div className="flex-1 overflow-y-auto pb-20">{body}</div>
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
+              <Button onClick={onApply} className="w-full h-11">Apply Filters</Button>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      {/* Desktop: compact popover dropdown */}
+      <div className="hidden md:block">
+        <Popover open={isOpen} onOpenChange={setIsOpen}>
+          <PopoverTrigger asChild>
+            <TriggerButton hasActiveFilters={hasActiveFilters} activeFilterCount={activeFilterCount} />
+          </PopoverTrigger>
+          <PopoverContent
+            align="end"
+            sideOffset={8}
+            className="w-[360px] p-4 bg-popover/95 backdrop-blur-md border-border rounded-2xl shadow-elevated max-h-[80vh] overflow-y-auto"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-foreground">Filters</h3>
+              {hasActiveFilters && (
+                <button onClick={clearFilters} className="text-xs text-muted-foreground hover:text-primary transition-colors">Clear all</button>
+              )}
+            </div>
+            {body}
+          </PopoverContent>
+        </Popover>
+      </div>
+    </>
+  );
+};
+
+// ---- Shared filter body ----
+interface FilterBodyProps {
+  searchQuery: string;
+  setSearchQuery: (v: string) => void;
+  availableVenues: string[];
+  selectedVenues: string[];
+  handleVenueToggle: (v: string) => void;
+  dateRange: DateRange | undefined;
+  setDateRange: (r: DateRange | undefined) => void;
+  currentSort: SortOption;
+  handleSortChange: (v: SortOption) => void;
+  popularEvents: Array<{ concert_title: string; concert_date: string; venue: string; click_count: number }>;
+  showPopular: boolean;
+  setShowPopular: (v: boolean) => void;
+  showFavoritesOnly: boolean;
+  setShowFavoritesOnly: (v: boolean) => void;
+  handleSurprise: () => void;
+  onPopularEventClick: (title: string, date: string, venue: string) => void;
+  filteredEventsLength: number;
+}
+
+const FilterBody = ({
+  searchQuery, setSearchQuery, availableVenues, selectedVenues, handleVenueToggle,
+  dateRange, setDateRange, currentSort, handleSortChange, popularEvents,
+  showPopular, setShowPopular, showFavoritesOnly, setShowFavoritesOnly,
+  handleSurprise, onPopularEventClick, filteredEventsLength,
+}: FilterBodyProps) => (
+  <div className="space-y-4">
+    {/* Search */}
+    <div className="space-y-1.5">
+      <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Search</label>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          type="text"
+          placeholder="Search concerts..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-9 bg-muted/40 border-border text-sm placeholder:text-muted-foreground/60 rounded-xl"
+        />
+      </div>
+    </div>
+
+    {/* Venues */}
+    <div className="space-y-1.5">
+      <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Venues</label>
+      <div className="max-h-[160px] overflow-y-auto space-y-0.5 bg-muted/30 rounded-xl p-2">
+        {availableVenues.map((venue) => (
+          <div
+            key={venue}
+            className="flex items-center space-x-2 py-1.5 px-1 hover:bg-muted/60 rounded cursor-pointer"
+            onClick={() => handleVenueToggle(venue)}
+          >
+            <Checkbox
+              checked={selectedVenues.includes(venue)}
+              className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+            />
+            <span className="text-sm text-foreground">{venue}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Date Range */}
+    <div className="space-y-1.5">
+      <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Date Range</label>
+      <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} mobile />
+    </div>
+
+    {/* Sort */}
+    <div className="space-y-1.5">
+      <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Sort</label>
+      <Select value={currentSort} onValueChange={handleSortChange}>
+        <SelectTrigger className="w-full bg-muted/40 border-border rounded-xl">
+          <SelectValue placeholder="Sort by..." />
+        </SelectTrigger>
+        <SelectContent className="bg-popover border-border">
+          <SelectItem value="date-asc">Date (soonest first)</SelectItem>
+          <SelectItem value="date-desc">Date (latest first)</SelectItem>
+          <SelectItem value="title-asc">Name A-Z</SelectItem>
+          <SelectItem value="venue-asc">Venue A-Z</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+
+    {/* Popular */}
+    {popularEvents.length > 0 && (
+      <div className="space-y-1.5">
+        <button
+          onClick={() => setShowPopular(!showPopular)}
+          className="flex items-center justify-between w-full py-2.5 px-3 rounded-xl border bg-muted/30 border-border text-sm font-medium text-foreground transition-all hover:border-primary/40"
+        >
+          <span className="flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 text-primary" />
+            Popular Concerts
+          </span>
+          <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform", showPopular && "rotate-180")} />
+        </button>
+        {showPopular && (
+          <div className="max-h-[200px] overflow-y-auto space-y-0.5 bg-muted/30 rounded-xl p-2 animate-fade-in">
+            {popularEvents.map((event, i) => (
+              <button
+                key={`${event.concert_title}-${event.concert_date}`}
+                onClick={() => onPopularEventClick(event.concert_title, event.concert_date, event.venue)}
+                className="w-full text-left px-2 py-1.5 rounded text-sm text-foreground hover:text-primary hover:bg-muted/50 transition-colors truncate"
+              >
+                <span className="text-muted-foreground mr-1.5">{i + 1}.</span>
+                {event.concert_title}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+
+    {/* Quick Toggles */}
+    <div className="flex gap-2">
+      <button
+        onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+        className={cn(
+          "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border text-sm font-medium transition-all",
+          showFavoritesOnly
+            ? "bg-primary/10 border-primary text-primary"
+            : "bg-muted/30 border-border text-muted-foreground hover:border-primary/40"
+        )}
+      >
+        <Heart className={cn("h-4 w-4", showFavoritesOnly && "fill-primary")} />
+        Favorites
+      </button>
+      <button
+        onClick={handleSurprise}
+        disabled={filteredEventsLength === 0}
+        className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border bg-muted/30 border-border text-muted-foreground hover:border-primary/40 text-sm font-medium transition-all disabled:opacity-50"
+      >
+        <Dice5 className="h-4 w-4" />
+        Random
+      </button>
+    </div>
+  </div>
+);
+
