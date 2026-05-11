@@ -13,7 +13,6 @@ import { PageHeader } from "@/components/PageHeader";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { MobileFilters } from "@/components/filters/MobileFilters";
-import { DesktopFilters } from "@/components/filters/DesktopFilters";
 import { SEO } from "@/components/SEO";
 import { EventsSchema } from "@/components/EventsSchema";
 import { SEOContent } from "@/components/SEOContent";
