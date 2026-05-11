@@ -100,10 +100,10 @@ export const ConcertCard = memo(({
 
   return (
     <article
-      className="group w-full max-w-[420px] cursor-pointer"
+      className="group w-full max-w-none sm:max-w-[420px] cursor-pointer h-full sm:h-auto"
       onClick={handleClick}
     >
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-3xl bg-muted ring-1 ring-border transition-all duration-300 group-hover:ring-primary/60 group-hover:shadow-[0_0_40px_-8px_hsl(var(--primary)/0.55)]">
+      <div className="relative h-full sm:h-auto sm:aspect-[3/4] w-full overflow-hidden rounded-none sm:rounded-3xl bg-muted sm:ring-1 sm:ring-border transition-all duration-300 sm:group-hover:ring-primary/60 sm:group-hover:shadow-[0_0_40px_-8px_hsl(var(--primary)/0.55)]">
         <img
           src={displayImage}
           alt={`${artist} concert at ${venue} in Copenhagen`}
