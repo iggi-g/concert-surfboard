@@ -61,12 +61,12 @@ const About = () => {
         </div>
 
         {/* Story */}
-        <div className="space-y-5 text-text-secondary text-base md:text-lg leading-relaxed mb-14">
+        <div className="space-y-5 text-left text-text-secondary text-base md:text-lg leading-relaxed mb-14">
           <p>
-            Hi, I'm <span className="text-text-primary font-medium">Igor</span>. I built ConcertsCPH to help anyone discover new music happening in Copenhagen — from intimate club nights to arena shows, all in one calm, scrollable place.
+            Hi, I'm <span className="text-text-primary font-medium">Igor</span>. I built ConcertsCPH to help anyone discover new music happening in Copenhagen.&nbsp;
           </p>
           <p>
-            Missing a venue? Spotted a bug? Want to say hi? Drop me a line below.
+            Missing a venue? Want to say hi? Send me a message below.
           </p>
         </div>
 
@@ -78,7 +78,8 @@ const About = () => {
             </div>
             <div className="text-left">
               <h2 className="text-lg font-semibold text-text-primary leading-tight">Get in touch</h2>
-              <p className="text-xs text-text-secondary">Suggestions, feedback, hellos — all welcome.</p>
+              <p className="text-xs text-text-secondary">
+</p>
             </div>
           </div>
 
