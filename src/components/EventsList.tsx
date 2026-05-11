@@ -36,7 +36,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-0 sm:px-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-4 md:px-6">
         {Array.from({ length: 8 }).map((_, index) => (
           <div key={index} className="flex justify-center">
             <EventSkeleton />
@@ -47,13 +47,9 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
   }
 
   return (
-    <div className="snap-y snap-mandatory h-[100dvh] overflow-y-auto sm:h-auto sm:overflow-visible sm:snap-none grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-0 sm:gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-0 sm:px-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-4 md:px-6">
       {filteredEvents.map((event: Event) => (
-        <div
-          key={`${event.title}-${event.date}`}
-          className="snap-start snap-always h-[100dvh] sm:h-auto flex justify-center items-stretch sm:items-center"
-          style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}
-        >
+        <div key={`${event.title}-${event.date}`} className="flex justify-center" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
           <ConcertCard
             artist={event.title}
             date={event.date}
