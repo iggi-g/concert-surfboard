@@ -135,18 +135,32 @@ export const MobileFilterBar = ({
   ].filter(Boolean).length;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 p-1.5 rounded-full bg-card/60 backdrop-blur-md border border-border shadow-card">
       {/* Search Input */}
-      <div className="relative flex-1">
+      <div className="relative flex-1 min-w-0">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Search..."
+          placeholder="Search concerts..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9 h-9 bg-muted/50 border-muted-foreground/20 text-sm placeholder:text-muted-foreground/60"
+          className="pl-9 h-9 bg-transparent border-0 text-sm placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-primary/40 rounded-full"
         />
       </div>
+
+      {/* Favorites quick toggle */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+        className={cn(
+          "h-9 w-9 p-0 rounded-full",
+          showFavoritesOnly ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary"
+        )}
+        aria-label="Toggle favorites only"
+      >
+        <Heart className={cn("h-4 w-4", showFavoritesOnly && "fill-primary")} />
+      </Button>
 
       {/* Filter Sheet Trigger */}
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -155,13 +169,13 @@ export const MobileFilterBar = ({
             variant="ghost"
             size="sm"
             className={cn(
-              "h-9 px-3 text-muted-foreground relative",
-              hasActiveFilters && "text-primary"
+              "h-9 px-3 rounded-full text-muted-foreground relative",
+              hasActiveFilters && "text-primary bg-primary/10"
             )}
           >
             <SlidersHorizontal className="h-4 w-4" />
             {activeFilterCount > 0 && (
-              <span className="absolute -top-1 -right-1 h-4 w-4 text-[10px] bg-primary text-primary-foreground rounded-full flex items-center justify-center">
+              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[10px] bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
                 {activeFilterCount}
               </span>
             )}
