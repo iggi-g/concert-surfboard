@@ -1,66 +1,71 @@
+## Design Refresh: Midnight Neon + Tall Posters
 
-## Goal
-Make CPH Concerts the #1 result for "concerts in Copenhagen" by upgrading on-page SEO, structured data, content, crawlability, and performance signals.
+A focused visual overhaul. No business-logic changes — same data, same filters, same routes. Just a new look and a quieter card.
 
-## Current state
-- Good foundation: react-helmet-async SEO component, JSON-LD MusicEvent + ItemList + Organization schemas, dynamic sitemap edge function, individual `/event/:slug` pages.
-- Gaps: thin H1/copy on homepage, no prerendering (React SPA = empty HTML for crawlers), missing keyword-rich content, no FAQ/Breadcrumb schema, no per-venue landing pages, weak internal linking, OG image is SVG (Facebook/Twitter prefer PNG/JPG ≥1200×630), `og:locale` `en_DK` is invalid, generic title format, no hreflang, sitemap.xml in /public is stale and conflicts with edge function, robots.txt points to edge function (good) but no host/preferred-domain signals.
+### 1. New color palette — "Deep midnight + neon"
 
-## Plan
+Replace the current charcoal/orange system with a deep blue-purple base and a single electric accent.
 
-### 1. Fix critical meta + crawlability issues
-- `index.html`: fix `og:locale` to `en_GB` (or `da_DK`), add `theme-color`, `apple-touch-icon`, `manifest`, expanded keywords, geo coordinates, and a richer default JSON-LD (`Organization` + `WebSite` with `SearchAction` sitelinks searchbox).
-- Replace `public/og-image.svg` reference with a 1200×630 PNG (`/og-image.png`) — generate it.
-- Update `public/robots.txt` to also reference `https://cphconcerts.com/sitemap.xml` and add `Host:` directive.
-- Delete stale `public/sitemap.xml` OR replace it with a redirect note; rely on edge function. Add a Vite redirect/rewrite via a simple static `sitemap.xml` that lists static pages as fallback.
+- Background: deep midnight navy (`#0A0B14`)
+- Surface (cards/inputs): elevated indigo (`#13152099`)
+- Border: subtle violet-tinted line (`#1F2238`)
+- Text primary: near-white (`#F2F3F8`)
+- Text secondary: cool muted (`#8A8FB0`)
+- Accent (single): electric cyan (`#00E5FF`) — used sparingly for active filters, hover, focus ring, and "X concerts available" count
+- Remove the warm orange entirely
 
-### 2. Upgrade SEO component
-- `src/components/SEO.tsx`: add support for `keywords`, `articlePublishedTime`, multiple `og:image` sizes, `og:image:width/height`, Twitter `@site`/`@creator`, `application-name`, `format-detection`. Default OG image → PNG.
+All values defined in `src/index.css` as HSL tokens; `tailwind.config.ts` already maps them. Components keep using semantic tokens (`bg-background`, `text-primary`, etc.) so most files don't need touching.
 
-### 3. Homepage content + structured data (Index.tsx)
-- Add an SEO-only content section (visible but compact) below events with: keyword-rich H2s ("Live Concerts in Copenhagen", "Top Music Venues in Copenhagen — Vega, Pumpehuset, DR Koncerthuset…"), FAQ block (8–10 Q&As), and a city overview paragraph. This gives Google indexable text.
-- Add `FAQPage` JSON-LD schema (new component `FAQSchema.tsx`).
-- Add `BreadcrumbList` schema on subpages.
-- Improve dynamic H1 to always include the phrase "Concerts in Copenhagen" when no filter is active.
+### 2. Cards — tall portrait posters
 
-### 4. Per-venue landing pages (huge SEO win)
-- New route `/venues/:venueSlug` rendering all upcoming events at that venue with venue-specific H1, description, MusicVenue schema, breadcrumbs.
-- New route `/venues` as an index page listing all venues with internal links.
-- Link venues from concert cards and event pages.
+Rework `ConcertCard` to a gallery-style 3:4 portrait:
 
-### 5. Event page enhancements
-- Add `BreadcrumbList` schema (Home → Venue → Event).
-- Add internal links to `/venues/:venueSlug`.
-- Improve meta description with price/availability cues when present.
-- Add `eventStatus`, `previousStartDate` if rescheduled (future-proof), and `Performer` MusicGroup with `sameAs` when Spotify link exists.
+- Aspect ratio `3/4` (was 16/9), image fills the frame
+- Wider max-width (~280px mobile, ~320px desktop) so cards feel bigger
+- Remove the dark gradient overlay on top of the image
+- Below the image: large artist name (one line, truncate), small date · venue line beneath
+- Date and venue stay clickable for filtering, but as plain underlined text — no chip pills on top of the image
+- Heart and calendar buttons stay, moved to a small row under the meta line, ghost style (icon only, no surface)
+- Grid: 2 cols mobile, 3 tablet, 4 desktop, 5 on 2xl (was 1/2/3/4/5) — bigger feel because each card is taller
 
-### 6. Sitemap improvements (edge function)
-- Include venue pages, About, Favorites.
-- Add `<image:image>` namespace with event images for Google Image indexing.
-- Add proper `lastmod` per event (use `updated_at` if available).
-- Set `Cache-Control` to 1h (already done).
+### 3. Sticky minimal pill filter bar
 
-### 7. Performance/Core Web Vitals signals
-- Preload hero font subset, add `fetchpriority="high"` to hero/LCP image area, lazy-load video background on mobile (already partially done).
-- Add `<link rel="dns-prefetch">` for Supabase + image CDN.
+Replace the current two-row filter block with a single sticky pill bar at the top:
 
-### 8. Prerendering note (technical)
-React SPAs render empty HTML initially — Google handles JS but social crawlers (Facebook, LinkedIn, Twitter, Slack) don't. Best fix is server-side prerendering. Two viable options inside Lovable:
-- **Edge function prerender** for `/event/:slug` and `/venues/:slug` that returns fully-rendered HTML with meta tags when `User-Agent` is a known bot. Implementable as a Supabase edge function + Cloudflare/Vercel-like routing — but Lovable hosts statically so this requires the user to either (a) add a reverse proxy on their custom domain, or (b) accept JS-rendered SEO (Google still indexes).
-- **Recommended pragmatic path**: ensure all critical meta tags also exist statically in `index.html` defaults so social previews work for the homepage; rely on Google's JS rendering for event pages.
+- Search input (icon only when collapsed, expands on focus)
+- Date pill (opens calendar popover)
+- Venue pill (opens existing checkbox sheet)
+- Sort pill
+- Favorites toggle (heart pill)
+- "Clear" only appears when filters are active
+- Advanced/extra controls move into a "More" sheet on mobile
+- Bar is rounded-full, floats with subtle border, sticks to top on scroll, hides on scroll-down past 150px (existing behavior preserved)
 
-### 9. Files to create/edit
-- Edit: `index.html`, `public/robots.txt`, `public/sitemap.xml`, `src/components/SEO.tsx`, `src/components/EventsSchema.tsx`, `src/pages/Index.tsx`, `src/pages/EventPage.tsx`, `src/App.tsx` (new routes), `supabase/functions/generate-sitemap/index.ts`.
-- Create: `src/components/FAQSchema.tsx`, `src/components/BreadcrumbSchema.tsx`, `src/components/SEOContent.tsx` (homepage keyword content + FAQ), `src/pages/VenuePage.tsx`, `src/pages/VenuesIndex.tsx`, `public/og-image.png` (1200×630).
+Desktop and mobile use the same pill bar — no separate `DesktopFilters` vs `MobileFilters` markup divergence for the primary controls. Existing filter components are reused inside; only the chrome changes.
 
-### Out of scope (call out for user)
-- Backlink building, Google Search Console submission, Google Business Profile — these are off-platform and the user must do them.
-- True SSR/prerendering would require infrastructure changes outside Lovable's static hosting.
+### 4. Hero — quieter
 
-<lov-actions>
-<lov-suggestion message="Approved — implement the full SEO optimization plan.">Approve full plan</lov-suggestion>
-<lov-suggestion message="Just do the high-impact items: fix index.html meta, add FAQ schema + SEO content section on homepage, improve sitemap, and add per-venue landing pages.">Do high-impact only</lov-suggestion>
-<lov-suggestion message="Skip per-venue pages for now and focus only on homepage SEO content, FAQ schema, fixed meta tags, and a proper 1200x630 OG image.">Homepage SEO only</lov-suggestion>
-<lov-suggestion message="Add a prerendering edge function so social media crawlers (Facebook, LinkedIn, Twitter) get fully rendered HTML for event pages.">Add prerendering</lov-suggestion>
-</lov-actions>
+- Smaller H1 (keep dynamic text logic intact)
+- Remove the bottom gradient fade
+- Tighter vertical spacing so the first row of cards is visible above the fold
 
+### 5. Out of scope
+
+- No changes to data fetching, analytics tracking, calendar export, favorites logic, SEO/schema components, routes, or edge functions
+- No changes to `EventPage`, `Favorites`, `About`
+- Memory rules around 8px grid, 44px control height, scroll-hide nav, and card click behavior are preserved
+
+### Files to touch
+
+- `src/index.css` — new color tokens
+- `tailwind.config.ts` — only if a new shadow/radius is needed
+- `src/components/ConcertCard.tsx` — full visual rework
+- `src/components/EventsList.tsx` — grid columns + intrinsic size
+- `src/components/filters/DesktopFilters.tsx` + `MobileFilters.tsx` — collapse into shared pill bar (or new `StickyPillBar.tsx` that both render)
+- `src/pages/Index.tsx` — hero spacing, swap filter bar
+- `src/pages/Favorites.tsx` — pick up new tokens (no structural change)
+- `mem://design/unified-design-system` — update palette + card notes after build
+
+### Validation
+
+After implementation: visual check at mobile (375), tablet (768), desktop (1280); confirm filter clicks still update results; confirm calendar/heart still work; confirm no orange remains.

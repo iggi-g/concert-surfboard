@@ -84,8 +84,8 @@ export default {
           secondary: "hsl(var(--text-secondary))",
         },
         ui: {
-          surface: "#1F1F21",
-          border: "#2A2A2C",
+          surface: "#13152099",
+          border: "#1F2238",
         },
       },
       boxShadow: {
