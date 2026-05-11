@@ -5,32 +5,33 @@
 
 @layer base {
   :root {
-    --background: 240 6% 6%;
-    --foreground: 0 0% 100%;
-    --card: 240 6% 12%;
-    --card-foreground: 0 0% 100%;
-    --popover: 240 6% 12%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 15 97% 62%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 2% 66%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 240 6% 12%;
-    --muted-foreground: 220 2% 66%;
-    --accent: 15 97% 62%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 240 6% 17%;
-    --input: 240 6% 12%;
-    --ring: 15 97% 62%;
-    --radius: 0.625rem;
+    /* Deep midnight + neon palette */
+    --background: 232 38% 6%;          /* #0A0B14 */
+    --foreground: 230 25% 96%;         /* #F2F3F8 */
+    --card: 232 28% 11%;               /* indigo elevated */
+    --card-foreground: 230 25% 96%;
+    --popover: 232 28% 11%;
+    --popover-foreground: 230 25% 96%;
+    --primary: 187 100% 50%;           /* electric cyan #00E5FF */
+    --primary-foreground: 232 38% 6%;
+    --secondary: 230 12% 65%;
+    --secondary-foreground: 230 25% 96%;
+    --muted: 232 24% 13%;
+    --muted-foreground: 230 15% 65%;   /* #8A8FB0 */
+    --accent: 187 100% 50%;
+    --accent-foreground: 232 38% 6%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 230 25% 96%;
+    --border: 232 24% 16%;             /* #1F2238 */
+    --input: 232 24% 13%;
+    --ring: 187 100% 50%;
+    --radius: 0.75rem;
     
     /* Unified Design System */
-    --primary-glow: 15 97% 70%;
-    --surface-elevated: 240 6% 12%;
-    --text-primary: 0 0% 100%;
-    --text-secondary: 220 2% 66%;
+    --primary-glow: 187 100% 65%;
+    --surface-elevated: 232 28% 11%;
+    --text-primary: 230 25% 96%;
+    --text-secondary: 230 15% 65%;
     
     /* Spacing System - 8px baseline grid */
     --spacing-xs: 0.5rem;   /* 8px */
