@@ -4,7 +4,7 @@ import { DateRange } from "react-day-picker";
 import { Event } from "@/lib/supabase-client";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -212,10 +212,15 @@ interface TriggerWrapperProps {
   onApply: () => void;
 }
 
-const TriggerButton = ({ hasActiveFilters, activeFilterCount }: { hasActiveFilters: boolean; activeFilterCount: number }) => (
+const TriggerButton = React.forwardRef<
+  HTMLButtonElement,
+  { hasActiveFilters: boolean; activeFilterCount: number } & React.ComponentPropsWithoutRef<typeof Button>
+>(({ hasActiveFilters, activeFilterCount, ...props }, ref) => (
   <Button
+    ref={ref}
     variant="ghost"
     size="sm"
+    {...props}
     className={cn(
       "h-9 px-3 rounded-full text-muted-foreground relative",
       hasActiveFilters && "text-primary bg-primary/10"
@@ -228,7 +233,8 @@ const TriggerButton = ({ hasActiveFilters, activeFilterCount }: { hasActiveFilte
       </span>
     )}
   </Button>
-);
+));
+TriggerButton.displayName = "TriggerButton";
 
 const FilterTriggerWrapper = ({ isOpen, setIsOpen, hasActiveFilters, clearFilters, activeFilterCount, body, onApply }: TriggerWrapperProps) => {
   return (
