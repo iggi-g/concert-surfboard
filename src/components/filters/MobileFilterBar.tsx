@@ -237,26 +237,68 @@ const TriggerButton = React.forwardRef<
 TriggerButton.displayName = "TriggerButton";
 
 const FilterTriggerWrapper = ({ isOpen, setIsOpen, hasActiveFilters, clearFilters, activeFilterCount, body, onApply }: TriggerWrapperProps) => {
+  const [isDesktop, setIsDesktop] = React.useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(min-width: 768px)").matches : false
+  );
+
+  React.useEffect(() => {
+    const query = window.matchMedia("(min-width: 768px)");
+    const updateIsDesktop = () => setIsDesktop(query.matches);
+    updateIsDesktop();
+    query.addEventListener("change", updateIsDesktop);
+    return () => query.removeEventListener("change", updateIsDesktop);
+  }, []);
+
+  if (isDesktop) {
+    return (
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <TriggerButton hasActiveFilters={hasActiveFilters} activeFilterCount={activeFilterCount} />
+        </PopoverTrigger>
+        <PopoverContent
+          align="end"
+          sideOffset={8}
+          className="w-[360px] p-4 bg-popover/95 backdrop-blur-md border-border rounded-2xl shadow-elevated max-h-[80vh] overflow-y-auto"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-foreground">Filters</h3>
+            {hasActiveFilters && (
+              <button onClick={clearFilters} className="text-xs text-muted-foreground hover:text-primary transition-colors">Clear all</button>
+            )}
+          </div>
+          {body}
+        </PopoverContent>
+      </Popover>
+    );
+  }
+
   return (
-    <>
-      {/* Mobile: full-screen bottom sheet */}
-      <div className="md:hidden">
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <TriggerButton hasActiveFilters={hasActiveFilters} activeFilterCount={activeFilterCount} />
-          </SheetTrigger>
-          <SheetContent side="bottom" className="h-[100dvh] rounded-none px-4 pb-8 flex flex-col">
-            <SheetHeader className="pb-2 border-b border-border mb-4 flex-shrink-0">
-              <div className="flex items-center justify-between">
-                <SheetTitle className="text-left text-lg">Filters</SheetTitle>
-                <div className="flex items-center gap-3">
-                  {hasActiveFilters && (
-                    <button onClick={clearFilters} className="text-sm text-muted-foreground hover:text-primary transition-colors">Clear all</button>
-                  )}
-                  <button onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground">
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger asChild>
+        <TriggerButton hasActiveFilters={hasActiveFilters} activeFilterCount={activeFilterCount} />
+      </SheetTrigger>
+      <SheetContent side="bottom" className="h-[100dvh] rounded-none px-4 pb-8 flex flex-col">
+        <SheetHeader className="pb-2 border-b border-border mb-4 flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <SheetTitle className="text-left text-lg">Filters</SheetTitle>
+            <div className="flex items-center gap-3">
+              {hasActiveFilters && (
+                <button onClick={clearFilters} className="text-sm text-muted-foreground hover:text-primary transition-colors">Clear all</button>
+              )}
+              <button onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </SheetHeader>
+        <div className="flex-1 overflow-y-auto pb-20">{body}</div>
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
+          <Button onClick={onApply} className="w-full h-11">Apply Filters</Button>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+};
               </div>
             </SheetHeader>
             <div className="flex-1 overflow-y-auto pb-20">{body}</div>
