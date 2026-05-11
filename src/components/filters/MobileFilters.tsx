@@ -43,7 +43,7 @@ export const MobileFilters = ({
   onPopularEventClick,
 }: MobileFiltersProps) => {
   return (
-    <div className="md:hidden w-full">
+    <div className="w-full max-w-3xl mx-auto">
       <FilterControls
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
