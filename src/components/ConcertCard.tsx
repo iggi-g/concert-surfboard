@@ -1,4 +1,3 @@
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Calendar } from "lucide-react";
 import { useState, memo, useCallback } from "react";
@@ -21,14 +20,12 @@ interface ConcertCardProps {
   onDateClick?: (date: string) => void;
 }
 
-// Concert card component for displaying event information - memoized for performance
 export const ConcertCard = memo(({
   artist,
   date,
   venue,
   imageUrl,
   ticketUrl,
-  venueLink,
   isFavorite = false,
   onToggleFavorite,
   isInFavoritesView = false,
@@ -42,7 +39,6 @@ export const ConcertCard = memo(({
   }, []);
 
   const handleClick = useCallback(async () => {
-    // Track concert card click
     try {
       await supabase.from('concert_analytics').insert({
         concert_title: artist,
@@ -52,15 +48,11 @@ export const ConcertCard = memo(({
     } catch (error) {
       console.error('Error tracking concert click:', error);
     }
-    
-    // Open ticket URL directly
     window.open(ticketUrl, '_blank');
   }, [artist, date, venue, ticketUrl]);
 
   const handleFavoriteClick = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
-    
-    // Track favorite button click
     try {
       await supabase.from('favorite_analytics').insert({
         concert_title: artist,
@@ -71,18 +63,13 @@ export const ConcertCard = memo(({
     } catch (error) {
       console.error('Error tracking favorite click:', error);
     }
-    
-    if (onToggleFavorite) {
-      onToggleFavorite(artist);
-    }
+    onToggleFavorite?.(artist);
   }, [artist, date, venue, isFavorite, onToggleFavorite]);
 
   const handleCalendarClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     const eventDate = new Date(date);
-    // Format date as YYYYMMDD for all-day event
     const dateString = eventDate.toISOString().slice(0, 10).replace(/-/g, '');
-    // For all-day events, we need to add one day to the end date
     const nextDay = new Date(eventDate);
     nextDay.setDate(nextDay.getDate() + 1);
     const endDateString = nextDay.toISOString().slice(0, 10).replace(/-/g, '');
@@ -91,7 +78,6 @@ export const ConcertCard = memo(({
       text: artist,
       details: `Concert at ${venue}. Get tickets: ${ticketUrl}`,
       dates: `${dateString}/${endDateString}`,
-      // All-day event: start date to next day
       location: venue
     });
     window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
@@ -99,106 +85,115 @@ export const ConcertCard = memo(({
 
   const handleVenueClick = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
-    
-    // Track venue filter click
     try {
-      await supabase.from('venue_filter_analytics').insert({
-        venue: venue
-      });
+      await supabase.from('venue_filter_analytics').insert({ venue });
     } catch (error) {
       console.error('Error tracking venue filter click:', error);
     }
-    
-    if (onVenueClick) {
-      onVenueClick(venue);
-    }
+    onVenueClick?.(venue);
   }, [venue, onVenueClick]);
 
   const handleDateClick = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
-    
-    // Track date filter click
     try {
-      await supabase.from('date_filter_analytics').insert({
-        date: date
-      });
+      await supabase.from('date_filter_analytics').insert({ date });
     } catch (error) {
       console.error('Error tracking date filter click:', error);
     }
-    
-    if (onDateClick) {
-      onDateClick(date);
-    }
+    onDateClick?.(date);
   }, [date, onDateClick]);
 
-  const placeholderImage = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=75";
+  const placeholderImage = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=600&q=75";
   const displayImage = error || !imageUrl ? placeholderImage : imageUrl;
 
+  // Format date as e.g. "Fri, May 15"
+  let formattedDate = date;
+  try {
+    const d = new Date(date);
+    if (!isNaN(d.getTime())) {
+      formattedDate = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+  } catch {}
+
   return (
-    <Card 
-      className="overflow-visible w-full max-w-[350px] md:max-w-[350px] transition-transform duration-200 hover:scale-[1.01] cursor-pointer border-0 bg-transparent shadow-none relative" 
+    <article
+      className="group w-full max-w-[320px] cursor-pointer"
       onClick={handleClick}
     >
-      <div className="relative aspect-[16/9] w-full bg-muted">
-        <img 
-          src={displayImage} 
-          alt={`${artist} concert at ${venue} in Copenhagen`} 
-          className="absolute inset-0 w-full h-full object-cover" 
-          loading="lazy" 
-          decoding="async" 
-          width="400" 
-          height="225"
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-muted ring-1 ring-border transition-all duration-300 group-hover:ring-primary/60 group-hover:shadow-[0_0_32px_-8px_hsl(var(--primary)/0.6)]">
+        <img
+          src={displayImage}
+          alt={`${artist} concert at ${venue} in Copenhagen`}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          loading="lazy"
+          decoding="async"
+          width="600"
+          height="800"
           onError={handleImageError}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-        <div className="absolute top-3 inset-x-0 flex justify-between items-start px-5">
+      </div>
+
+      <div className="pt-3 px-0.5 space-y-1.5">
+        <h2 className="text-base md:text-lg font-bold text-text-primary uppercase tracking-tight leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+          {artist}
+        </h2>
+        <div className="flex items-center gap-2 text-xs text-text-secondary">
           <button
             onClick={handleDateClick}
-            className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card hover:bg-ui-surface hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
-            aria-label={`Filter by date ${date}`}
+            className="hover:text-primary transition-colors font-medium"
+            aria-label={`Filter by date ${formattedDate}`}
           >
-            {date}
+            {formattedDate}
           </button>
+          <span className="text-border">·</span>
           <button
             onClick={handleVenueClick}
-            className="text-text-secondary text-xs font-medium bg-ui-surface/80 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-ui-border shadow-card hover:bg-ui-surface hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+            className="hover:text-primary transition-colors font-medium truncate"
             aria-label={`Filter by venue ${venue}`}
           >
             {venue}
           </button>
         </div>
-        <div className="absolute bottom-3 inset-x-0 flex justify-between items-center px-5">
+
+        <div className="flex items-center gap-1 pt-1 -ml-2">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-xl bg-ui-surface/80 hover:bg-ui-surface group backdrop-blur-sm h-10 w-10 border border-ui-border shadow-card hover:border-primary/50" onClick={handleCalendarClick} aria-label="Add to calendar">
-                  <Calendar className="h-4 w-4 text-text-primary group-hover:text-primary transition-colors" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full text-text-secondary hover:text-primary hover:bg-primary/10"
+                  onClick={handleCalendarClick}
+                  aria-label="Add to calendar"
+                >
+                  <Calendar className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="top" sideOffset={5} className="bg-ui-surface text-text-primary border-ui-border z-[100] whitespace-nowrap px-3 py-1.5 text-xs font-medium shadow-card" align="start">
-                <p>Add to calendar</p>
-              </TooltipContent>
+              <TooltipContent side="top" className="text-xs">Add to calendar</TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-xl bg-ui-surface/80 hover:bg-ui-surface group backdrop-blur-sm h-10 w-10 border border-ui-border shadow-card hover:border-primary/50" onClick={handleFavoriteClick} aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}>
-                  <Heart className={`h-4 w-4 transition-colors group-hover:text-primary ${isFavorite ? 'fill-current text-primary' : isInFavoritesView ? 'text-primary' : 'text-text-primary'}`} />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full text-text-secondary hover:text-primary hover:bg-primary/10"
+                  onClick={handleFavoriteClick}
+                  aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                >
+                  <Heart className={`h-4 w-4 transition-colors ${isFavorite || isInFavoritesView ? 'fill-current text-primary' : ''}`} />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="top" sideOffset={5} className="bg-ui-surface text-text-primary border-ui-border z-[100] whitespace-nowrap px-3 py-1.5 text-xs font-medium shadow-card" align="end">
-                <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
+              <TooltipContent side="top" className="text-xs">
+                {isFavorite ? "Remove from favorites" : "Add to favorites"}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
       </div>
-      <div className="px-3 py-2">
-        <h2 className="text-sm md:text-base font-bold text-text-primary uppercase tracking-wide leading-tight">{artist}</h2>
-      </div>
-    </Card>
+    </article>
   );
 });
 
