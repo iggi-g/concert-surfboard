@@ -66,11 +66,21 @@ export const TimeFilterTabs = ({ dateRange, setDateRange, recentlyAdded = false,
   const activeFilter = getActiveFilter();
 
   const handleFilterClick = (filter: TimeFilter) => {
+    setRecentlyAdded?.(false);
     if (filter === "today") {
       setDateRange(activeFilter === "today" ? undefined : todayRange);
     } else if (filter === "weekend") {
       setDateRange(activeFilter === "weekend" ? undefined : weekendRange);
     }
+  };
+
+  const handleRecentlyAddedClick = () => {
+    if (recentlyAdded) {
+      setRecentlyAdded?.(false);
+      return;
+    }
+    setDateRange(undefined);
+    setRecentlyAdded?.(true);
   };
 
   const getDateLabel = () => {
