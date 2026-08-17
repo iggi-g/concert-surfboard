@@ -100,17 +100,25 @@ export const TimeFilterTabs = ({ dateRange, setDateRange, recentlyAdded = false,
   return (
     <div className="flex items-center gap-1.5 min-w-max">
       <button
+        onClick={handleRecentlyAddedClick}
+        className={cn(buttonBase, "flex items-center gap-1.5", recentlyAdded ? activeClass : inactiveClass)}
+      >
+        <Sparkles className="h-3.5 w-3.5" />
+        Recently Added
+      </button>
+      <button
         onClick={() => handleFilterClick("today")}
-        className={cn(buttonBase, activeFilter === "today" ? activeClass : inactiveClass)}
+        className={cn(buttonBase, activeFilter === "today" && !recentlyAdded ? activeClass : inactiveClass)}
       >
         Today
       </button>
       <button
         onClick={() => handleFilterClick("weekend")}
-        className={cn(buttonBase, activeFilter === "weekend" ? activeClass : inactiveClass)}
+        className={cn(buttonBase, activeFilter === "weekend" && !recentlyAdded ? activeClass : inactiveClass)}
       >
         This Weekend
       </button>
+
 
       <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
         <PopoverTrigger asChild>
