@@ -138,6 +138,13 @@ export const ConcertCard = memo(({
           </button>
         </div>
 
+        {isNew && (
+          <span className="absolute top-14 left-3 text-[10px] font-bold uppercase tracking-wide bg-primary text-primary-foreground px-2.5 py-1 rounded-full shadow-md">
+            New
+          </span>
+        )}
+
+
         {/* Bottom: artist + actions */}
         <div className="absolute bottom-0 inset-x-0 px-4 pb-4 pt-10">
           <h2 className="text-lg md:text-xl font-bold text-text-primary uppercase tracking-tight leading-tight line-clamp-2 mb-3 drop-shadow-md">
