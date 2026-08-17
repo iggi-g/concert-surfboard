@@ -21,6 +21,8 @@ interface MobileFiltersProps {
   showMobileFilters: boolean;
   setShowMobileFilters: (show: boolean) => void;
   onPopularEventClick?: (title: string, date: string, venue: string) => void;
+  recentlyAdded?: boolean;
+  setRecentlyAdded?: (value: boolean) => void;
 }
 
 export const MobileFilters = ({
@@ -41,6 +43,8 @@ export const MobileFilters = ({
   setShowFavoritesOnly,
   filteredEvents,
   onPopularEventClick,
+  recentlyAdded,
+  setRecentlyAdded,
 }: MobileFiltersProps) => {
   return (
     <div className="w-full max-w-3xl mx-auto">
@@ -63,6 +67,8 @@ export const MobileFilters = ({
         filteredEvents={filteredEvents}
         isMobile={true}
         onPopularEventClick={onPopularEventClick}
+        recentlyAdded={recentlyAdded}
+        setRecentlyAdded={setRecentlyAdded}
       />
     </div>
   );

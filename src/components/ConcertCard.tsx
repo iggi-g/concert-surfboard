@@ -18,6 +18,7 @@ interface ConcertCardProps {
   isInFavoritesView?: boolean;
   onVenueClick?: (venue: string) => void;
   onDateClick?: (date: string) => void;
+  isNew?: boolean;
 }
 
 export const ConcertCard = memo(({
@@ -30,7 +31,8 @@ export const ConcertCard = memo(({
   onToggleFavorite,
   isInFavoritesView = false,
   onVenueClick,
-  onDateClick
+  onDateClick,
+  isNew = false
 }: ConcertCardProps) => {
   const [error, setError] = useState(false);
 
@@ -135,6 +137,13 @@ export const ConcertCard = memo(({
             {venue}
           </button>
         </div>
+
+        {isNew && (
+          <span className="absolute top-14 left-3 text-[10px] font-bold uppercase tracking-wide bg-primary text-primary-foreground px-2.5 py-1 rounded-full shadow-md">
+            New
+          </span>
+        )}
+
 
         {/* Bottom: artist + actions */}
         <div className="absolute bottom-0 inset-x-0 px-4 pb-4 pt-10">

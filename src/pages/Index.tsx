@@ -27,6 +27,7 @@ const Index = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [recentlyAdded, setRecentlyAdded] = useState(false);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [favorites] = useLocalStorage<string[]>("favorites", []);
   const {
@@ -96,12 +97,14 @@ const Index = () => {
     setSortOrder("asc");
     setSortBy("date");
     setShowFavoritesOnly(false);
+    setRecentlyAdded(false);
     toast({
       title: "Filters Cleared",
       description: "All filters have been reset to default values"
     });
   };
-  const hasActiveFilters = Boolean(searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly);
+  const RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+  const hasActiveFilters = Boolean(searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly || recentlyAdded);
   const filteredEvents = events.filter(event => {
     // Filter out past events (same logic as EventsList)
     const eventDate = parseISO(event.date);
@@ -129,8 +132,15 @@ const Index = () => {
     if (showFavoritesOnly && !favorites.includes(event.title)) {
       return false;
     }
+    if (recentlyAdded) {
+      if (!event.first_seen_at) return false;
+      if (Date.now() - new Date(event.first_seen_at).getTime() > RECENT_WINDOW_MS) return false;
+    }
     return true;
   }).sort((a, b) => {
+    if (recentlyAdded) {
+      return new Date(b.first_seen_at || 0).getTime() - new Date(a.first_seen_at || 0).getTime();
+    }
     if (sortBy === "title") {
       return sortOrder === "asc" ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title);
     }
@@ -219,7 +229,7 @@ const Index = () => {
         
         {/* Sticky Pill Filter Bar - shared on all viewports */}
         <div className={`px-4 pb-3 mt-2 md:mt-3 space-y-xs relative z-10 transition-all duration-300 ${hideFilters ? 'max-h-0 opacity-0 overflow-hidden pb-0 mt-0' : 'max-h-[500px] opacity-100'}`}>
-          <MobileFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} showMobileFilters={showMobileFilters} setShowMobileFilters={setShowMobileFilters} onPopularEventClick={handlePopularEventClick} />
+          <MobileFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} showMobileFilters={showMobileFilters} setShowMobileFilters={setShowMobileFilters} onPopularEventClick={handlePopularEventClick} recentlyAdded={recentlyAdded} setRecentlyAdded={setRecentlyAdded} />
         </div>
         
       </div>
@@ -234,6 +244,7 @@ const Index = () => {
           showFavoritesOnly={showFavoritesOnly}
           onVenueClick={handleVenueClick}
           onDateClick={handleDateClick}
+          emptyMessage={recentlyAdded ? "No new concerts added in the last 7 days." : undefined}
         />
       </div>
 

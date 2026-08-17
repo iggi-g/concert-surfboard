@@ -149,7 +149,10 @@ export type Database = {
       events: {
         Row: {
           date: string
+          first_seen_at: string
+          id: string
           image: string | null
+          last_seen_at: string
           link: string | null
           title: string
           venue: string | null
@@ -157,7 +160,10 @@ export type Database = {
         }
         Insert: {
           date: string
+          first_seen_at?: string
+          id?: string
           image?: string | null
+          last_seen_at?: string
           link?: string | null
           title: string
           venue?: string | null
@@ -165,7 +171,10 @@ export type Database = {
         }
         Update: {
           date?: string
+          first_seen_at?: string
+          id?: string
           image?: string | null
+          last_seen_at?: string
           link?: string | null
           title?: string
           venue?: string | null
@@ -287,6 +296,10 @@ export type Database = {
     }
     Functions: {
       delete_rows_before_today: { Args: never; Returns: undefined }
+      event_key: {
+        Args: { _date: string; _link: string; _title: string; _venue: string }
+        Returns: string
+      }
       get_random_concert: {
         Args: never
         Returns: {

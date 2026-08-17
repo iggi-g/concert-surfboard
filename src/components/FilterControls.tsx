@@ -29,6 +29,8 @@ interface FilterControlsProps {
   isMobile?: boolean;
   showOnlyAdvancedFilters?: boolean;
   onPopularEventClick?: (title: string, date: string, venue: string) => void;
+  recentlyAdded?: boolean;
+  setRecentlyAdded?: (value: boolean) => void;
 }
 
 export const FilterControls = ({
@@ -51,6 +53,8 @@ export const FilterControls = ({
   isMobile,
   showOnlyAdvancedFilters,
   onPopularEventClick,
+  recentlyAdded,
+  setRecentlyAdded,
 }: FilterControlsProps) => {
   if (showOnlyAdvancedFilters) {
     return (
@@ -93,8 +97,14 @@ export const FilterControls = ({
       <div className="w-full space-y-2">
         {/* Time Filter Tabs - Scrollable */}
         <div className="overflow-x-auto scrollbar-hide -mx-2 px-2">
-          <TimeFilterTabs dateRange={dateRange} setDateRange={setDateRange} />
+          <TimeFilterTabs
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            recentlyAdded={recentlyAdded}
+            setRecentlyAdded={setRecentlyAdded}
+          />
         </div>
+
 
         {/* Search + Filter Button Row */}
         <MobileFilterBar

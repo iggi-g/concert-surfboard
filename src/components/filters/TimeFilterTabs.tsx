@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { startOfDay, endOfDay, isSaturday, nextSaturday, nextSunday, isSunday, format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Sparkles } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -15,11 +15,13 @@ import { X } from "lucide-react";
 interface TimeFilterTabsProps {
   dateRange: DateRange | undefined;
   setDateRange: (range: DateRange | undefined) => void;
+  recentlyAdded?: boolean;
+  setRecentlyAdded?: (value: boolean) => void;
 }
 
 type TimeFilter = "all" | "today" | "weekend" | "custom";
 
-export const TimeFilterTabs = ({ dateRange, setDateRange }: TimeFilterTabsProps) => {
+export const TimeFilterTabs = ({ dateRange, setDateRange, recentlyAdded = false, setRecentlyAdded }: TimeFilterTabsProps) => {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const today = new Date();
   
@@ -64,11 +66,21 @@ export const TimeFilterTabs = ({ dateRange, setDateRange }: TimeFilterTabsProps)
   const activeFilter = getActiveFilter();
 
   const handleFilterClick = (filter: TimeFilter) => {
+    setRecentlyAdded?.(false);
     if (filter === "today") {
       setDateRange(activeFilter === "today" ? undefined : todayRange);
     } else if (filter === "weekend") {
       setDateRange(activeFilter === "weekend" ? undefined : weekendRange);
     }
+  };
+
+  const handleRecentlyAddedClick = () => {
+    if (recentlyAdded) {
+      setRecentlyAdded?.(false);
+      return;
+    }
+    setDateRange(undefined);
+    setRecentlyAdded?.(true);
   };
 
   const getDateLabel = () => {
@@ -88,17 +100,25 @@ export const TimeFilterTabs = ({ dateRange, setDateRange }: TimeFilterTabsProps)
   return (
     <div className="flex items-center gap-1.5 min-w-max">
       <button
+        onClick={handleRecentlyAddedClick}
+        className={cn(buttonBase, "flex items-center gap-1.5", recentlyAdded ? activeClass : inactiveClass)}
+      >
+        <Sparkles className="h-3.5 w-3.5" />
+        Recently Added
+      </button>
+      <button
         onClick={() => handleFilterClick("today")}
-        className={cn(buttonBase, activeFilter === "today" ? activeClass : inactiveClass)}
+        className={cn(buttonBase, activeFilter === "today" && !recentlyAdded ? activeClass : inactiveClass)}
       >
         Today
       </button>
       <button
         onClick={() => handleFilterClick("weekend")}
-        className={cn(buttonBase, activeFilter === "weekend" ? activeClass : inactiveClass)}
+        className={cn(buttonBase, activeFilter === "weekend" && !recentlyAdded ? activeClass : inactiveClass)}
       >
         This Weekend
       </button>
+
 
       <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
         <PopoverTrigger asChild>
