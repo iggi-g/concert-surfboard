@@ -29,6 +29,8 @@ interface FilterControlsProps {
   isMobile?: boolean;
   showOnlyAdvancedFilters?: boolean;
   onPopularEventClick?: (title: string, date: string, venue: string) => void;
+  recentlyAdded?: boolean;
+  setRecentlyAdded?: (value: boolean) => void;
 }
 
 export const FilterControls = ({
@@ -51,6 +53,8 @@ export const FilterControls = ({
   isMobile,
   showOnlyAdvancedFilters,
   onPopularEventClick,
+  recentlyAdded,
+  setRecentlyAdded,
 }: FilterControlsProps) => {
   if (showOnlyAdvancedFilters) {
     return (
