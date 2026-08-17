@@ -21,6 +21,8 @@ interface MobileFiltersProps {
   showMobileFilters: boolean;
   setShowMobileFilters: (show: boolean) => void;
   onPopularEventClick?: (title: string, date: string, venue: string) => void;
+  recentlyAdded?: boolean;
+  setRecentlyAdded?: (value: boolean) => void;
 }
 
 export const MobileFilters = ({

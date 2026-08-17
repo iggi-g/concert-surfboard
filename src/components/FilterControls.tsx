@@ -97,8 +97,14 @@ export const FilterControls = ({
       <div className="w-full space-y-2">
         {/* Time Filter Tabs - Scrollable */}
         <div className="overflow-x-auto scrollbar-hide -mx-2 px-2">
-          <TimeFilterTabs dateRange={dateRange} setDateRange={setDateRange} />
+          <TimeFilterTabs
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            recentlyAdded={recentlyAdded}
+            setRecentlyAdded={setRecentlyAdded}
+          />
         </div>
+
 
         {/* Search + Filter Button Row */}
         <MobileFilterBar
