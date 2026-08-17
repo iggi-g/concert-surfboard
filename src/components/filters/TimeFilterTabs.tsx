@@ -15,11 +15,13 @@ import { X } from "lucide-react";
 interface TimeFilterTabsProps {
   dateRange: DateRange | undefined;
   setDateRange: (range: DateRange | undefined) => void;
+  recentlyAdded?: boolean;
+  setRecentlyAdded?: (value: boolean) => void;
 }
 
 type TimeFilter = "all" | "today" | "weekend" | "custom";
 
-export const TimeFilterTabs = ({ dateRange, setDateRange }: TimeFilterTabsProps) => {
+export const TimeFilterTabs = ({ dateRange, setDateRange, recentlyAdded = false, setRecentlyAdded }: TimeFilterTabsProps) => {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const today = new Date();
   
