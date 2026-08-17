@@ -18,6 +18,7 @@ interface ConcertCardProps {
   isInFavoritesView?: boolean;
   onVenueClick?: (venue: string) => void;
   onDateClick?: (date: string) => void;
+  isNew?: boolean;
 }
 
 export const ConcertCard = memo(({
@@ -30,7 +31,8 @@ export const ConcertCard = memo(({
   onToggleFavorite,
   isInFavoritesView = false,
   onVenueClick,
-  onDateClick
+  onDateClick,
+  isNew = false
 }: ConcertCardProps) => {
   const [error, setError] = useState(false);
 
