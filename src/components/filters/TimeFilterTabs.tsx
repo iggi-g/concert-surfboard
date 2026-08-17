@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { startOfDay, endOfDay, isSaturday, nextSaturday, nextSunday, isSunday, format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Sparkles } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
