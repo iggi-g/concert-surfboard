@@ -1,71 +1,49 @@
-## Design Refresh: Midnight Neon + Tall Posters
+# Recently Added tab
 
-A focused visual overhaul. No business-logic changes — same data, same filters, same routes. Just a new look and a quieter card.
+Add a "Recently added" filter tab that shows concerts that appeared in the database within the last 7 days — while making the scraper's re-inserts stop creating duplicates and stop resetting a concert's "added" date when its title changes (e.g. a `– FÅ BILLETTER` suffix appears).
 
-### 1. New color palette — "Deep midnight + neon"
+## The problem today
 
-Replace the current charcoal/orange system with a deep blue-purple base and a single electric accent.
+The `events` table has no identity and no timestamps — only title, date, link, image, venue, venue_link. The scraper plain-inserts every row on every run, so:
 
-- Background: deep midnight navy (`#0A0B14`)
-- Surface (cards/inputs): elevated indigo (`#13152099`)
-- Border: subtle violet-tinted line (`#1F2238`)
-- Text primary: near-white (`#F2F3F8`)
-- Text secondary: cool muted (`#8A8FB0`)
-- Accent (single): electric cyan (`#00E5FF`) — used sparingly for active filters, hover, focus ring, and "X concerts available" count
-- Remove the warm orange entirely
+- The same concert is re-inserted whenever anything in its title changes (ticket-status suffixes like `– FÅ BILLETTER`), creating what looks like a "new" concert.
+- Unchanged concerts are re-inserted as exact duplicates or silently pile up.
+- There is no way to know when a concert first showed up, so "recently added" is impossible to compute.
 
-All values defined in `src/index.css` as HSL tokens; `tailwind.config.ts` already maps them. Components keep using semantic tokens (`bg-background`, `text-primary`, etc.) so most files don't need touching.
+Current data: 1082 rows, 1073 distinct links (9 rows have no link). The event URL is effectively a unique identity and is stable when the title changes — so it is the right dedup key.
 
-### 2. Cards — tall portrait posters
+## Approach
 
-Rework `ConcertCard` to a gallery-style 3:4 portrait:
+Identity = `link` when present, otherwise `venue + date + normalized title`. A database trigger absorbs the scraper's plain INSERTs: if the concert already exists, it refreshes the existing row's fields and drops the insert; otherwise it inserts a fresh row with `first_seen_at = now()`. No scraper changes needed.
 
-- Aspect ratio `3/4` (was 16/9), image fills the frame
-- Wider max-width (~280px mobile, ~320px desktop) so cards feel bigger
-- Remove the dark gradient overlay on top of the image
-- Below the image: large artist name (one line, truncate), small date · venue line beneath
-- Date and venue stay clickable for filtering, but as plain underlined text — no chip pills on top of the image
-- Heart and calendar buttons stay, moved to a small row under the meta line, ghost style (icon only, no surface)
-- Grid: 2 cols mobile, 3 tablet, 4 desktop, 5 on 2xl (was 1/2/3/4/5) — bigger feel because each card is taller
+All existing rows get backfilled with a `first_seen_at` in the past, so the tab starts empty and fills up naturally over the next scrape runs.
 
-### 3. Sticky minimal pill filter bar
+## Database changes (one migration)
 
-Replace the current two-row filter block with a single sticky pill bar at the top:
+1. Add to `public.events`:
+   - `id uuid primary key default gen_random_uuid()`
+   - `first_seen_at timestamptz not null default now()`
+   - `last_seen_at timestamptz not null default now()`
+2. Add a normalization helper `public.event_key(title, date, venue, link)` — immutable, returns `lower(link)` when link is present, else `lower(venue)|date|` plus the title stripped of ticket-status noise (`få billetter`, `few tickets`, `udsolgt`, `sold out`, `sidste billetter`, trailing dashes/parens) and collapsed whitespace.
+3. Unique index on `event_key(...)`.
+4. `BEFORE INSERT` trigger `events_dedup`:
+   - Look up an existing row with the same key.
+   - If found: update its `title`, `image`, `venue_link`, `link`, `date`, and `last_seen_at = now()`; leave `first_seen_at` untouched; `RETURN NULL` (insert skipped).
+   - If not found: set `first_seen_at`/`last_seen_at` to `now()` and insert.
+5. Collapse existing duplicates (keep one row per key, earliest) and backfill `first_seen_at = now() - interval '30 days'` for all current rows.
+6. Index on `first_seen_at` for the new query.
 
-- Search input (icon only when collapsed, expands on focus)
-- Date pill (opens calendar popover)
-- Venue pill (opens existing checkbox sheet)
-- Sort pill
-- Favorites toggle (heart pill)
-- "Clear" only appears when filters are active
-- Advanced/extra controls move into a "More" sheet on mobile
-- Bar is rounded-full, floats with subtle border, sticks to top on scroll, hides on scroll-down past 150px (existing behavior preserved)
+RLS on `events` stays as-is (public read only).
 
-Desktop and mobile use the same pill bar — no separate `DesktopFilters` vs `MobileFilters` markup divergence for the primary controls. Existing filter components are reused inside; only the chrome changes.
+## Frontend changes
 
-### 4. Hero — quieter
+- `src/lib/supabase-client.ts`: select `first_seen_at` in `fetchEvents` and add it to the `Event` type.
+- `src/pages/Index.tsx`: add a `recentlyAdded` filter state; when active, keep only events with `first_seen_at >= now() - 7 days` and sort by `first_seen_at` descending (newest first). Include it in `hasActiveFilters` / `clearFilters`.
+- `src/components/filters/TimeFilterTabs.tsx`: add a "Recently added" tab alongside the existing time tabs; selecting it clears the date range, and picking a date tab clears it.
+- `src/components/ConcertCard.tsx`: small "NEW" chip on cards whose `first_seen_at` is within 7 days (shown in all views, not just the tab).
+- Empty state copy for the tab: "No new concerts added in the last 7 days."
 
-- Smaller H1 (keep dynamic text logic intact)
-- Remove the bottom gradient fade
-- Tighter vertical spacing so the first row of cards is visible above the fold
+## Notes
 
-### 5. Out of scope
-
-- No changes to data fetching, analytics tracking, calendar export, favorites logic, SEO/schema components, routes, or edge functions
-- No changes to `EventPage`, `Favorites`, `About`
-- Memory rules around 8px grid, 44px control height, scroll-hide nav, and card click behavior are preserved
-
-### Files to touch
-
-- `src/index.css` — new color tokens
-- `tailwind.config.ts` — only if a new shadow/radius is needed
-- `src/components/ConcertCard.tsx` — full visual rework
-- `src/components/EventsList.tsx` — grid columns + intrinsic size
-- `src/components/filters/DesktopFilters.tsx` + `MobileFilters.tsx` — collapse into shared pill bar (or new `StickyPillBar.tsx` that both render)
-- `src/pages/Index.tsx` — hero spacing, swap filter bar
-- `src/pages/Favorites.tsx` — pick up new tokens (no structural change)
-- `mem://design/unified-design-system` — update palette + card notes after build
-
-### Validation
-
-After implementation: visual check at mobile (375), tablet (768), desktop (1280); confirm filter clicks still update results; confirm calendar/heart still work; confirm no orange remains.
+- Because the backfill dates existing rows 30 days back, the tab will show nothing until the next scrape adds genuinely new concerts — that is intended, not a bug.
+- Concerts whose title only gained a ticket-status suffix will update in place and will not reappear as new.
