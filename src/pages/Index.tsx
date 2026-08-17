@@ -229,7 +229,7 @@ const Index = () => {
         
         {/* Sticky Pill Filter Bar - shared on all viewports */}
         <div className={`px-4 pb-3 mt-2 md:mt-3 space-y-xs relative z-10 transition-all duration-300 ${hideFilters ? 'max-h-0 opacity-0 overflow-hidden pb-0 mt-0' : 'max-h-[500px] opacity-100'}`}>
-          <MobileFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} showMobileFilters={showMobileFilters} setShowMobileFilters={setShowMobileFilters} onPopularEventClick={handlePopularEventClick} />
+          <MobileFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedVenues={selectedVenues} setSelectedVenues={setSelectedVenues} availableVenues={availableVenues} dateRange={dateRange} setDateRange={setDateRange} sortOrder={sortOrder} setSortOrder={setSortOrder} sortBy={sortBy} setSortBy={setSortBy} hasActiveFilters={hasActiveFilters} clearFilters={clearFilters} showFavoritesOnly={showFavoritesOnly} setShowFavoritesOnly={setShowFavoritesOnly} filteredEvents={filteredEvents} showMobileFilters={showMobileFilters} setShowMobileFilters={setShowMobileFilters} onPopularEventClick={handlePopularEventClick} recentlyAdded={recentlyAdded} setRecentlyAdded={setRecentlyAdded} />
         </div>
         
       </div>
@@ -244,6 +244,7 @@ const Index = () => {
           showFavoritesOnly={showFavoritesOnly}
           onVenueClick={handleVenueClick}
           onDateClick={handleDateClick}
+          emptyMessage={recentlyAdded ? "No new concerts added in the last 7 days." : undefined}
         />
       </div>
 
