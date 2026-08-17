@@ -43,6 +43,8 @@ export const MobileFilters = ({
   setShowFavoritesOnly,
   filteredEvents,
   onPopularEventClick,
+  recentlyAdded,
+  setRecentlyAdded,
 }: MobileFiltersProps) => {
   return (
     <div className="w-full max-w-3xl mx-auto">
