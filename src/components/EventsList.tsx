@@ -11,9 +11,15 @@ interface EventsListProps {
   showFavoritesOnly?: boolean;
   onVenueClick?: (venue: string) => void;
   onDateClick?: (date: string) => void;
+  emptyMessage?: string;
 }
 
-export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVenueClick, onDateClick }: EventsListProps) => {
+const isRecentlyAdded = (event: Event) => {
+  if (!event.first_seen_at) return false;
+  return Date.now() - new Date(event.first_seen_at).getTime() <= 7 * 24 * 60 * 60 * 1000;
+};
+
+export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVenueClick, onDateClick, emptyMessage }: EventsListProps) => {
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
   const { toast } = useToast();
 
