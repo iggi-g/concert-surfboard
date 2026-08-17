@@ -67,6 +67,8 @@ export const MobileFilters = ({
         filteredEvents={filteredEvents}
         isMobile={true}
         onPopularEventClick={onPopularEventClick}
+        recentlyAdded={recentlyAdded}
+        setRecentlyAdded={setRecentlyAdded}
       />
     </div>
   );
