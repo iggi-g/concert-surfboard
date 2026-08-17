@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { startOfDay, endOfDay, isSaturday, nextSaturday, nextSunday, isSunday, format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Calendar as CalendarIcon, Sparkles } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -103,7 +103,6 @@ export const TimeFilterTabs = ({ dateRange, setDateRange, recentlyAdded = false,
         onClick={handleRecentlyAddedClick}
         className={cn(buttonBase, "flex items-center gap-1.5", recentlyAdded ? activeClass : inactiveClass)}
       >
-        <Sparkles className="h-3.5 w-3.5" />
         Recently Added
       </button>
       <button
