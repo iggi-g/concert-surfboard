@@ -27,6 +27,7 @@ const Index = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [recentlyAdded, setRecentlyAdded] = useState(false);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [favorites] = useLocalStorage<string[]>("favorites", []);
   const {
