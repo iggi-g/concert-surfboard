@@ -53,6 +53,36 @@ export type Database = {
         }
         Relationships: []
       }
+      challenges: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          starts_at: string
+          text_en: string
+          text_fr: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          starts_at: string
+          text_en: string
+          text_fr: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          starts_at?: string
+          text_en?: string
+          text_fr?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       concert_analytics: {
         Row: {
           clicked_at: string
@@ -92,6 +122,27 @@ export type Database = {
           date?: string
           filtered_at?: string
           id?: string
+        }
+        Relationships: []
+      }
+      event_settings: {
+        Row: {
+          id: number
+          reveal_at: string
+          shots_per_guest: number
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          reveal_at?: string
+          shots_per_guest?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          reveal_at?: string
+          shots_per_guest?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -149,6 +200,51 @@ export type Database = {
         }
         Relationships: []
       }
+      host_config: {
+        Row: {
+          id: number
+          pin_hash: string
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          pin_hash: string
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          pin_hash?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      photos: {
+        Row: {
+          challenge: string | null
+          created_at: string
+          guest_id: string
+          guest_name: string
+          id: string
+          storage_path: string
+        }
+        Insert: {
+          challenge?: string | null
+          created_at?: string
+          guest_id: string
+          guest_name: string
+          id?: string
+          storage_path: string
+        }
+        Update: {
+          challenge?: string | null
+          created_at?: string
+          guest_id?: string
+          guest_name?: string
+          id?: string
+          storage_path?: string
+        }
+        Relationships: []
+      }
       ShowStop: {
         Row: {
           created_at: string
@@ -202,6 +298,12 @@ export type Database = {
           venue_link: string
         }[]
       }
+      is_guest_name_taken: {
+        Args: { _guest_id: string; _name: string }
+        Returns: boolean
+      }
+      set_host_pin: { Args: { _new_pin: string }; Returns: undefined }
+      verify_host_pin: { Args: { _pin: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
