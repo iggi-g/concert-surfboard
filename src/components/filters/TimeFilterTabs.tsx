@@ -103,7 +103,6 @@ export const TimeFilterTabs = ({ dateRange, setDateRange, recentlyAdded = false,
         onClick={handleRecentlyAddedClick}
         className={cn(buttonBase, "flex items-center gap-1.5", recentlyAdded ? activeClass : inactiveClass)}
       >
-        <Sparkles className="h-3.5 w-3.5" />
         Recently Added
       </button>
       <button
