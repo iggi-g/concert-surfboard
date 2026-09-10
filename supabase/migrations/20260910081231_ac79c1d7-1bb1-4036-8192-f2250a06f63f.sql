@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.events_dedup() FROM PUBLIC, anon, authenticated;
