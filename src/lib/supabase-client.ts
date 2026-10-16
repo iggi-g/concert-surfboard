@@ -13,6 +13,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
 });
 
 export interface Event {
+  id: string;
   title: string;
   date: string;
   link: string;
@@ -52,6 +53,7 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<Ev
       .from('events')
       .select('*')
       .gte('date', today)
+      .range(0, 2999)
       .order('date', { ascending: sortOrder === 'asc' });
     
     if (error) {

@@ -63,7 +63,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-4 md:px-6">
       {filteredEvents.map((event: Event) => (
-        <div key={`${event.title}-${event.date}`} className="flex justify-center" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
+        <div key={event.id || `${event.title}-${event.venue}-${event.date}`} className="flex justify-center" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
           <ConcertCard
             artist={event.title}
             date={event.date}
