@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";
 import { ContactButton } from "@/components/ContactButton";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -43,6 +43,19 @@ const Index = () => {
   const events = eventsResponse?.events || [];
   const hasMoreEvents = eventsResponse?.hasMore || false;
   const totalEvents = eventsResponse?.total || 0;
+
+  // Latest scrape time across upcoming events -> "list updated X ago" indicator
+  const lastUpdatedLabel = useMemo(() => {
+    let latest: Date | null = null;
+    for (const e of events) {
+      const ts = e.last_seen_at || e.first_seen_at;
+      if (!ts) continue;
+      const d = new Date(ts);
+      if (isNaN(d.getTime())) continue;
+      if (!latest || d > latest) latest = d;
+    }
+    return latest ? formatDistanceToNow(latest, { addSuffix: true }) : null;
+  }, [events]);
 
   // Add debugging to see what's happening
   console.log('Index - Total events from database:', events.length);
@@ -223,6 +236,12 @@ const Index = () => {
               return `${totalEvents} ${totalEvents === 1 ? 'concert' : 'concerts'} available`;
             })()}
     </p>
+    {lastUpdatedLabel && (
+      <p className="text-[11px] md:text-xs text-text-secondary/90 flex items-center gap-1.5 animate-fade-in" title="When the concert list was last refreshed">
+        <Clock className="h-3 w-3 text-primary" aria-hidden="true" />
+        <span>Updated {lastUpdatedLabel}</span>
+      </p>
+    )}
   </div>
       </div>
 
