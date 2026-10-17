@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchEvents } from "@/lib/supabase-client";
 import { DateRange } from "react-day-picker";
-import { isWithinInterval, parseISO, format, isToday, isSameDay, isAfter, startOfDay } from "date-fns";
+import { isWithinInterval, parseISO, format, isToday, isSameDay, isAfter, startOfDay, formatDistanceToNow } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { VideoBackground } from "@/components/VideoBackground";
 import { EventsList } from "@/components/EventsList";

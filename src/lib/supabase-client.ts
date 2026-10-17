@@ -22,6 +22,7 @@ export interface Event {
   venue_link: string;
   location?: string;
   first_seen_at?: string;
+  last_seen_at?: string;
 }
 
 export interface EventsResponse {
