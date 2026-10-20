@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase-client";
 import { SEO } from "@/components/SEO";
+import { EventSubmissionForm } from "@/components/EventSubmissionForm";
 
 const About = () => {
   const location = useLocation();
@@ -125,6 +126,7 @@ const About = () => {
             </Button>
           </form>
         </div>
+        <EventSubmissionForm />
       </div>
     </PageContainer>
   );
