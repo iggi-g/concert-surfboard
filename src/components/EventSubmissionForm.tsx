@@ -25,7 +25,9 @@ export function EventSubmissionForm() {
     setErrors({});
     setSaving(true);
     try {
-      const { error } = await supabase.from("event_submissions").insert(parsed.data);
+      const { title, date, venue, link, image, venue_link } = parsed.data;
+      if (!title || !date || !venue) return;
+      const { error } = await supabase.from("event_submissions").insert({ title, date, venue, link, image, venue_link });
       if (error) throw error;
       setSubmitted(true);
       setForm({ ...emptyEventSubmission });
