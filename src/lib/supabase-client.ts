@@ -1,6 +1,6 @@
 
 import { createClient } from '@supabase/supabase-js';
-import { startOfDay } from 'date-fns';
+import { format } from 'date-fns';
 
 const supabaseUrl = 'https://cmnsnmhlbsnegwdbwzxj.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtbnNubWhsYnNuZWd3ZGJ3enhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE5MzU3NjAsImV4cCI6MjA0NzUxMTc2MH0.UHu7DKYCaUYNDGCOUJouYYNcLnLtdjJsnVlaaZiZMBk';
@@ -34,7 +34,7 @@ export interface EventsResponse {
 export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<EventsResponse> => {
   try {
     // Use startOfDay to ensure we get the start of the current day in the local timezone
-    const today = startOfDay(new Date()).toISOString().split('T')[0];
+    const today = format(new Date(), 'yyyy-MM-dd');
     console.log('Fetching events from date:', today);
     
     // First, let's get a count of all events to see what we're working with
@@ -50,16 +50,20 @@ export const fetchEvents = async (sortOrder: "asc" | "desc" = "asc"): Promise<Ev
     
     console.log('Total events available in database:', count);
     
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .gte('date', today)
-      .range(0, 2999)
-      .order('date', { ascending: sortOrder === 'asc' });
-    
-    if (error) {
-      console.error('Error fetching events:', error);
-      throw error;
+    // PostgREST caps each response at 1,000 rows even for a larger requested range.
+    const data: Event[] = [];
+    const pageSize = 1000;
+    for (let offset = 0; offset < (count || 0); offset += pageSize) {
+      const { data: page, error } = await supabase
+        .from('events')
+        .select('*')
+        .gte('date', today)
+        .order('date', { ascending: sortOrder === 'asc' })
+        .order('id', { ascending: true })
+        .range(offset, offset + pageSize - 1);
+      if (error) throw error;
+      data.push(...(page || []) as Event[]);
+      if (!page?.length) break;
     }
 
     // Log the first few events to verify the date filtering
