@@ -146,6 +146,42 @@ export type Database = {
         }
         Relationships: []
       }
+      event_submissions: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          image: string | null
+          link: string | null
+          title: string
+          updated_at: string
+          venue: string
+          venue_link: string | null
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          image?: string | null
+          link?: string | null
+          title: string
+          updated_at?: string
+          venue: string
+          venue_link?: string | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          image?: string | null
+          link?: string | null
+          title?: string
+          updated_at?: string
+          venue?: string
+          venue_link?: string | null
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           date: string
