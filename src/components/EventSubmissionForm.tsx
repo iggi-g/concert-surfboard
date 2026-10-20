@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { CalendarPlus, CheckCircle2, Loader2, Send } from "lucide-react";
+import { CalendarPlus, CheckCircle2, ChevronDown, Loader2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { supabase } from "@/integrations/supabase/client";
 import { emptyEventSubmission, eventSubmissionSchema } from "@/lib/event-submission";
 
 export function EventSubmissionForm() {
+  const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ ...emptyEventSubmission });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
@@ -42,19 +44,26 @@ export function EventSubmissionForm() {
     { key: "title", label: "Artist / event name", placeholder: "Event name", required: true },
     { key: "date", label: "Event date", type: "date", required: true },
     { key: "venue", label: "Venue", placeholder: "Venue name", required: true },
-    { key: "link", label: "Ticket / event link", placeholder: "https://", type: "url" },
-    { key: "image", label: "Poster image link", placeholder: "https://", type: "url" },
+    { key: "link", label: "Ticket / event link", placeholder: "https://", type: "url", required: true },
+    { key: "image", label: "Poster image link", placeholder: "https://", type: "url", required: true },
     { key: "venue_link", label: "Venue website", placeholder: "https://", type: "url" },
   ] as const;
 
   return (
     <section aria-labelledby="submit-event-heading" className="mt-10 border-t border-border pt-8 text-left">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="h-10 w-10 shrink-0 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
-          <CalendarPlus className="h-4 w-4 text-primary" />
-        </div>
-        <h2 id="submit-event-heading" className="text-lg font-semibold text-text-primary">Submit a concert or event</h2>
-      </div>
+      <Collapsible open={open} onOpenChange={setOpen}>
+        <h2 id="submit-event-heading">
+          <CollapsibleTrigger asChild>
+            <Button variant="ghost" className="w-full h-auto min-h-11 p-0 justify-start gap-3 text-left hover:bg-transparent">
+              <span className="h-10 w-10 shrink-0 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
+                <CalendarPlus className="h-4 w-4 text-primary" />
+              </span>
+              <span className="text-lg font-semibold text-text-primary whitespace-normal">Submit a concert or event</span>
+              <ChevronDown className={`ml-auto h-5 w-5 shrink-0 text-text-secondary transition-transform motion-reduce:transition-none ${open ? "rotate-180" : ""}`} />
+            </Button>
+          </CollapsibleTrigger>
+        </h2>
+        <CollapsibleContent className="pt-6">
       {submitted ? (
         <div role="status" className="space-y-4">
           <p className="flex items-start gap-2 text-text-primary"><CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />Thanks! Your event has been submitted for review.</p>
@@ -88,6 +97,8 @@ export function EventSubmissionForm() {
           </Button>
         </form>
       )}
+        </CollapsibleContent>
+      </Collapsible>
     </section>
   );
 }
