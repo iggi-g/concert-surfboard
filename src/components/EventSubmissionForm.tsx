@@ -66,7 +66,7 @@ export function EventSubmissionForm() {
         <CollapsibleContent className="pt-6">
       {submitted ? (
         <div role="status" className="space-y-4">
-          <p className="flex items-start gap-2 text-text-primary"><CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />Thanks! Your event has been submitted for review.</p>
+          <p className="flex items-start gap-2 text-text-primary"><CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />Thanks! Your event is now listed. If it was already listed, we kept the existing concert.</p>
           <Button variant="outline" onClick={() => setSubmitted(false)}>Submit another event</Button>
         </div>
       ) : (
