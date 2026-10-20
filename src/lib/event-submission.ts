@@ -1,9 +1,11 @@
 import { z } from "zod";
 
-const optionalUrl = z.string().trim().max(2000, "Links must be under 2,000 characters.").refine(
+const urlField = z.string().trim().max(2000, "Links must be under 2,000 characters.").refine(
   (value) => !value || /^https?:\/\/[a-z0-9]([a-z0-9.-]*[a-z0-9])?(:[0-9]{1,5})?([/?#][^\s]*)?$/i.test(value) && !/[\x00-\x1f\x7f]/.test(value),
   "Enter a valid http:// or https:// link."
-).transform((value) => value || null);
+);
+const optionalUrl = urlField.transform((value) => value || null);
+const requiredUrl = urlField.refine((value) => value.length > 0, "This link is required.");
 
 export const eventSubmissionSchema = z.object({
   title: z.string().trim().min(1, "Enter an event name.").max(200),
@@ -12,8 +14,8 @@ export const eventSubmissionSchema = z.object({
     return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
   }, "Choose a valid date."),
   venue: z.string().trim().min(1, "Enter a venue.").max(200),
-  link: optionalUrl,
-  image: optionalUrl,
+  link: requiredUrl,
+  image: requiredUrl,
   venue_link: optionalUrl,
 });
 
