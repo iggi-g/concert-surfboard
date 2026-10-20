@@ -4,6 +4,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { EventSkeleton } from "./EventSkeleton";
 import { useMemo, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { getLatestUpdate, isAddedInLatestUpdate } from "@/lib/event-freshness";
 
 interface EventsListProps {
   events: Event[];
@@ -12,14 +13,11 @@ interface EventsListProps {
   onVenueClick?: (venue: string) => void;
   onDateClick?: (date: string) => void;
   emptyMessage?: string;
+  latestUpdate?: string;
 }
 
-const isRecentlyAdded = (event: Event) => {
-  if (!event.first_seen_at) return false;
-  return Date.now() - new Date(event.first_seen_at).getTime() <= 7 * 24 * 60 * 60 * 1000;
-};
-
-export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVenueClick, onDateClick, emptyMessage }: EventsListProps) => {
+export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVenueClick, onDateClick, emptyMessage, latestUpdate }: EventsListProps) => {
+  const updateTimestamp = latestUpdate || getLatestUpdate(events);
   const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
   const { toast } = useToast();
 
@@ -77,7 +75,7 @@ export const EventsList = ({ events, isLoading, showFavoritesOnly = false, onVen
             isInFavoritesView={showFavoritesOnly}
             onVenueClick={onVenueClick}
             onDateClick={onDateClick}
-            isNew={isRecentlyAdded(event)}
+            isNew={isAddedInLatestUpdate(event, updateTimestamp)}
           />
         </div>
       ))}

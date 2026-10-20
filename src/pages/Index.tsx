@@ -16,6 +16,7 @@ import { MobileFilters } from "@/components/filters/MobileFilters";
 import { SEO } from "@/components/SEO";
 import { EventsSchema } from "@/components/EventsSchema";
 import { SEOContent } from "@/components/SEOContent";
+import { getLatestUpdate, isAddedInLatestUpdate } from "@/lib/event-freshness";
 const Index = () => {
   const {
     toast
@@ -44,18 +45,8 @@ const Index = () => {
   const hasMoreEvents = eventsResponse?.hasMore || false;
   const totalEvents = eventsResponse?.total || 0;
 
-  // Latest scrape time across upcoming events -> "list updated X ago" indicator
-  const lastUpdatedLabel = useMemo(() => {
-    let latest: Date | null = null;
-    for (const e of events) {
-      const ts = e.last_seen_at || e.first_seen_at;
-      if (!ts) continue;
-      const d = new Date(ts);
-      if (isNaN(d.getTime())) continue;
-      if (!latest || d > latest) latest = d;
-    }
-    return latest ? formatDistanceToNow(latest, { addSuffix: true }) : null;
-  }, [events]);
+  const latestUpdate = useMemo(() => getLatestUpdate(events), [events]);
+  const lastUpdatedLabel = latestUpdate ? formatDistanceToNow(new Date(latestUpdate), { addSuffix: true }) : null;
 
   // Add debugging to see what's happening
   console.log('Index - Total events from database:', events.length);
@@ -116,7 +107,6 @@ const Index = () => {
       description: "All filters have been reset to default values"
     });
   };
-  const RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
   const hasActiveFilters = Boolean(searchQuery || selectedVenues.length > 0 || dateRange?.from || dateRange?.to || sortOrder !== "asc" || sortBy !== "date" || showFavoritesOnly || recentlyAdded);
   const filteredEvents = events.filter(event => {
     // Filter out past events (same logic as EventsList)
@@ -146,8 +136,7 @@ const Index = () => {
       return false;
     }
     if (recentlyAdded) {
-      if (!event.first_seen_at) return false;
-      if (Date.now() - new Date(event.first_seen_at).getTime() > RECENT_WINDOW_MS) return false;
+      if (!isAddedInLatestUpdate(event, latestUpdate)) return false;
     }
     return true;
   }).sort((a, b) => {
@@ -259,11 +248,12 @@ const Index = () => {
     }}>
         <EventsList 
           events={filteredEvents} 
+          latestUpdate={latestUpdate}
           isLoading={isLoading} 
           showFavoritesOnly={showFavoritesOnly}
           onVenueClick={handleVenueClick}
           onDateClick={handleDateClick}
-          emptyMessage={recentlyAdded ? "No new concerts added in the last 7 days." : undefined}
+          emptyMessage={recentlyAdded ? "No new concerts added in the latest update." : undefined}
         />
       </div>
 
