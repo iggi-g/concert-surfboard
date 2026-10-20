@@ -1,0 +1,2 @@
+DELETE FROM public.event_submissions WHERE venue = 'Publishing verification venue' AND link IN ('https://example.com/automatic-publishing-verification', 'https://example.com/browser-publishing-verification');
+DELETE FROM public.events WHERE venue = 'Publishing verification venue' AND link IN ('https://example.com/automatic-publishing-verification', 'https://example.com/browser-publishing-verification');
