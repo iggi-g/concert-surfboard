@@ -1,0 +1,3 @@
+- [ ] Add a compact About page event submission form beneath Get in touch.
+- [ ] Validate and save submissions using fields compatible with concert listings.
+- [ ] Verify submission, validation, and access restrictions.
