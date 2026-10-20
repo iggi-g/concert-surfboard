@@ -4,3 +4,5 @@
 - [x] Restrict Recently Added and NEW to the latest update day, preserving original first-added timestamps.
 - [x] Fetch all upcoming concerts despite the service's per-request row limit.
 - [x] Verify latest-update counts and badge behavior against live data.
+- [ ] Automatically publish validated visitor submissions without overwriting existing listings.
+- [ ] Verify automatic publishing and duplicate protection.
