@@ -1,3 +1,6 @@
 - [x] Add a compact About page event submission form beneath Get in touch.
 - [x] Validate and save submissions using fields compatible with concert listings.
 - [x] Verify submission, validation, and access restrictions.
+- [ ] Restrict Recently Added and NEW to the latest update day, preserving original first-added timestamps.
+- [ ] Fetch all upcoming concerts despite the service's per-request row limit.
+- [ ] Verify latest-update counts and badge behavior against live data.
