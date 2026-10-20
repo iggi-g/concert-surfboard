@@ -1,0 +1,1 @@
+DELETE FROM public.event_submissions WHERE title = 'Community submission verification 2026-10-20' AND venue = 'Submission verification venue' AND link = 'https://example.com/community-event-verification';
