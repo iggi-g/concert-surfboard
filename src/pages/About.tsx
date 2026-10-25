@@ -3,7 +3,7 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Loader2, Send } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase-client";
@@ -73,15 +73,8 @@ const About = () => {
 
         {/* Contact card */}
         <div id="contact-form" className="rounded-2xl bg-card/60 backdrop-blur-md border border-border p-6 md:p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="h-10 w-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
-              <Send className="h-4 w-4 text-primary" />
-            </div>
-            <div className="text-left">
-              <h2 className="text-lg font-semibold text-text-primary leading-tight">Get in touch</h2>
-              <p className="text-xs text-text-secondary">
-</p>
-            </div>
+          <div className="mb-6 text-left">
+            <h2 className="text-lg font-semibold text-text-primary leading-tight">Get in touch</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3 text-left">

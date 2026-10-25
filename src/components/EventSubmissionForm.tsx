@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CalendarPlus, CheckCircle2, ChevronDown, Loader2, Send } from "lucide-react";
+import { CheckCircle2, ChevronDown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,10 +54,7 @@ export function EventSubmissionForm() {
       <Collapsible open={open} onOpenChange={setOpen}>
         <h2 id="submit-event-heading">
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full h-auto min-h-11 p-0 justify-start gap-3 text-left hover:bg-transparent">
-              <span className="h-10 w-10 shrink-0 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
-                <CalendarPlus className="h-4 w-4 text-primary" />
-              </span>
+            <Button variant="ghost" className="w-full h-auto min-h-11 p-0 justify-start text-left hover:bg-transparent">
               <span className="text-lg font-semibold text-text-primary whitespace-normal">Submit a concert or event</span>
               <ChevronDown className={`ml-auto h-5 w-5 shrink-0 text-text-secondary transition-transform motion-reduce:transition-none ${open ? "rotate-180" : ""}`} />
             </Button>
@@ -92,7 +89,7 @@ export function EventSubmissionForm() {
           </div>
           {submitError && <p role="alert" className="text-sm text-destructive">{submitError}</p>}
           <Button type="submit" disabled={saving} className="w-full h-11 rounded-xl font-semibold">
-            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
+            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {saving ? "Submitting..." : "Submit event"}
           </Button>
         </form>
